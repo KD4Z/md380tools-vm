@@ -15,7 +15,19 @@ You will need to download the VirtualBox Appliance image file from Dropbox.
 
 Link:   https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.ova  
 
+The file is also available split into four parts.
+Here are the links for each piece:
+
+https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.part1.rar
+https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.part2.rar
+https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.part3.rar
+https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.part4.rar
+
+Download each one.  You will need to use the RAR program to extract them
+back into the original OVA file.
+
 Image file updated:	 12/13/2016 17:05 EST
+
 
 
 
