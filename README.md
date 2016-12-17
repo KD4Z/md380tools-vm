@@ -24,11 +24,19 @@ https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.part3.rar
 https://dl.dropboxusercontent.com/u/24789865/VM/tyt_kd4z.part4.rar
 
 Download each one.  You will need to use the RAR program to extract them
-back into the original OVA file.
+back into the original OVA Appliance file.
 
-Image file updated:	 12/16/2016 15:30 EST
+Image file updated:	 12/16/2016 22:30 EST
 Current Version: 2.1
 
+NOTE:  12/16/2016 22:30 EST
+
+This build includes an extra command to workaround a current issue with the Makefile as retrieved from 
+the github repository for md380tools.  I have opened a ticket in hope the error will be resolved.  In
+the mean time, if you get an error when running the glv command, use glvfixup instead.  That command
+does a fixup by copying back a prior version of the Makefile, that is known good.  At some point the
+glv command should start working again when the developers working on the md380tools project fix the 
+issue.   KD4Z
 
 
 
