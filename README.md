@@ -1,6 +1,6 @@
 MD380tools VM for VirtualBox
 Warren Merkel, KD4Z
-Current Version: 2.2
+Current Version: 2.21
 
 This project is a fork of https://github.com/kd0kkv/md380tools-vm
 
@@ -29,6 +29,17 @@ Download each one.  You will need to use the RAR program to extract them
 back into the original OVA Appliance file.
 
 Image file updated:	 12/16/2016 22:30 EST to Version 2.2
+
+Installation document updated: 12/24/2016 11:00 EST to Version 2.21
+
+Noteable features:
+
+-Runs under Windows or OS-X hosts
+-Simple, one word commands
+-Able to update firmware on MD-380 and MD-390 radios with GPS
+-Able to update radios when not connectded to the internet
+-Able to add private DMR IDs to the UsersCSV 
+
 
 
 
