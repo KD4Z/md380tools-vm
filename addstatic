@@ -26,9 +26,11 @@
 FILE=static.users
 
 if [ -f $FILE ]; then
+  sed -i 1,1d user.bin
   cat $FILE >>user.bin
   sort -k 1 -n user.bin >usersorted.tmp
-  cat usersorted.tmp >user.bin
+  wc -c < usersorted.tmp >user.bin
+  cat usersorted.tmp >>user.bin
   rm usersorted.tmp
   wc --lines $FILE
   echo "Import of static DMR IDs complete"
