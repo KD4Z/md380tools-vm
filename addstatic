@@ -1,0 +1,37 @@
+#!/bin/bash
+# addstatic
+# KD4Z  
+# Version:  1
+# script to add static DMR ids into the usersCSV after glv
+# requires a simple file that mimics the exact field layout of user.bin
+# must contain seven fields, separated by commas 
+# (that means 6 commas per line)
+# leave field blank if no data is needed for a given field
+
+# filename containing static user data is named: static.users
+
+# Example:
+#  privateID1,call1,name1,city1,state1,nickname1,country1
+#  privateID2,call2,name2,,,nickname2,
+#  privateID3,call3,name3,,,,
+
+# useage:
+# after running glv, but before running flashdb, run this script
+# one time.  Don't leave off the ./ or the script won't be found
+#
+#  ./addstatic
+#
+# then, run flashdb as usual
+
+FILE=static.users
+
+if [ -f $FILE ]; then
+  cat $FILE >>user.bin
+  sort -k 1 -n user.bin >usersorted.tmp
+  cat usersorted.tmp >user.bin
+  rm usersorted.tmp
+  wc --lines $FILE
+  echo "Import of static DMR IDs complete"
+else
+  echo "Could not find file containing static user info. Filename '$FILE' "
+fi
