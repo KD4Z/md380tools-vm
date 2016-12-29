@@ -1,10 +1,10 @@
 #!/bin/bash
 # addstatic
-# KD4Z  
-# Version:  1
+# KD4Z
+# Version:  2.22
 # script to add static DMR ids into the usersCSV after glv
 # requires a simple file that mimics the exact field layout of user.bin
-# must contain seven fields, separated by commas 
+# must contain seven fields, separated by commas
 # (that means 6 commas per line)
 # leave field blank if no data is needed for a given field
 
@@ -21,19 +21,28 @@
 #
 #  ./addstatic
 #
+#  To enable the seed file without having a static.users file, you
+#  must first create an empty file with this:
+#
+#    touch static.users
+#
 # then, run flashdb as usual
 
 FILESTATIC=static.users
 FILESEED=user.seed
+FILESEEDZIP=seeds.zip
 
-if [ -f $FILESEED ]; then
-  sed -i 1,1d $FILESEED
+if [ ! -f $FILESEEDZIP ]; then
+  wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP
 fi
 
 if [ -f $FILESTATIC ]; then
   sed -i 1,1d user.bin
-  if [ -f $FILESEED ]; then
-    cat $FILESTATIC $FILESEED user.bin >>userall.tmp
+  cat $FILESTATIC >userall.tmp
+ if [ -f $FILESEEDZIP ]; then
+    unzip $FILESEEDZIP $FILESEED >/dev/null
+    cat $FILESEED user.bin >>userall.tmp
+    rm $FILESEED
   else
     cat $FILESTATIC user.bin >>userall.tmp
   fi
