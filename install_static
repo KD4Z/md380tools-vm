@@ -9,7 +9,9 @@
 
 wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/addstatic -O addstatic
 wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/static.users.example -O static.users.example
+wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/static.users -O static.users
 chmod +x addstatic
-
-echo "Create a file called 'static.users' using the example file 'static.users.example' as a guide"
+clear
+echo "addstatic script installed or updated successfully"
+echo "Use nano to edit the file called 'static.users' using the example file 'static.users.example' as a guide"
 echo "Then run glv, followed by ./addstatic, then flashdb" 
