@@ -7,14 +7,14 @@
 # must contain seven fields, separated by commas
 # (that means 6 commas per line)
 # leave field blank if no data is needed for a given field
-
+#
 # filename containing static user data is named: static.users
-
+#
 # Example:
 #  privateID1,call1,name1,city1,state1,nickname1,country1
 #  privateID2,call2,name2,,,nickname2,
 #  privateID3,call3,name3,,,,
-
+#
 # useage:
 # after running glv, but before running flashdb, run this script
 # one time.  Don't leave off the ./ or the script won't be found
