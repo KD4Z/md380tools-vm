@@ -31,7 +31,7 @@ https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_2.22
 Be sure to read it completely before emailing questions!  99% of all questions are
 answered in the installation PDF.
 
-You will need to download the VirtualBox Appliance image file from Dropbox.
+You will need to download the VirtualBox Appliance image file from these links:
 
 Link:   https://drive.google.com/file/d/0Bwoi2MrlPb3vSzlxeXFrTEVuWEU/view?usp=sharing  803 MB
 
