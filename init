@@ -30,3 +30,5 @@ if [ -f ~/md380tools-vm/root/lookup ]; then
   chmod +x ~/lookup
 fi
 cp ~/md380tools-vm/menuopts ~
+chmod +x ~/menuopts
+
