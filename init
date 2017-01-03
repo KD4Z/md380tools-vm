@@ -6,6 +6,9 @@
 if [ -f ~/md380tools-vm/exec.pre ]; then
   chmod +x ~/md380tools-vm/exec.pre
 fi
+if [ -f ~/md380tools-vm/menuopts ]; then
+  chmod +x ~/md380tools-vm/menuopts
+fi
 if [ -f ~/md380tools-vm/exec.post ]; then
   chmod +x ~/md380tools-vm/exec.post  
 fi
