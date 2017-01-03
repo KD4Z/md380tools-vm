@@ -1,0 +1,13 @@
+#!/bin/bash
+# flashdb
+# KD4Z
+# Version:  3.0
+# static Wrapper to flashdb
+
+if [ -f ~/md380tools-vm/flashdb ]; then
+ ~/md380tools-vm/flashdb
+else
+  echo -e "${RED} md380tools-vm files not present.  Run glv first.${NC}"
+fi
+
+

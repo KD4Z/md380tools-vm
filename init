@@ -1,0 +1,29 @@
+#!/bin/bash
+# KD4Z
+# Version:  3.0
+# called after git pull, and before everything else, use to setup script exec mode
+
+if [ -f ~/md380tools-vm/exec.pre ]; then
+  chmod +x ~/md380tools-vm/exec.pre
+fi
+if [ -f ~/md380tools-vm/exec.post ]; then
+  chmod +x ~/md380tools-vm/exec.post  
+fi
+if [ -f ~/md380tools-vm/addstatic ]; then
+  chmod +x ~/md380tools-vm/addstatic
+fi
+if [ -f ~/md380tools-vm/flashdb ]; then
+  chmod +x ~/md380tools-vm/flashdb
+fi
+if [ -f ~/md380tools-vm/recipes ]; then
+  chmod +x ~/md380tools-vm/recipes
+fi
+if [ -f ~/md380tools-vm/root/flashdb ]; then
+  cp ~/md380tools-vm/root/flashdb ~
+  chmod +x ~/flashdb
+fi
+if [ -f ~/md380tools-vm/root/lookup ]; then
+  cp ~/md380tools-vm/root/lookup ~
+  chmod +x ~/lookup
+fi
+cp ~/md380tools-vm/menuopts ~

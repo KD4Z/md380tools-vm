@@ -1,0 +1,13 @@
+#!/bin/bash
+# exec.post
+# KD4Z
+# Version:  3.0
+# Runs after glv is completed
+
+# wire up the static DMR IDs if present
+cd ~/md380tools-vm
+./addstatic
+echo -e "${GREEN} GLV has completed successfully."
+sleep 5
+cd ~
+~/md380tools-vm/menuopts

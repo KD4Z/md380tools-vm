@@ -1,0 +1,2 @@
+#/bin/bash
+~/md380tools-vm/lookup $1

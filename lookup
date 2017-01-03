@@ -1,0 +1,8 @@
+#/bin/bash
+if [ -f ~/user.bin ]; then
+  echo -e "Looking up $1"
+  /bin/grep -i "$1" ~/user.bin
+else
+  echo -e "${RED}User Data not available.  Run glv first.${NC}"
+fi
+

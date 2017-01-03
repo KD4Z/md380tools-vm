@@ -1,0 +1,16 @@
+#!/bin/bash
+# flashdb
+# KD4Z
+# Version:  3.0
+# flashes UsersCSV to radio
+
+ 
+if [ -f ~/user.bin ]; then
+  echo "Record Count `wc --lines ~/user.bin`"
+ ~/md380tools/md380-tool spiflashwrite ~/user.bin 0x100000
+else
+  echo "${RED}Contact User file not present.  Run glv first."
+fi
+
+ 
+

@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  2.22
+# Version:  3.0
 # script to add static DMR ids into the usersCSV after glv
 # requires a simple file that mimics the exact field layout of user.bin
 # must contain seven fields, separated by commas
@@ -16,11 +16,8 @@
 #  privateID3,call3,name3,,,,
 #
 # useage:
-# after running glv, but before running flashdb, run this script
-# one time.  Don't leave off the ./ or the script won't be found
-#
-#  ./addstatic
-#
+#  Nothing to do here, this script is automatically called from exec.post
+# 
 #  To enable the seed file without having a static.users file, you
 #  must first create an empty file with this:
 #
@@ -33,26 +30,27 @@ FILESEED=user.seed
 FILESEEDZIP=seeds.zip
 
 if [ ! -f $FILESEEDZIP ]; then
-  wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP
+  rm $FILESEEDZIP
 fi
+wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP
 
 if [ -f $FILESTATIC ]; then
-  sed -i 1,1d user.bin
+  sed -i 1,1d ~/user.bin
   cat $FILESTATIC >userall.tmp
  if [ -f $FILESEEDZIP ]; then
     unzip $FILESEEDZIP $FILESEED >/dev/null
-    cat $FILESEED user.bin >>userall.tmp
+    cat $FILESEED ~/user.bin >>userall.tmp
     rm $FILESEED
   else
-    cat $FILESTATIC user.bin >>userall.tmp
+    cat $FILESTATIC ~/user.bin >>userall.tmp
   fi
   awk -F',' '!seen[$1]++' userall.tmp >user.tmp
   sort -t, -k 1,1 -n user.tmp >usersorted.tmp
-  wc -c < usersorted.tmp >user.bin
-  cat usersorted.tmp >>user.bin
+  wc -c < usersorted.tmp >~/user.bin
+  cat usersorted.tmp >>~/user.bin
   rm userall.tmp usersorted.tmp user.tmp
   wc --lines $FILESTATIC
-  echo "Import of static DMR IDs complete"
+  echo -e "${GREEN}Static DMR ID Import completed${NC}"
 else
-  echo "Could not find file containing static user info. Filename '$FILE' "
+  echo -e "${RED}Could not find file containing static user info. Filename${WHITE} '$FILE' ${NC}"
 fi
