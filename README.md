@@ -1,21 +1,23 @@
 MD380tools VM for VirtualBox
 Warren Merkel, KD4Z
-Current Version: 2.22
+Current Version: 3.0
 
-*** UPDATE COMING OUT VERY SOON ***  Version 3.0
-12:00am EST 4 January, 2017
-You might want to hold off a day or two, as Version 3.0 is coming out within 48 hours.
-I'll leave the links up for version 2.22 just in case you have to have it now.
-
+*** NEW Version 3.0 ***
+10:00am EST 4 January, 2017
 
 From github project
 https://github.com/KD4Z/md380tools-vm
+
+Follow the installation directions in the PDF found here:
+Version 3 is installed the same way as version 2.22, so use this document
+until I get it updated for version 3.0
+
+https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_2.22.pdf
 
 
 This project allows you to create the latest firmware for the MD-380 / MD-390
 series of radios from Tytera (TYT).  It leverages the MD380tools project by
 Travis Goodspeed found elsewhere on github. 
-
 
 This VM provided in the image provides simple single-word menu that is easy to
 use, and does all of the heavy lifting of installing the MD380tools project files.
@@ -30,54 +32,50 @@ for that has been recently added.  This feature may also be interesting to you i
 use a hotspot device and are annoyed that certain parts of the contact database 
 now show up with blank, redacted location data.
 
-Follow the installation directions in the PDF found here:
-https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_2.22.pdf
-
-
 Be sure to read it completely before emailing questions!  99% of all questions are
 answered in the installation PDF.
 
 You will need to download the VirtualBox Appliance image file from these links:
 
-Link:   https://drive.google.com/file/d/0Bwoi2MrlPb3vSzlxeXFrTEVuWEU/view?usp=sharing  803 MB
+Single Image (Zip):
+https://drive.google.com/file/d/0Bwoi2MrlPb3vVEt3Ym4tVHF3SDQ/view?usp=sharing
+	
+Use the above link, or the 4 links below.  Don't do both!
+	
+Parts - Must use 7-zip to extract  http://www.7-zip.org/download.html	
+	
+Part 1: https://drive.google.com/file/d/0Bwoi2MrlPb3vY2hkb0lVZ3Z4R3c/view?usp=sharing
+Part 2: https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28/view?usp=sharing
+Part 3:	https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU/view?usp=sharing
+Part 4: https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA/view?usp=sharing
 
-The file is also available split into four parts.  You dont' need these if you downloaded 
-from the single link above.
-
-Here are the links for each piece:
-
-https://drive.google.com/file/d/0Bwoi2MrlPb3vMzN3bWxfZUI1MTQ/view?usp=sharing  205 MB
-https://drive.google.com/file/d/0Bwoi2MrlPb3vOC15N18xcHF1WjQ/view?usp=sharing  205 MB
-https://drive.google.com/file/d/0Bwoi2MrlPb3vbEJWTEtCSHh1b3c/view?usp=sharing  205 MB
-https://drive.google.com/file/d/0Bwoi2MrlPb3vRnBORmNCQndQMUE/view?usp=sharing  200 MB
-
-
-Download each one.  You will need to use the RAR program to extract them
-back into the original OVA Appliance file.  (http://www.win-rar.com)
-Install RAR, and then Right-Click on the first part and choose the RAR item on
-the context menu to extract.
+Download each one.  You will need to use the 7-zip program to extract them
+back into the original OVA Appliance file. 
+Install 7-Zip, and then Right-Click on the first part file and find the 7-Zip menu, and
+follow it out to extract.
 
 Current Version Numbers:
-Image file updated:	 12/16/2016 22:30 EST to Version 2.2
+Image file updated:	 01/04/2017 10:00 EST to Version 3.0
 Installation PDF updated: 12/29/2016 12:26 EST to Version 2.22
 
 Noteable features:
 
   Runs under Windows or OS-X hosts.  Runs under VMware as well, reported by others.
 
+  Able to update radios when not connected to the internet, great for laptops.
+
+  Able to add private DMR IDs to the UsersCSV (Version 2.21)
+
+  Automatically adds back missing userCSV data from the EU using seed file (Version 3.0)
+
+  Automatically stays updated with changes going forward. You will not need to download
+  the VM Image again, after getting to Version 3.0
+  
   Simple, one word commands
 
   Able to update firmware on MD-380 and MD-390 radios with GPS
 
-  Able to update radios when not connected to the internet
-
-  Able to add private DMR IDs to the UsersCSV (Version 2.21)
-
-  Able to add back missing userCSV data using seed file (Version 2.22)
-   To install, see the section on Installing support for Static DMR IDs
-   in the PDF document.   
-
-
+  
 
 
 
