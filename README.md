@@ -2,6 +2,12 @@ MD380tools VM for VirtualBox
 Warren Merkel, KD4Z
 Current Version: 2.22
 
+*** UPDATE COMING OUT VERY SOON ***  Version 3.0
+12:00am EST 4 January, 2017
+You might want to hold off a day or two, as Version 3.0 is coming out within 48 hours.
+I'll leave the links up for version 2.22 just in case you have to have it now.
+
+
 From github project
 https://github.com/KD4Z/md380tools-vm
 
