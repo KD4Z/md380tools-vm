@@ -21,6 +21,9 @@ fi
 if [ -f ~/md380tools-vm/recipes ]; then
   chmod +x ~/md380tools-vm/recipes
 fi
+if [ -f ~/md380tools-vm/lookup ]; then
+  chmod +x ~/md380tools-vm/lookup
+fi
 if [ -f ~/md380tools-vm/root/flashdb ]; then
   cp ~/md380tools-vm/root/flashdb ~
   chmod +x ~/flashdb
