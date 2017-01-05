@@ -25,14 +25,11 @@
 #
 # then, run flashdb as usual
 
-FILESTATIC=static.users
+FILESTATIC=~/static.users
 FILESEED=user.seed
 FILESEEDZIP=seeds.zip
 
-if [ ! -f $FILESTATIC ]; then
-  touch $FILESTATIC
-fi
-if [ ! -f $FILESEEDZIP ]; then
+if [ -f $FILESEEDZIP ]; then
   rm $FILESEEDZIP
 fi
 wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP

@@ -9,15 +9,13 @@ From github project
 https://github.com/KD4Z/md380tools-vm
 
 Follow the installation directions in the PDF found here:
-Version 3 is installed the same way as version 2.22, so use this document
-until I get it updated for version 3.0
 
-https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_2.22.pdf
-
+https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.0.pdf
 
 This project allows you to create the latest firmware for the MD-380 / MD-390
 series of radios from Tytera (TYT).  It leverages the MD380tools project by
-Travis Goodspeed found elsewhere on github. 
+Travis Goodspeed found elsewhere on github.  It also downloads the dmr-marc contact
+database into the radio.
 
 This VM provided in the image provides simple single-word menu that is easy to
 use, and does all of the heavy lifting of installing the MD380tools project files.
