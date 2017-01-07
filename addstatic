@@ -32,6 +32,10 @@ FILESEEDZIP=seeds.zip
 if [ -f $FILESEEDZIP ]; then
   rm $FILESEEDZIP
 fi
+if [ ! -f $FILESTATIC ]; then
+  touch $FILESTATIC
+fi
+
 wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP
 
 if [ -f $FILESTATIC ]; then

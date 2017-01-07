@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.0)${NC}"
+echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.01)${NC}"
 echo -e ""
 echo -e " Before running ${YELLOW}flash${NC} or ${YELLOW}flashgps${NC}, the radio must be in ${RED}DFU${NC} mode."
 echo -e " ${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
