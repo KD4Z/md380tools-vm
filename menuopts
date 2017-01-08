@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.01)${NC}"
+echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.02)${NC}"
 echo -e ""
 echo -e " Before running ${YELLOW}flash${NC} or ${YELLOW}flashgps${NC}, the radio must be in ${RED}DFU${NC} mode."
 echo -e " ${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
@@ -17,7 +17,7 @@ echo -e " After glv, all commands below can be run when the internet isn't avail
 echo -e ""
 echo -e "  ${YELLOW}flash${NC}     -- ${RED}(DFU mode)${NC} flash firmware to radios without GPS (MD-380)"
 echo -e "  ${YELLOW}flashgps${NC}  -- ${RED}(DFU mode)${NC} flash firmware to radios having GPS (MD-390)"
-echo -e "  ${YELLOW}flashdb${NC}   -- ${RED}(ON)${NC} flash the complete dmr-marc 'UsersCSV database'"
+echo -e "  ${YELLOW}flashdb${NC}   -- ${RED}(ON)${NC} flash the complete dmr-marc 'UsersCSV' database"
 echo -e ""
 echo -e "  ${YELLOW}~/lookup${NC} ${BLUE}yoursearchstring${NC}  -- query the user database for yoursearchstring"
 echo -e ""

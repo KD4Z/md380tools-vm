@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.0) - Recipes ${NC}"
+echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.02) - Recipes ${NC}"
 echo -e ""
 echo -e " ${WHITE}MD-380 / Retevis RT3 / No GPS${NC}"
 echo -e ""
@@ -19,6 +19,8 @@ echo -e ""
 echo -e "  ${YELLOW}glv${NC}"
 echo -e "  ${YELLOW}flashdb${NC}"
 echo -e ""
+echo -e "  ${YELLOW}touch ~/fillnickname${NC} Enable experimental nickname map from first name"
+echo -e "  ${YELLOW}rm ~/fillnickname${NC}    Disable experimental nickname map from first name"
 echo -e ""
 echo -e "  ${YELLOW}menu${NC}     -- Back to main menu (or ${WHITE}Ctrl-D${NC})"
 echo -e ""

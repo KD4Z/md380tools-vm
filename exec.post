@@ -1,13 +1,27 @@
 #!/bin/bash
 # exec.post
 # KD4Z
-# Version:  3.0
+# Version:  3.02
 # Runs after glv is completed
 
 # wire up the static DMR IDs if present
 cd ~/md380tools-vm
 ./addstatic
-echo -e "${GREEN} GLV has completed successfully."
+echo -e "${GREEN}GLV has completed successfully."
+
+if [ -f ~/fillnickname ]; then
+  userfile=~/user.bin
+  usertmp=~/user.tmp
+  echo -e "${YELLOW}Touching up nicknames from first name field if blank!"
+  sed -i 1,1d $userfile
+  awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
+  rm $userfile
+  wc -c < $usertmp >$userfile
+  cat $usertmp >>$userfile
+  rm $usertmp
+  echo -e "${YELLOW}Nickname touchup complete."
+fi
+
 sleep 5
 cd ~
 ~/md380tools-vm/menuopts
