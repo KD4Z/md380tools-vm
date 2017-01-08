@@ -9,17 +9,23 @@ cd ~/md380tools-vm
 ./addstatic
 echo -e "${GREEN}GLV has completed successfully."
 
-if [ -f ~/fillnickname ]; then
-  userfile=~/user.bin
-  usertmp=~/user.tmp
-  echo -e "${YELLOW}Touching up nicknames from first name field if blank!"
+userfile=~/user.bin
+usertmp=~/user.tmp
+
+if [ -f ~/fill.nickname.enable ]; then
+  echo -e "${YELLOW}Touching up nicknames"
   sed -i 1,1d $userfile
   awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
   rm $userfile
   wc -c < $usertmp >$userfile
   cat $usertmp >>$userfile
   rm $usertmp
-  echo -e "${YELLOW}Nickname touchup complete."
+  # nicknames explode the user file and hit the radio limit, so must enable filters
+  touch ~/filter.sys.enable
+fi
+
+if [ -f filter.sys ] && [ -f ~/filter.sys.enable ]; then  
+  ./filter.sys $userfile
 fi
 
 sleep 5

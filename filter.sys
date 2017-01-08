@@ -1,0 +1,32 @@
+#!/bin/bash
+# filter.sys`
+# KD4Z
+# Version:  3.03
+# script that executes system level search and replace operations to
+# reduce the usersCSV octet count by abbreviating know values
+# calls out to ~/filter.local if found in home directory
+# where user can add their own operations
+# receives filename as first argument
+# assumes user file has octet count header, which is removed and replaced
+
+echo -e "${YELLOW}Applying system database filters${NC}"
+sed -i 1,1d $1
+
+sed -i -e 's/United States/USA/g' $1
+sed -i -e 's/United Kingdom/UK/g' $1
+sed -i -e 's/North /N./g' $1
+sed -i -e 's/South /S./g' $1
+sed -i -e 's/East /E./g' $1
+sed -i -e 's/West /W./g' $1
+
+# local hook if desired for extra filtering
+if [ -f ~/filter.local ]; then
+  echo -e "${YELLOW}Applying local database filters${NC}"
+  chmod +x ~/filter.local
+  ~/filter.local $1
+fi
+
+wc -c < $1 >filtersys.tmp
+cat $1 >>filtersys.tmp
+cat filtersys.tmp > $1
+rm filtersys.tmp

@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.02) - Recipes ${NC}"
+echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.03) - Recipes ${NC}"
 echo -e ""
 echo -e " ${WHITE}MD-380 / Retevis RT3 / No GPS${NC}"
 echo -e ""
@@ -19,6 +19,9 @@ echo -e ""
 echo -e "  ${YELLOW}glv${NC}"
 echo -e "  ${YELLOW}flashdb${NC}"
 echo -e ""
+echo -e "Experimental"
+echo -e "  ${YELLOW}touch ~/fill.nickname.enable${NC}  Enables nickname fill"
+echo -e "  ${YELLOW}rm ~/fill.nickname.enable${NC}     Disable nickname fill"
 echo -e ""
 echo -e "  ${YELLOW}menu${NC}     -- Back to main menu (or ${WHITE}Ctrl-D${NC})"
 echo -e ""

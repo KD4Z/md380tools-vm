@@ -32,6 +32,9 @@ if [ -f ~/md380tools-vm/root/lookup ]; then
   cp ~/md380tools-vm/root/lookup ~
   chmod +x ~/lookup
 fi
+if [ -f ~/md380tools-vm/filter.sys ]; then
+  chmod +x ~/md380tools-vm/filter.sys
+fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 
