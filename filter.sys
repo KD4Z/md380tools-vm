@@ -45,7 +45,7 @@ sed -i -e 's/Malaysia/MYS/g' $1
 sed -i -e 's/New Zealand/NZL/g' $1
 sed -i -e 's/Brazil/BRA/g' $1
 
-# and one absurbly long, redunant name
+# and one absurbly long, redundant name
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
 
 
