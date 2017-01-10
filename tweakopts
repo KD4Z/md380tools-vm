@@ -1,0 +1,39 @@
+#!/bin/bash 
+clear
+echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.04) - Tweaks ${NC}"
+echo -e ""
+echo -e "Experimental settings are controlled by file existence in the home directory."
+echo -e "These take affect after your run next ${YELLOW}glv${NC}. A ${RED}*${NC} indicates currently enabled."
+echo -e ""
+echo -e "  ${YELLOW}touch ~/setting${NC}  Enables setting"
+echo -e "  ${YELLOW}rm ~/setting${NC}     Disables setting"
+echo -e ""
+echo -e " Example:  touch ~/fill.nickname.enable"
+echo -e ""
+echo -e " ${WHITE}-- UsersCSV size reductions. Useful if call display isn't working --${NC}"
+echo -e ""
+echo -e -n "  ${YELLOW}filter.sys.enable${NC} Enable filter framework & Country abbreviations"
+if [ -f ~/filter.sys.enable ]; then
+  echo -e "${RED} *${NC}"
+ else
+  echo -e ""
+fi
+echo -e -n "  ${YELLOW}filter.us.states${NC}  Enable US state abbreviations"
+if [ -f ~/filter.us.states ]; then
+  echo -e "${RED} *${NC}"
+ else
+  echo -e ""
+fi 
+echo -e ""
+echo -e " ${WHITE}-- Other fun things --${NC}"
+echo -e " "
+echo -e -n "  ${YELLOW}fill.nickname.enable${NC} Enable nickname display from first name"
+if [ -f ~/fill.nickname.enable ]; then
+  echo -e "${RED} *${NC}"
+ else
+  echo -e ""
+fi
+echo -e ""
+echo -e ""
+echo -e "\t\t\t${YELLOW}menu${NC}     -- Back to main menu (or ${WHITE}Ctrl-D${NC})"
+echo -e ""

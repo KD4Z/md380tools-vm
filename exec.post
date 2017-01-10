@@ -28,6 +28,6 @@ if [ -f filter.sys ] && [ -f ~/filter.sys.enable ]; then
   ./filter.sys $userfile
 fi
 
-sleep 5
+# sleep 5   #filters are adding enough delay so remove
 cd ~
 ~/md380tools-vm/menuopts

@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.03)${NC}"
+echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.04)${NC}"
 echo -e ""
 echo -e " Before running ${YELLOW}flash${NC} or ${YELLOW}flashgps${NC}, the radio must be in ${RED}DFU${NC} mode."
 echo -e " ${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
@@ -21,7 +21,7 @@ echo -e "  ${YELLOW}flashdb${NC}   -- ${RED}(ON)${NC} flash the complete dmr-mar
 echo -e ""
 echo -e "  ${YELLOW}~/lookup${NC} ${BLUE}yoursearchstring${NC}  -- query the user database for yoursearchstring"
 echo -e ""
-echo -e "  ${YELLOW}menu${NC}     -- display this screen again (or ${WHITE}Ctrl-D${NC})"
-echo -e "  ${YELLOW}help${NC}     -- display typical command recipes"
+echo -e "\t\t\t${YELLOW}menu${NC}     -- display this screen again (or ${WHITE}Ctrl-D${NC})"
+echo -e "\t\t\t${YELLOW}help${NC}     -- display typical command recipes"
 echo -e ""
 

@@ -24,6 +24,9 @@ fi
 if [ -f ~/md380tools-vm/lookup ]; then
   chmod +x ~/md380tools-vm/lookup
 fi
+if [ -f ~/md380tools-vm/tweakopts ]; then
+  chmod +x ~/md380tools-vm/tweakopts
+fi
 if [ -f ~/md380tools-vm/root/flashdb ]; then
   cp ~/md380tools-vm/root/flashdb ~
   chmod +x ~/flashdb
@@ -34,6 +37,10 @@ if [ -f ~/md380tools-vm/root/lookup ]; then
 fi
 if [ -f ~/md380tools-vm/filter.sys ]; then
   chmod +x ~/md380tools-vm/filter.sys
+fi
+if [ -f ~/md380tools-vm/root/tweaks ]; then
+  cp ~/md380tools-vm/root/tweaks ~
+  chmod +x ~/tweaks
 fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts

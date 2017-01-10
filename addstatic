@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  3.0
+# Version:  3.04
 # script to add static DMR ids into the usersCSV after glv
 # requires a simple file that mimics the exact field layout of user.bin
 # must contain seven fields, separated by commas
@@ -44,7 +44,7 @@ if [ -f $FILESTATIC ]; then
  if [ -f $FILESEEDZIP ]; then
     unzip $FILESEEDZIP $FILESEED >/dev/null
     cat $FILESEED ~/user.bin >>userall.tmp
-    rm $FILESEED
+    rm $FILESEED $FILESEEDZIP
   else
     cat $FILESTATIC ~/user.bin >>userall.tmp
   fi
