@@ -45,6 +45,60 @@ sed -i -e 's/Malaysia/MYS/g' $1
 sed -i -e 's/New Zealand/NZL/g' $1
 sed -i -e 's/Brazil/BRA/g' $1
 
+if [ -f ~/filter.us.states ]; then
+  sed -i -e 's/Alabama/AL/g' $1
+  sed -i -e 's/Alaska/AK/g' $1
+  sed -i -e 's/Arizona/AZ/g' $1
+  sed -i -e 's/Arkansas/AR/g' $1
+  sed -i -e 's/California/CA/g' $1
+  sed -i -e 's/Colorado/CO/g' $1
+  sed -i -e 's/Connecticut/CT/g' $1
+  sed -i -e 's/Delaware/DE/g' $1
+  sed -i -e 's/Florida/FL/g' $1
+  sed -i -e 's/Georgia/GA/g' $1
+  sed -i -e 's/Hawaii/HI/g' $1
+  sed -i -e 's/Idaho/ID/g' $1
+  sed -i -e 's/Indiana/IN/g' $1
+  sed -i -e 's/Iowa/IA/g' $1
+  sed -i -e 's/Kansas/KS/g' $1
+  sed -i -e 's/Kentucky/KY/g' $1
+  sed -i -e 's/Louisiana/LA/g' $1
+  sed -i -e 's/Maine/ME/g' $1
+  sed -i -e 's/Maryland/MD/g' $1
+  sed -i -e 's/Massachusetts/MA/g' $1
+  sed -i -e 's/Michigan/MI/g' $1
+  sed -i -e 's/Minnesota/MN/g' $1
+  sed -i -e 's/Mississippi/MS/g' $1
+  sed -i -e 's/Missouri/MO/g' $1
+  sed -i -e 's/Montana/MT/g' $1
+  sed -i -e 's/Nebraska/NE/g' $1
+  sed -i -e 's/Nevada/NV/g' $1
+  sed -i -e 's/New Hampshire/NH/g' $1
+  sed -i -e 's/New Jersey/NJ/g' $1
+  sed -i -e 's/New Mexico/NM/g' $1
+  sed -i -e 's/New York/NY/g' $1
+  sed -i -e 's/N. Carolina/NC/g' $1
+  sed -i -e 's/N. Dakota/ND/g' $1
+  sed -i -e 's/Ohio/OH/g' $1
+  sed -i -e 's/Oklahoma/OK/g' $1
+  sed -i -e 's/Oregon/OR/g' $1
+  sed -i -e 's/Pennsylvania/PA/g' $1
+  sed -i -e 's/Rhode Island/RI/g' $1
+  sed -i -e 's/S. Carolina/SC/g' $1
+  sed -i -e 's/S. Dakota/SD/g' $1
+  sed -i -e 's/Tennessee/TN/g' $1
+  sed -i -e 's/Texas/TX/g' $1
+  sed -i -e 's/Utah/UT/g' $1
+  sed -i -e 's/Vermont/VT/g' $1
+  sed -i -e 's/Virginia/VA/g' $1
+  sed -i -e 's/Washington/WA/g' $1
+  sed -i -e 's/W. Virginia/WV/g' $1
+  sed -i -e 's/Wisconsin/WI/g' $1
+  sed -i -e 's/District of Columbia/DC/g' $1
+  sed -i -e 's/Puerto Rico/PR/g' $1
+fi
+
+
 # and one absurbly long, redundant name
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
 
