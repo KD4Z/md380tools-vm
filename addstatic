@@ -32,15 +32,20 @@ FILESEEDZIP=seeds.zip
 if [ ! -f $FILESTATIC ]; then
   touch $FILESTATIC
 fi
-if [ ! -f ~/keep.seed.file ]; then
+
+if [ -f ~/keep.seed.file ] && [ -f ~/seeds.zip ]; then
+    cp ~/seeds.zip .
+else  
   rm $FILESEEDZIP
-else
-  if [ -f ~/seed.zip ]; then
-    cp ~/seed.zip .
-  fi
 fi
+
 if [ ! -f $FILESEEDZIP ]; then
   wget https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP
+fi
+
+if [ ! -f $FILESEEDZIP ]; then
+  echo -e "${RED}Unable to download seed file for static EU data.${NC}"
+  sleep 8
 fi
 
 if [ -f $FILESTATIC ]; then
@@ -49,7 +54,7 @@ if [ -f $FILESTATIC ]; then
   if [ -f $FILESEEDZIP ]; then
     unzip $FILESEEDZIP $FILESEED >/dev/null
     cat $FILESEED ~/user.bin >>userall.tmp
-    if [ -f ~/keep.seed.file ]; endif
+    if [ -f ~/keep.seed.file ]; then
 		echo -e "${GREEN}Keeping seed file for next ${YELLOW}glv${NC}."
 		echo -e "${GREEN}To force an update next glv: rm ~/keep.seed.file"
 		cp $FILESEEDZIP ~
@@ -57,8 +62,7 @@ if [ -f $FILESTATIC ]; then
 		rm $FILESEEDZIP
 	fi
 	rm $FILESEED
-    echo -e "${RED}Unable to download seed file for static EU data.${NC}"
-    sleep 4
+    
 	cat $FILESTATIC ~/user.bin >>userall.tmp
   fi
   awk -F',' '!seen[$1]++' userall.tmp >user.tmp
