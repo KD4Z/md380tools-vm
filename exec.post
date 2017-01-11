@@ -15,7 +15,12 @@ usertmp=~/user.tmp
 if [ -f ~/fill.nickname.enable ]; then
   echo -e "${YELLOW}Touching up nicknames"
   sed -i 1,1d $userfile
-  awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
+  #Jan 11, 2017  dmr-marc has removed the nickname field completely and is now 
+  # pumping in the mode type DMR or CCS7
+  # forgo looking for nickname, and just parse the first name out for all rows
+  #  awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
+  awk -F, '{print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7}' $userfile >$usertmp
+ 
   rm $userfile
   wc -c < $usertmp >$userfile
   cat $usertmp >>$userfile
@@ -28,6 +33,6 @@ if [ -f filter.sys ] && [ -f ~/filter.sys.enable ]; then
   ./filter.sys $userfile
 fi
 
-# sleep 5   #filters are adding enough delay so remove
+sleep 5
 cd ~
 ~/md380tools-vm/menuopts
