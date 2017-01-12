@@ -4,28 +4,48 @@
 # Version:  3.02
 # Runs after glv is completed
 
-# wire up the static DMR IDs if present
-cd ~/md380tools-vm
-./addstatic
-echo -e "${GREEN}GLV has completed successfully."
+
 
 userfile=~/user.bin
 usertmp=~/user.tmp
 
+cd ~/md380tools-vm
+
+# Jan 11, 2017  dmr-marc has removed the nickname field completely and is now 
+# pumping in the comment at the end of the record
+# by the time md380tools massages it, the formats look like this:
+# old format prior to Jan 11, 2017
+# 	id,callsign,fullname,city,state,nickname,country
+# new format (wtf) 
+# 	id,callsign,fullname,state,country,city,comment
+  
+# translate new format back to old, except nickname is now missing,
+# 
+
+sed -i 1,1d $userfile
+awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
+  
+cat $usertmp >$userfile
+cat $usertmp >~/user.converted
+rm $usertmp  
+
+### end of data translation dance 
+
+./addstatic
+
 if [ -f ~/fill.nickname.enable ]; then
   echo -e "${YELLOW}Touching up nicknames"
-  sed -i 1,1d $userfile
-  #Jan 11, 2017  dmr-marc has removed the nickname field completely and is now 
-  # pumping in the mode type DMR or CCS7
-  # forgo looking for nickname, and just parse the first name out for all rows
-  #  awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
+
+  # old formatter saved just in case dmr-marc goes back to original format
+  # awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
+  
   awk -F, '{print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7}' $userfile >$usertmp
- 
-  rm $userfile
-  wc -c < $usertmp >$userfile
-  cat $usertmp >>$userfile
+
+  cat $usertmp >$userfile
   rm $usertmp
-  # nicknames explode the user file and hit the radio limit, so must enable filters
+  # nickname option explodes the user file and seems to hit the radio limit, so must enable filters to 
+  # reduce the dataset size. 
+  # Todo-   Need to ask Travis what the upper limit is or why lookups fail over 3.1Megs
   touch ~/filter.sys.enable
 fi
 
@@ -33,6 +53,13 @@ if [ -f filter.sys ] && [ -f ~/filter.sys.enable ]; then
   ./filter.sys $userfile
 fi
 
+# now put back the header
+wc -c < $userfile >$usertmp
+cat $userfile >>$usertmp
+cat $usertmp >$userfile
+rm $usertmp
+echo -e "${GREEN}GLV completed."  
 sleep 5
+
 cd ~
 ~/md380tools-vm/menuopts

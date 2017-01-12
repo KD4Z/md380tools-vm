@@ -1,6 +1,7 @@
 #!/bin/bash 
+count=$(wc --lines ~/user.bin | cut -d" " -f1)
 clear
-echo -e "                      ${WHITE}KD4Z - md380tools-vm (v3.04)${NC}"
+echo -e "                ${WHITE}KD4Z - md380tools-vm (v3.05)${NC}\t  ${RED}(UserCSV records: ${count})${NC}"
 echo -e ""
 echo -e " Before running ${YELLOW}flash${NC} or ${YELLOW}flashgps${NC}, the radio must be in ${RED}DFU${NC} mode."
 echo -e " ${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
@@ -24,4 +25,3 @@ echo -e ""
 echo -e "\t\t\t${YELLOW}menu${NC}     -- display this screen again (or ${WHITE}Ctrl-D${NC})"
 echo -e "\t\t\t${YELLOW}help${NC}     -- display typical command recipes"
 echo -e ""
-

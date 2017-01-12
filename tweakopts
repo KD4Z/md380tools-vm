@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.04) - Tweaks ${NC}"
+echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.05) - Tweaks ${NC}"
 echo -e ""
 echo -e "Experimental settings are controlled by file existence in the home directory."
 echo -e "These take affect after your run next ${YELLOW}glv${NC}. A ${RED}*${NC} indicates currently enabled."

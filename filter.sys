@@ -10,7 +10,7 @@
 # assumes user file has octet count header, which is removed and replaced
 
 echo -e "${YELLOW}Applying system database filters${NC}"
-sed -i 1,1d $1
+
 if [ ! -f ~/filter.countries.disable ]; then
   sed -i -e 's/United States/USA/g' $1
   sed -i -e 's/United Kingdom/UK/g' $1
@@ -102,7 +102,7 @@ fi
 
 # and one absurbly long, redundant name
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
-
+sed -i -e 's/Beers Beers/Beers/g' $1
 
 sed -i -e 's/North /N. /g' $1
 sed -i -e 's/South /S. /g' $1
@@ -115,8 +115,3 @@ if [ -f ~/filter.local ]; then
   chmod +x ~/filter.local
   ~/filter.local $1
 fi
-
-wc -c < $1 >filtersys.tmp
-cat $1 >>filtersys.tmp
-cat filtersys.tmp > $1
-rm filtersys.tmp
