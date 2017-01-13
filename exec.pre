@@ -1,6 +1,23 @@
 #!/bin/bash
 # exec.pre
 # KD4Z
-# Version:  3.0
+# Version:  3.06
 # Runs before glv is started
 
+# copy existing build as default snapshot
+if [ -f ~/user.bin ]; then
+  cp ~/user.bin  ~/archive/user.bin.previous
+fi
+if [ -f ~/firmware-GPS.bin ]; then
+  cp ~/firmware-GPS.bin ~/archive/firmware-GPS.bin.previous
+fi
+if [ -f ~/firmware-noGPS.bin ]; then
+  cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin.previous
+fi
+
+# local hook if desired for extra pre glv processing
+if [ -f ~/exec.pre.local ]; then
+  echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
+  chmod +x ~/exec.pre.local
+  ~/exec.pre.local $userfile
+fi

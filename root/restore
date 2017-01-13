@@ -1,0 +1,51 @@
+#!/bin/bash
+# restore script
+# restores bin files from previous glv
+# takes argument 1, 2 or 3 to restore a specific save point
+# without argument, just restores prior build
+# KD4Z
+# Version:  3.6
+#
+
+file1=~/archive/user.bin.previous
+file2=~/archive/firmware-GPS.bin.previous
+file3=~/archive/firmware-noGPS.bin.previous
+
+
+if [ "$#" -ne 1 ] ; then
+  echo -e "${YELLOW}Restoring previous firmware and contacts from the build prior to last glv${NC}"
+  if [ -f ${file1} ]; then
+    cp ${file1} ~/user.bin
+  else
+    echo -e "${RED}Unable to restore previous glv file, file not found ${NC}"
+    echo -e $file1
+  fi
+
+  if [ -f ${file2} ]; then
+    cp ${file2} ~/firmware-GPS.bin
+  else
+    echo -e "${RED}Unable to restore previous glv file, file not found ${NC}"
+    echo -e $file2
+  fi
+
+  if [ -f ${file3} ]; then
+    cp ${file3} ~/firmware-noGPS.bin
+  else
+    echo -e "${RED}Unable to restore previous glv file, file not found ${NC}"
+    echo -3 $file3
+  fi
+  echo -e "${YELLOW}Done.${NC}"
+  exit 1
+fi
+if [ -f ~/archive/user.bin.$1 ]; then
+  echo -e "${YELLOW}Restoring snapshot $1 firmware and contact list.${NC}"
+  cp ~/archive/user.bin.$1 ~/user.bin
+ 
+  if [ -f ~/firmware-GPS.bin.$1 ]; then
+    cp ~/archive/firmware-GPS.bin.$1 ~/firmware-GPS.bin
+  fi
+  if [ -f ~/firmware-noGPS.bin.$1 ]; then
+    cp ~/archive/firmware-noGPS.bin.$1 ~/firmware-noGPS.bin
+  fi
+  echo -e "${YELLOW}Done.${NC}"
+fi

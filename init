@@ -2,7 +2,12 @@
 # KD4Z
 # Version:  3.0
 # called after git pull, and before everything else, use to setup script exec mode
-
+if [ -d ~/save ] && [ ! -d ~/archive ]; then
+  mv ~/save ~/archive
+fi
+if [ ! -d ~/archive ]; then
+  md ~/archive
+fi
 if [ -f ~/md380tools-vm/exec.pre ]; then
   chmod +x ~/md380tools-vm/exec.pre
 fi
@@ -41,6 +46,14 @@ fi
 if [ -f ~/md380tools-vm/root/tweaks ]; then
   cp ~/md380tools-vm/root/tweaks ~
   chmod +x ~/tweaks
+fi
+if [ -f ~/md380tools-vm/root/save ]; then
+  cp ~/md380tools-vm/root/save ~
+  chmod +x ~/save
+fi
+if [ -f ~/md380tools-vm/root/restore ]; then
+  cp ~/md380tools-vm/root/restore ~
+  chmod +x ~/restore
 fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts

@@ -1,0 +1,29 @@
+#!/bin/bash
+# save script
+# save bin files from current glv one of 3 save points
+# takes argument 1, 2 or 3 to restore a specific save point
+# without argument, does nothing
+# KD4Z
+# Version:  3.06
+#
+
+if [ "$#" -ne 1 ] ; then
+  echo -e "${GREEN}savebin -  requires argument for save point name or number (no embedded spaces)   Example:${YELLOW}  save 1${NC}"
+  exit 1
+fi
+
+echo -e -n "${YELLOW}Saving snapshot \"$1\" ... "
+  if [ -f ~/user.bin ]; then
+    cp ~/user.bin ~/archive/user.bin.$1
+  fi
+  if [ -f ~/firmware-GPS.bin ]; then
+    cp ~/firmware-GPS.bin ~/archive/firmware-GPS.bin.$1
+  fi
+  if [ -f ~/firmware-noGPS.bin ]; then
+    cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin.$1
+  fi
+  sleep 1
+echo -e "Done.${NC}"
+
+
+

@@ -26,7 +26,9 @@ sed -i 1,1d $userfile
 awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
   
 cat $usertmp >$userfile
-cat $usertmp >~/user.converted
+if [ -f ~/user.converted ]; then
+  rm~/user.converted
+fi
 rm $usertmp  
 
 ### end of data translation dance 
@@ -59,7 +61,14 @@ cat $userfile >>$usertmp
 cat $usertmp >$userfile
 rm $usertmp
 echo -e "${GREEN}GLV completed."  
-sleep 5
+sleep 4
+
+# local hook if desired for extra post processing
+if [ -f ~/exec.post.local ]; then
+  echo -e "${YELLOW}Executing ~/exec.post.local${NC}"
+  chmod +x ~/exec.post.local
+  ~/exec.post.local $userfile
+fi
 
 cd ~
 ~/md380tools-vm/menuopts

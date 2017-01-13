@@ -1,6 +1,6 @@
 #!/bin/bash 
 clear
-echo -e "                  ${WHITE}KD4Z - md380tools-vm (v3.05) - Recipes ${NC}"
+echo -e "                  ${WHITE}KD4Z - md380tools-vm - Recipes ${NC}"
 echo -e ""
 echo -e " ${WHITE}MD-380 / Retevis RT3 / No GPS${NC}"
 echo -e ""
