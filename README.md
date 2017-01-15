@@ -1,7 +1,7 @@
 MD380tools VM for VirtualBox
 Warren Merkel, KD4Z
 
-Current Version: 3.04 (after you glv)
+Current Version: 3.06 (after you glv)
 Image file updated:	 01/04/2017  Version 3.0
 Installation PDF updated: 01/09/2017
 
@@ -52,7 +52,14 @@ You will need to download the VirtualBox Appliance image file from these links:
 Single Image (Zip):
 https://drive.google.com/file/d/0Bwoi2MrlPb3vVEt3Ym4tVHF3SDQ/view?usp=sharing
 	
-Use the above link, or the 4 links below.  Don't do both!
+** Optional Image **
+User videobuff provided a converted image file, more suitable for 
+VMWare Fusion users: In case you wish to install a working VMWare container,
+you can download it here:
+
+https://drive.google.com/file/d/0BwED_-BHnZjSalVvMVUtZUlNTEk/view?usp=sharing	
+	
+Use one of the above links, or the 4 links below.  Don't do both!
 	
 Parts - Must use 7-zip to extract  http://www.7-zip.org/download.html	
 	
@@ -71,7 +78,7 @@ follow it out to extract.
 Noteable features:
 
   Runs under Windows or OS-X hosts using the free VirtualBox host software.  Runs under
-  VMware as well, though I can't help you there.
+  VMware as well.  Use the Optional Image mentioned above.
  
   Able to update radios when not connected to the internet, great for laptops.
 
