@@ -24,6 +24,11 @@
 FILESTATIC=~/static.users
 FILESEED=user.seed
 FILESEEDZIP=seeds.zip
+STATICFILEHOST=~/static.host
+
+if [ -f $STATICFILEHOST ]; then
+  timeout 8 wget -i $STATICFILEHOST -O $FILESTATIC
+fi
 
 if [ ! -f $FILESTATIC ]; then
   touch $FILESTATIC

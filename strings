@@ -1,0 +1,115 @@
+# localization strings
+# this file is used for simple language translation.
+# no font change support is available.  
+
+# These can not be changed without more effort
+# do not change this section as the menu commands
+# themselves do not follow these.  They are hardwired.
+# in English.  See section 2 below for the string section
+# that can be used for your own translation
+
+# Again, don't change anything in Section 1
+# this section becomes the default for English
+#
+#### SECTION 1 ########################################################################
+# Do NOT alter this section
+#
+export ZPROJ="KD4Z - md380tools-vm"
+export ZCOM1="glv"
+export ZCOM2="flash"
+export ZCOM3="flashgps"
+export ZCOM4="flashdb"
+export ZCOM5="~/lookup"
+export ZCOM6="menu"
+export ZCOM7="help"
+export ZCOM8="~/tweaks"
+export ZRAD10="MD-380 / RT3"
+export ZRAD20="MD-390 / RT8"
+#
+# Variables below this point will be considered for translation
+#
+export ZRAD11="No GPS"
+export ZRAD12="with GPS"
+export ZCOUNT1="UsersCSV records"
+export ZRECIPS="Recipes"
+export ZMESS11="Before running ${YELLOW}${ZCOM2}${NC} or ${YELLOW}${ZCOM3}${NC}, the radio must be in ${RED}DFU${NC} mode."
+export ZMESS12="${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
+export ZMESS13="verify that 'AnyRoad Technology Digital Radio' is selected."
+export ZMESS14=""
+export ZMESS15="Before running ${YELLOW}${ZCOM4}${NC} the radio should be in normal power ${RED}ON${NC} mode."
+export ZMESS16="In the 'Devices\USB' menu, the radio will be called '@0000:ffff Patched MD380'"
+export ZMESS17=""
+export ZSEL4="After ${ZCOM1}, all commands below can be run without an Internet connection."
+export ZMESS61="Display this screen again"
+export ZMESS71="Display typical command recipes"
+export ZCOM11="Downloads and builds everything"
+export ZCOM12="Update UsersCSV Contact list only"
+export ZCOM51="searchstring"
+export ZWRITE1="Write firmware to radios without GPS"
+export ZWRITE2="Write firmware to radios having GPS"
+export ZWRITE3="Write 'UsersCSV' contact list to radio"
+export ZWRITE4="Query the UserCSV data for searchstring"
+export ZCOM13="Save"
+export ZCOM14="Restore"
+export ZCOM15="build set"
+export ZCOM17="save"
+export ZCOM18="restore"
+export ZCOM19="setname"
+export ZCOM20="or"
+export ZCOM21="without setname for previous build"
+export ZCOM22="Tweaks menu"
+export ZCOM23="Back to main"
+# no need to change this line.  It is computed from the lines above
+export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
+
+#### SECTION 2 ########################################################################
+
+# Only localize variables below
+# be very careful to keep each variable in double quotes
+# do not change any of the embedded substitution variables 
+#   they must be exactly as the are now.  For example ${ZPROJ} 
+#
+# send your completed translation block to the email listed on 
+# my KD4Z QRZ.COM page.  I will include it in the project when 
+# the formatting looks correct.  
+# Copied from section above
+# to allow line by line translations to be done.
+# 
+#
+
+if [ -f ~/lang.dut]; then
+export ZRAD11="No GPS"
+export ZRAD12="with GPS"
+export ZCOUNT1="UsersCSV records"
+export ZRECIPS="Recipes"
+export ZMESS11="Before running ${YELLOW}${ZCOM2}${NC} or ${YELLOW}${ZCOM3}${NC}, the radio must be in ${RED}DFU${NC} mode."
+export ZMESS12="${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
+export ZMESS13="verify that 'AnyRoad Technology Digital Radio' is selected."
+export ZMESS14=""
+export ZMESS15="Before running ${YELLOW}${ZCOM4}${NC} the radio should be in normal power ${RED}ON${NC} mode."
+export ZMESS16="In the 'Devices\USB' menu, the radio will be called '@0000:ffff Patched MD380'"
+export ZMESS17=""
+export ZSEL4="After ${ZCOM1}, all commands below can be run without an Internet connection."
+export ZMESS61="Display this screen again"
+export ZMESS71="Display typical command recipes"
+export ZCOM11="Downloads and builds everything"
+export ZCOM12="Update UsersCSV Contact list only"
+export ZCOM51="searchstring"
+export ZWRITE1="Write firmware to radios without GPS"
+export ZWRITE2="Write firmware to radios having GPS"
+export ZWRITE3="Write 'UsersCSV' contact list to radio"
+export ZWRITE4="Query the UserCSV data for searchstring"
+export ZCOM13="Save"
+export ZCOM14="Restore"
+export ZCOM15="build set"
+export ZCOM17="save"
+export ZCOM18="restore"
+export ZCOM19="setname"
+export ZCOM20="or"
+export ZCOM21="without setname for previous build"
+export ZCOM22="Tweaks menu"
+export ZCOM23="Back to main"
+# no need to change this line.  It is computed from the lines above
+export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
+fi
+# End of Dutch translation area

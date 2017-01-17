@@ -58,3 +58,12 @@ fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 
+# enable nickname by default now
+if [ ! -f ~/fill.nickname.disable ]; then
+  touch ~/fill.nickname.enable
+ fi
+ 
+# which will require this anyway
+if [ ! -f ~/filter.sys.disable ]; then
+  touch ~/filter.sys.enable
+fi

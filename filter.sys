@@ -100,7 +100,7 @@ if [ -f ~/filter.us.states ]; then
 fi
 
 
-# and one absurbly long, redundant name
+# and one absurbly long, redundant name and other spastics
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
 sed -i -e 's/Beers Beers/Beers/g' $1
 
