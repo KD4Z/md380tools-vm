@@ -68,7 +68,7 @@ if [ -f $FILESTATIC ]; then
   awk -F',' '!seen[$1]++' userall.tmp >user.tmp
   sort -t, -k 1,1 -n user.tmp >usersorted.tmp
   
-  sed -i 1,1d usersorted.tmp
+  #sed -i 1,1d usersorted.tmp
   
   cat usersorted.tmp >~/user.bin
   rm userall.tmp usersorted.tmp user.tmp
