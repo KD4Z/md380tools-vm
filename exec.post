@@ -12,6 +12,7 @@ usertmp=~/user.tmp
 cd ~/md380tools-vm
 
 # Jan 11, 2017  dmr-marc has removed the nickname field completely and is now 
+# Jan 17, 2017  md380tools source was changed to workaround the issue, now removing my workaround
 # pumping in the comment at the end of the record
 # by the time md380tools massages it, the formats look like this:
 # old format prior to Jan 11, 2017
@@ -22,14 +23,14 @@ cd ~/md380tools-vm
 # translate new format back to old, except nickname is now missing,
 # 
 
-sed -i 1,1d $userfile
-awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
+#sed -i 1,1d $userfile
+#awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
   
-cat $usertmp >$userfile
-if [ -f ~/user.converted ]; then
-  rm~/user.converted
-fi
-rm $usertmp  
+#cat $usertmp >$userfile
+#if [ -f ~/user.converted ]; then
+#  rm~/user.converted
+#fi
+#rm $usertmp  
 
 ### end of data translation dance 
 
