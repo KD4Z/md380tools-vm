@@ -55,6 +55,11 @@ if [ -f ~/md380tools-vm/root/restore ]; then
   cp ~/md380tools-vm/root/restore ~
   chmod +x ~/restore
 fi
+
+if [ -f ~/md380tools-vm/root/glvusers ]; then
+  cp ~/md380tools-vm/root/glvusers ~
+  chmod +x ~/glvusers
+fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 

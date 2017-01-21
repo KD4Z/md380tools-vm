@@ -1,0 +1,36 @@
+#!/bin/bash
+# glvusers
+# builds the user.bin and flashes to radio.
+# skips the firmware build portion for faster updates
+
+
+if [ ! -d md380tools ]; then
+  echo -e "${RED}Must run ${YELLOW}glv${RED} first."
+fi
+
+cd ~/md380tools
+
+if [ -f ~/md380tools/db/stripped.csv ]; then
+  rm ~/md380tools/db/stripped.csv
+fi
+if [ -f ~/md380tools/db/dmrmarc.tmp ]; then
+  rm ~/md380tools/db/dmrmarc.tmp
+fi
+if [ -f ~/md380tools/db/dmrmark2.tmp ]; then
+  rm ~/md380tools/db/dmrmark2.tmp
+fi
+if [ -f ~/user.bin ]; then
+  cp ~/user.bin  ~/archive/user.bin.previous
+fi
+
+make updatedb
+
+
+wc -c < db/stripped.csv > user.bin
+cat db/stripped.csv >> user.bin
+cp user.bin ~/user.bin
+cd ~/md380tools-vm
+~/md380tools-vm/exec.post
+cd ~
+~/md380tools-vm/menuopts
+

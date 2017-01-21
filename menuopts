@@ -1,10 +1,13 @@
 #!/bin/bash 
 
+if [ ! -f /etc/motd.save ]; then
+  . ~/md380tools-vm/root/.bash_aliases
+fi
 . ~/md380tools-vm/strings
 
 count=$(wc --lines ~/user.bin | cut -d" " -f1)
 clear
-echo -e "                ${WHITE}${ZPROJ} (v3.06)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
+echo -e "                ${WHITE}${ZPROJ} (v3.07)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
 echo -e ""
 echo -e " ${ZMESS11}"
 echo -e " ${ZMESS12}"
@@ -13,9 +16,10 @@ echo -e " ${ZMESS14}"
 echo -e ""
 echo -e " ${ZMESS15}"
 echo -e " ${ZMESS16}"
-echo -e " ${ZMESS17}"
+#echo -e " ${ZMESS17}"
 echo -e ""
-echo -e "  ${YELLOW}${ZCOM1}${NC}       -- (${YELLOW}G${NC}et ${YELLOW}L${NC}atest ${YELLOW}V${NC}ersion) ${ZCOM11}"
+echo -e "  ${YELLOW}${ZCOM1}${NC}      -- (${YELLOW}G${NC}et ${YELLOW}L${NC}atest ${YELLOW}V${NC}ersion) ${ZCOM11}"
+echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"
 echo -e ""
 echo -e " ${ZSEL4}"
 echo -e ""
