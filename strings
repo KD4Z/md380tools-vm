@@ -115,7 +115,7 @@ export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 fi
 # End of Dutch translation area
 
-if [ -f ~/lang.pt]; then
+if [ -f ~/lang.pt ]; then
 export ZRAD11="Sem GPS"
 export ZRAD12="Com GPS"
 export ZCOUNT1="Registos na UsersCSV"
