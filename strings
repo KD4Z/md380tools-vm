@@ -120,18 +120,19 @@ fi
 # End of Dutch translation area
 #
 # Portuguese translation area
-# Thank CS7AGH for this section
+# courtesy of CS7AGH
+#
 if [ -f ~/lang.pt ]; then
 export ZRAD11="Sem GPS"
 export ZRAD12="Com GPS"
 export ZCOUNT1="Registos na UsersCSV"
 export ZRECIPS="Sequência de comandos"
 export ZMESS11="Antes de executar ${YELLOW}${ZCOM2}${NC} ou ${YELLOW}${ZCOM3}${NC}, o rádio deverá estar em modo ${RED}DFU${NC}."
-export ZMESS12="${RED}Pressione o PTT e o botão superior antes de ligar o rádio${NC}. Confirme se no menu 'Devices/USB',"
-export ZMESS13="a linha 'AnyRoad Technology Digital Radio' está seleccionada."
-export ZMESS14=""
-export ZMESS15="Antes de executar ${YELLOW}${ZCOM4}${NC} o rádio deverá estar ligado ${RED}NORMALMENTE${NC}."
-export ZMESS16="Neste modo, o rádio deverá aparecer como '@0000:ffff Patched MD380' no menu 'Devices\USB'."
+export ZMESS12="${RED}Pressione o PTT e o botão superior antes de ligar o rádio${NC}."
+export ZMESS13="Confirme se no menu 'Devices/USB',"
+export ZMESS14="a linha 'AnyRoad Technology Digital Radio' está seleccionada."
+export ZMESS15="Antes de executar ${YELLOW}${ZCOM4}${NC} o rádio deverá estar ligado ${RED}NORMALMENTE${NC}. Neste modo,"
+export ZMESS16="o rádio deverá aparecer como '@0000:ffff Patched MD380' no menu 'Devices\USB'."
 export ZMESS17=""
 export ZSEL4="Depois do ${ZCOM1}, todos os comandos podem ser executados sem ligação à Internet."
 export ZMESS61="Mostrar este ecrã novamente"

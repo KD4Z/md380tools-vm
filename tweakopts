@@ -34,5 +34,5 @@ if [ -f ~/fill.nickname.enable ]; then
 fi
 echo -e ""
 echo -e ""
-echo -e "\t\t\t${YELLOW}menu${NC}     -- Back to main menu (${ZCOM20} ${WHITE}Ctrl-D${NC})"
+echo -e "\t${YELLOW}menu${NC} -- Back to main menu (${ZCOM20} ${WHITE}Ctrl+D${NC})"
 echo -e ""
