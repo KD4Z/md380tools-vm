@@ -73,14 +73,15 @@ export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 # Branch and create a pull request when done or
 # send your completed translation block to the email listed on 
 # my KD4Z QRZ.COM page, and I'll merge it for yout.
-#  I will include it in the project when 
+# I will include it in the project when 
 # the formatting looks correct.  
 # Copied from section above
 # to allow line by line translations to be done.
 # 
 #
 
-# This needs to be done for Dutch  (Rob, you interested in doing this?)
+# Todo:  (Rob, you interested in doing this?)
+# Dutch translation area
 if [ -f ~/lang.dut ]; then
 export ZRAD11="No GPS"
 export ZRAD12="with GPS"
@@ -117,7 +118,9 @@ export ZCOM23="Back to main"
 export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 fi
 # End of Dutch translation area
-
+#
+# Portuguese translation area
+# Thank CS7AGH for this section
 if [ -f ~/lang.pt ]; then
 export ZRAD11="Sem GPS"
 export ZRAD12="Com GPS"
@@ -130,7 +133,7 @@ export ZMESS14=""
 export ZMESS15="Antes de executar ${YELLOW}${ZCOM4}${NC} o rádio deverá estar ligado ${RED}NORMALMENTE${NC}."
 export ZMESS16="Neste modo, o rádio deverá aparecer como '@0000:ffff Patched MD380' no menu 'Devices\USB'."
 export ZMESS17=""
-export ZSEL4="Depois do ${ZCOM1}, todos os comandos podem ser executados sem ligação a Internet."
+export ZSEL4="Depois do ${ZCOM1}, todos os comandos podem ser executados sem ligação à Internet."
 export ZMESS61="Mostrar este ecrã novamente"
 export ZMESS71="Mostrar as sequências recomendadas de comandos"
 export ZCOM11="Descarrega e compila toda a informação"
@@ -154,3 +157,29 @@ export ZCOM23="Regressar ao menu principal"
 export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 fi
 # End of Portuguese translation area
+
+# Italian translation area
+if [ -f ~/lang.it ]; then
+# Copy export strings from above and translate them
+# Any takers for this language?
+
+fi
+# End Italian translation area
+
+
+# German translation area
+if [ -f ~/lang.de ]; then
+# Copy export strings from above and translate them
+# Any takers for this language?
+
+fi
+# End German translation area
+
+
+# Spanish translation area
+if [ -f ~/lang.es ]; then
+# Copy export strings from above and translate them
+# Any takers for this language?
+
+fi
+# End Spanish translation area
