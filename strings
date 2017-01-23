@@ -70,15 +70,18 @@ export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 # do not change any of the embedded substitution variables 
 #   they must be exactly as the are now.  For example ${ZPROJ} 
 #
+# Branch and create a pull request when done or
 # send your completed translation block to the email listed on 
-# my KD4Z QRZ.COM page.  I will include it in the project when 
+# my KD4Z QRZ.COM page, and I'll merge it for yout.
+#  I will include it in the project when 
 # the formatting looks correct.  
 # Copied from section above
 # to allow line by line translations to be done.
 # 
 #
 
-if [ -f ~/lang.dut]; then
+# This needs to be done for Dutch  (Rob, you interested in doing this?)
+if [ -f ~/lang.dut ]; then
 export ZRAD11="No GPS"
 export ZRAD12="with GPS"
 export ZCOUNT1="UsersCSV records"
