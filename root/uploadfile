@@ -1,0 +1,61 @@
+#/bin/bash
+
+# uploadfile script
+# KD4Z
+# Version:  3.07
+#
+# upload a file from a given directory
+# to an ftp server outside the VM
+
+# you can execute this manually at the prompt with
+#
+#   ~/uploadfile
+#
+# or you can create a file called this
+#
+#   nano ~/exec.post.local
+#
+# with this content
+
+
+#/bin/bash
+~/uploadfile
+
+
+
+###########################################################################
+# Settings to change.  You must configure these for your server
+###########################################################################
+
+host=192.168.1.111
+user=username
+pass=password
+
+# this is the folder to upload the file to on the ftp server
+# leave as "/" if your file is to go into the default folder for the user
+# or if you want to change to a folder named "my/data"  (it must already exist on the server) 
+# set uploadfolder="/my/data"
+# 
+uploadfolder="/"
+
+
+# change these if you need a different file uploaded
+
+file="stripped.csv"
+localfolder="~/md380tools/db"
+
+###########################################################################
+# You don't need to change anything below this line
+###########################################################################
+
+echo -e "${GREEN}Uploading ${file} to local ftp server at ${host}${NC}"
+
+ftp -p -n <<EOF
+open ${host}
+user ${user} ${pass}
+lcd "${localfolder}"
+cd "${uploadfolder}"
+put "${file}"
+EOF
+
+echo -e "${GREEN}Upload complete${NC}"

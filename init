@@ -55,6 +55,10 @@ if [ -f ~/md380tools-vm/root/restore ]; then
   cp ~/md380tools-vm/root/restore ~
   chmod +x ~/restore
 fi
+if [ -f ~/md380tools-vm/root/uploadfile ]; then
+  cp ~/md380tools-vm/root/uploadfile ~
+  chmod +x ~/uploadfile
+fi
 if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bash_aliases ~
 fi  
@@ -73,4 +77,11 @@ if [ ! -f ~/fill.nickname.disable ]; then
 # which will require this anyway
 if [ ! -f ~/filter.sys.disable ]; then
   touch ~/filter.sys.enable
+fi
+
+# local hook if desired for user provided preprocessing
+if [ -f ~/exec.init.local ]; then
+  echo -e "${YELLOW}Executing ~/exec.init.local${NC}"
+  chmod +x ~/exec.init.local
+  ~/exec.init.local
 fi
