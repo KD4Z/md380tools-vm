@@ -4,8 +4,10 @@
 # skips the firmware build portion for faster updates
 
 
-if [ ! -d md380tools ]; then
-  echo -e "${RED}Must run ${YELLOW}glv${RED} first."
+if [ ! -d ~/md380tools ]; then
+  echo -e "${RED}Must run ${YELLOW}glv${RED} first.${NC}"
+  sleep 8
+  exit 1
 fi
 
 cd ~/md380tools
@@ -23,9 +25,68 @@ if [ -f ~/user.bin ]; then
   cp ~/user.bin  ~/archive/user.bin.previous
 fi
 
-make updatedb
+#make updatedb
+# skip full make and bypass the long running get_special_IDs.py
+# by faking out make and seed it with base records
 
+cd ~/md380tools/db
+make clean
+echo "250997,Parrot Service,Echo Function,,,,Russia," >~/md380tools/db/special.tmp
+echo "250999,APRS Gate,APRS Function,,,,Russia," >>~/md380tools/db/special.tmp
+make stripped.csv
 
+# sanity check by uncommenting this line
+#echo "0 nuts" > ~/md380tools/db/dmrmarc.tmp
+
+minimumsize=1000
+actualsize=$(wc -c ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
+
+if [ $count -lt 10 ] || [ $actualsize -le $minimumsize ]; then
+  # Warning...giant SWAG below as an attempt to workaround curl download fail
+  echo ""
+  echo -e "${RED}ERROR - Unable to download user data from dmr-marc.${NC}" 
+  echo -e ""
+  echo -e "${CYAN}The contact user database will not be complete if left like this."
+  echo -e ""
+  echo -e -n "No problem, I will try an alternate download method in 8 seconds.${NC}"
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo -e -n "."
+  sleep 1
+  echo "${NC}"
+  make clean
+  echo "250997,Parrot Service,Echo Function,,,,Russia," >~/md380tools/db/special.tmp
+  echo "250999,APRS Gate,APRS Function,,,,Russia," >>~/md380tools/db/special.tmp
+  if [ -f ~/md380tools/db/retry.tmp ]; then
+    rm retry.tmp
+  fi
+  timeout 8 wget "http://www.dmr-marc.net/cgi-bin/trbo-database/datadump.cgi?table=users&format=csv&header=0" -O ~/md380tools/db/retry.tmp
+  
+  count=$(wc --lines ~/md380tools/db/retry.tmp | cut -d" " -f1)
+  if [ $count -lt 10 ]; then
+    echo ""
+	echo -e "${RED}Oops.   The dmr-marc download workaround was not successful." 
+	echo -e "${GREEN}Try glvusers again or change to a different Internet connection.${NC}"
+	exit 1
+  else  
+    echo -e "${GREEN}dmr-marc download workaround was successful${NC}"
+	sleep 2
+	cat ~/md380tools/db/retry.tmp | perl -pe 's,<br/>,,' >~/md380tools/db/dmrmarc.tmp
+    make stripped.csv
+  fi    
+fi
+cd ~/md380tools
 wc -c < db/stripped.csv > user.bin
 cat db/stripped.csv >> user.bin
 cp user.bin ~/user.bin
