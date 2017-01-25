@@ -41,7 +41,7 @@ make stripped.csv
 minimumsize=1000
 actualsize=$(wc -c ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
 
-if [ $count -lt 10 ] || [ $actualsize -le $minimumsize ]; then
+if [ $actualsize -le $minimumsize ]; then
   # Warning...giant SWAG below as an attempt to workaround curl download fail
   echo ""
   echo -e "${RED}ERROR - Unable to download user data from dmr-marc.${NC}" 
