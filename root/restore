@@ -4,7 +4,7 @@
 # takes argument 1, 2 or 3 to restore a specific save point
 # without argument, just restores prior build
 # KD4Z
-# Version:  3.6
+# Version:  3.06
 #
 
 file1=~/archive/user.bin.previous
@@ -12,7 +12,7 @@ file2=~/archive/firmware-GPS.bin.previous
 file3=~/archive/firmware-noGPS.bin.previous
 
 
-if [ "$#" -ne 1 ] ; then
+if [ "$1" == "" ]; then
   echo -e "${YELLOW}Restoring previous firmware and contacts from the build prior to last glv${NC}"
   if [ -f ${file1} ]; then
     cp ${file1} ~/user.bin

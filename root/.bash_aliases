@@ -18,4 +18,10 @@ alias FLASH="flash"
 alias FLASHGPS="flashgps"
 alias FLASHDB="flashdb"
 alias dir="ls -lH"
+lookup() { ~/lookup "$1"; }
+save() { ~/save "$1"; }
+restore() { ~/restore "$1"; }
+rdtwrite() { ~/md380tools/md380-dfu write "$1"; }
+rdtread() { ~/md380tools/md380-dfu read "$1"; }
 
+ 
