@@ -1,8 +1,19 @@
 #/bin/bash
+
+. ~/md380tools-vm/strings
+
 if [ -f ~/user.bin ]; then
-  echo -e "Looking up $1"
-  /bin/grep -i "$1" ~/user.bin
+   
+  if [ "$1" == "" ]; then
+    echo -e "${RED}lookup - Missing criteria: ${ZWRITE4}"
+	echo ""
+    echo -e "${RED} -- Usage:  ${YELLOW}lookup ${BLUE}${ZCOM51}${NC}"
+    echo ""
+  else
+    echo -e "${GREEN}Search for ${BLUE}$1${NC}"
+    /bin/grep -i "$1" ~/user.bin
+  fi	
 else
-  echo -e "${RED}User Data not available.  Run glv first.${NC}"
+  echo -e "${RED}User Data not available.  Run ${ZCOM1} first.${NC}"
 fi
 

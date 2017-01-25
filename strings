@@ -61,8 +61,6 @@ export ZCOM20="or"
 export ZCOM21="without setname for previous build"
 export ZCOM22="Tweaks menu"
 export ZCOM23="Back to main"
-# no need to change this line.  It is computed from the lines above
-export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 
 #### SECTION 2 ########################################################################
 
@@ -78,8 +76,7 @@ export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 # the formatting looks correct.  
 # Copied from section above
 # to allow line by line translations to be done.
-# 
-#
+ 
 
 # Dutch translation area
 # Courtesy of PD0DIB
@@ -116,15 +113,14 @@ export ZCOM20="of"
 export ZCOM21="zonder setnaam: restore versie vóór glv"
 export ZCOM22="Tweaks menu met extra's"
 export ZCOM23="Terug naar hoofdmenu"
-
-# no need to change this line.  It is computed from the lines above
-export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 fi
 # End of Dutch translation area
+
 #
 # Portuguese translation area
 # courtesy of CS7AGH
 #
+
 if [ -f ~/lang.pt ]; then
 export ZRAD11="Sem GPS"
 export ZRAD12="Com GPS"
@@ -158,33 +154,32 @@ export ZCOM20="ou"
 export ZCOM21="para carregar a versão anterior"
 export ZCOM22="Menu de Testes"
 export ZCOM23="Regressar ao menu principal"
-# no need to change this line.  It is computed from the lines above
-export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
 fi
 # End of Portuguese translation area
 
 # Italian translation area
-if [ -f ~/lang.it ]; then
+#if [ -f ~/lang.it ]; then
 # Copy export strings from above and translate them
 # Any takers for this language?
-
-fi
+#
+#fi
 # End Italian translation area
 
 
 # German translation area
-if [ -f ~/lang.de ]; then
+#if [ -f ~/lang.de ]; then
 # Copy export strings from above and translate them
 # Any takers for this language?
-
-fi
+#fi
 # End German translation area
 
 
 # Spanish translation area
-if [ -f ~/lang.es ]; then
+#if [ -f ~/lang.es ]; then
 # Copy export strings from above and translate them
 # Any takers for this language?
-
-fi
+#fi
 # End Spanish translation area
+
+# no need to change this line.  It is computed from the lines above
+export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
