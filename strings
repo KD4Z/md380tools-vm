@@ -41,7 +41,7 @@ export ZMESS14=""
 export ZMESS15="Before running ${YELLOW}${ZCOM4}${NC} the radio should be in normal power ${RED}${ZCOM24}${NC} mode."
 export ZMESS16="In the 'Devices\USB' menu, the radio will be called '@0000:ffff Patched MD380'"
 export ZMESS17=""
-export ZSEL4="After ${ZCOM1}, all commands below can be run without an Internet connection."
+export ZSEL4=" After ${ZCOM1}, all commands below can be run without an Internet connection."
 export ZMESS61="Display this screen again"
 export ZMESS71="Display typical command recipes"
 export ZCOM11="Downloads and builds everything"
@@ -155,24 +155,27 @@ export ZCOM21="para carregar a versão anterior"
 export ZCOM22="Menu de Testes"
 export ZCOM23="Regressar ao menu principal"
 fi
-# End of Portuguese translation area
 
+# End of Portuguese translation area
+#
 # Italian translation area
 # courtesy of IW0QPP
+#
+
 if [ -f ~/lang.it ]; then
 export ZRAD11="Senza GPS"
 export ZRAD12="Con GPS"
 export ZCOUNT1="Nominativi in UsersCSV "
 export ZRECIPS="Sequenza di istruzioni"
 export ZCOM24="ON"
-export ZMESS11="Prima di eseguire ${YELLOW}${ZCOM2}${NC} o ${YELLOW}${ZCOM3}${NC}, La radio deve essere in modalità ${RED}DFU${NC} "
-export ZMESS12="${RED}Accenderla mantenendo premuti il PTT ed il tasto superiore${NC}.  Verificare nel menu 'Devices/USB' ,"
-export ZMESS13="che sia selezionato 'AnyRoad Technology Digital Radio' ."
+export ZMESS11="Prima di eseguire ${YELLOW}${ZCOM2}${NC} o ${YELLOW}${ZCOM3}${NC}, La radio deve essere in modalità ${RED}DFU${NC}"
+export ZMESS12="${RED}Accenderla premendo il PTT ed il tasto superiore${NC}. Verificare nel menu"
+export ZMESS13="'Devices/USB', che sia selezionato 'AnyRoad Technology Digital Radio'."
 export ZMESS14=""
-export ZMESS15="Prima di eseguire ${YELLOW}${ZCOM4}${NC} deve essere accesa normalmente ${RED}${ZCOM24}${NC} ."
+export ZMESS15="Prima di eseguire ${YELLOW}${ZCOM4}${NC} deve essere accesa normalmente ${RED}${ZCOM24}${NC}."
 export ZMESS16="nel menu 'Devices\USB', la radio sarà indicata come '@0000:ffff Patched MD380'"
 export ZMESS17=""
-export ZSEL4="Dopo ${ZCOM1}, tutti i comandi potranno essere eseguiti senza connessione ad Internet."
+export ZSEL4="Dopo ${ZCOM1}, tutti i comandi potranno essere eseguiti senza connessione ad Internet"
 export ZMESS61="Visualizza di nuovo questa schermata"
 export ZMESS71="Visualizza la sequenza di comandi corretta"
 export ZCOM11="Scarica e compila tutto"
