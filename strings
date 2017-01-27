@@ -158,11 +158,41 @@ fi
 # End of Portuguese translation area
 
 # Italian translation area
-#if [ -f ~/lang.it ]; then
-# Copy export strings from above and translate them
-# Any takers for this language?
-#
-#fi
+# courtesy of IW0QPP
+if [ -f ~/lang.it ]; then
+export ZRAD11="Senza GPS"
+export ZRAD12="Con GPS"
+export ZCOUNT1="Nominativi in UsersCSV "
+export ZRECIPS="Sequenza di istruzioni"
+export ZCOM24="ON"
+export ZMESS11="Prima di eseguire ${YELLOW}${ZCOM2}${NC} o ${YELLOW}${ZCOM3}${NC}, La radio deve essere in modalità ${RED}DFU${NC} "
+export ZMESS12="${RED}Accenderla mantenendo premuti il PTT ed il tasto superiore${NC}.  Verificare nel menu 'Devices/USB' ,"
+export ZMESS13="che sia selezionato 'AnyRoad Technology Digital Radio' ."
+export ZMESS14=""
+export ZMESS15="Prima di eseguire ${YELLOW}${ZCOM4}${NC} deve essere accesa normalmente ${RED}${ZCOM24}${NC} ."
+export ZMESS16="nel menu 'Devices\USB', la radio sarà indicata come '@0000:ffff Patched MD380'"
+export ZMESS17=""
+export ZSEL4="Dopo ${ZCOM1}, tutti i comandi potranno essere eseguiti senza connessione ad Internet."
+export ZMESS61="Visualizza di nuovo questa schermata"
+export ZMESS71="Visualizza la sequenza di comandi corretta"
+export ZCOM11="Scarica e compila tutto"
+export ZCOM12="Scarica e compila il solo UsersCSV"
+export ZCOM51="testodacercare"
+export ZWRITE1="Scrive il firmware nelle radio *senza*  GPS"
+export ZWRITE2="Scrive il firmware nelle radio *con* GPS"
+export ZWRITE3="Scrive la lista di contatti  'UsersCSV' nella radio"
+export ZWRITE4="Interroga l'archivio UserCSV per 'testodacercare"
+export ZCOM13="Salva"
+export ZCOM14="Ripristina"
+export ZCOM15="nome versione"
+export ZCOM17="salva"
+export ZCOM18="ripristina"
+export ZCOM19="nome"
+export ZCOM20="o"
+export ZCOM21="senza nome per versione precedente"
+export ZCOM22="Tweaks menu"
+export ZCOM23="Torna al menu principale"
+fi
 # End Italian translation area
 
 
