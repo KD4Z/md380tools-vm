@@ -208,12 +208,46 @@ fi
 # End German translation area
 
 
+
 # Spanish translation area
-#if [ -f ~/lang.es ]; then
-# Copy export strings from above and translate them
-# Any takers for this language?
-#fi
+# Courtesy of EA8EE
+if [ -f ~/lang.es ]; then
+export ZRAD11="Sin GPS"
+export ZRAD12="Con GPS"
+export ZCOUNT1="Indicativo en UsersCSV "
+export ZRECIPS="Secuencia de las instruciones"
+export ZCOM24="ON"
+export ZMESS11="Antes de continuar ${YELLOW}${ZCOM2}${NC} o ${YELLOW}${ZCOM3}${NC}, La radio debe estar en modalidad  ${RED}DFU${NC}"
+export ZMESS12="${RED}Presione primero el PTT y el boton superior${NC}. Verificar en el menu"
+export ZMESS13="'Devices/USB', que este seleccionado 'AnyRoad Technology Digital Radio'."
+export ZMESS14=""
+export ZMESS15="Antes de continuar ${YELLOW}${ZCOM4}${NC} debe estar encendida  normalmente ${RED}${ZCOM24}${NC}."
+export ZMESS16="en el  menu 'Devices\USB', la radio debera indicar  '@0000:ffff Patched MD380'"
+export ZMESS17=""
+#export ZSEL4="Despues ${ZCOM1}, todos los comandos se utilizaran sin conexion a Internet"
+export ZSEL4="Despues ${ZCOM1}, podra utilizar  los  comandos tambien sin conexion a Internet." 
+export ZMESS61="Visualiza de nuevo esta pantalla"
+export ZMESS71="Visualiza la secuencia de comandos  correcta"
+export ZCOM11="Descarga y compila todo"
+export ZCOM12="Descarga y compila solo el UsersCSV"
+export ZCOM51="texto a buscar"
+export ZWRITE1="Graba el firmware en los modelos *sin*  GPS"
+export ZWRITE2="Graba el firmware en los modelos *con* GPS"
+export ZWRITE3="Graba la lista de contactos 'UsersCSV' en la radio"
+export ZWRITE4="Localiza sobre el archivo UserCSV para 'buscar texto"
+export ZCOM13="Salva"
+export ZCOM14="Comienza de nuevo"
+export ZCOM15="Version"
+export ZCOM17="salva"
+export ZCOM18="Comienza de nuevo"
+export ZCOM19="nombre"
+export ZCOM20="o"
+export ZCOM21="sin nombre para la version anterior"
+export ZCOM22="Tweaks menu"
+export ZCOM23="Regresa al menu principal"
+fi
 # End Spanish translation area
+
 
 # no need to change this line.  It is computed from the lines above
 export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
