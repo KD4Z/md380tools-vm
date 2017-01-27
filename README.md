@@ -1,7 +1,7 @@
 MD380tools VM for VirtualBox
 Warren Merkel, KD4Z
 
-Current Version: 3.06 (after you glv)
+Current Version: 3.08 (after you glv)
 Image file updated:	 01/04/2017  Version 3.0
 Installation PDF updated: 01/14/2017
 
@@ -112,9 +112,15 @@ Noteable features:
 
   Able to update firmware on MD-380 and MD-390 radios with GPS
 
-  Multiple language support.   Currently Dutch and Portuguese modes are available. 
+  Multiple language support.   Currently 3 alternate languages are supported.
+  
+  Dutch			(enable with:  touch lang.nl )  Courtesy of PD0DIB 
+  Portuguese	(enable with:  touch lang.pt )  Courtesy of CS7AGH
+  Italian		(enable with:  touch lang.it )  Courtesy of IW0QPP
+  
+   
   If you can help translate into other languages, create a branch, and modify the
-  strings script, and request a pull.  Or send me the new language section in email.  
+  "strings" script (found here), and request a pull.  Or send me the new language section in email.  
 
   Able to display user's first name in the nickname space, which makes the name easy to see.
   
