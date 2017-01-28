@@ -3,14 +3,14 @@ Warren Merkel, KD4Z
 
 Current Version: 3.08 (after you glv)
 Image file updated:	 01/04/2017  Version 3.0
-Installation PDF updated: 01/14/2017
+Installation PDF updated: 01/28/2017
 
 From github project
 https://github.com/KD4Z/md380tools-vm
 
 Follow the installation directions in the PDF found here:
 
-https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.06.pdf
+https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08.pdf
 
 You do not need to download any files list here on this github site, except the install pdf above!
 
@@ -44,9 +44,7 @@ Other interesting tweaks in this VM make it stand out as being better than just
 the results from running the base md380tools scripts.
 
 Be sure to read it completely before emailing questions!  99% of all questions are
-answered in the installation PDF.   Consider joining the BrandMeister DMR talkgroup
-3148 Facebook group for assistance from others, and lots of information. 
-Link:  https://www.facebook.com/groups/158270421244005/
+answered in the installation PDF.  
 
 European users have access to this Facebook group, specializing in Dutch,
 though English posts are welcome:
