@@ -62,6 +62,9 @@ if [ -f $FILESTATIC ]; then
 fi
   
 if [ -f $FILESEEDZIP ]; then
+    if [ -f $FILESEED ]; then
+	  rm $FILESEED
+	fi
     unzip $FILESEEDZIP $FILESEED >/dev/null
     cat $FILESEED >>$TMPALL
     if [ -f ~/keep.seed.file ]; then

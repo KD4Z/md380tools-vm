@@ -7,30 +7,30 @@
 
 
 userfile=~/user.bin
-usertmp=~/user.tmp
+usertmp=~/header.tmp
 
 cd ~/md380tools-vm
 
-# Jan 11, 2017  dmr-marc has removed the nickname field completely and is now 
+# Jan 11, 2017  dmr-marc has removed the nickname field completely and is now
 # Jan 17, 2017  md380tools source was changed to workaround the issue, now removing my workaround
 # pumping in the comment at the end of the record
 # by the time md380tools massages it, the formats look like this:
 # old format prior to Jan 11, 2017
 # 	id,callsign,fullname,city,state,nickname,country
-# new format (wtf) 
+# new format (wtf)
 # 	id,callsign,fullname,state,country,city,comment
-  
+
 # translate new format back to old, except nickname is now missing,
 # 
 
 #sed -i 1,1d $userfile
 #awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
-  
+
 #cat $usertmp >$userfile
 #if [ -f ~/user.converted ]; then
 #  rm~/user.converted
 #fi
-#rm $usertmp  
+#rm $usertmp
 
 ### end of data translation dance 
 
@@ -41,19 +41,26 @@ if [ ! -f ~/fill.nickname.disable ]; then
 
   # old formatter saved just in case dmr-marc goes back to original format
   # awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
-  
+
   awk -F, '{print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7}' $userfile >$usertmp
 
   cat $usertmp >$userfile
   rm $usertmp
   # nickname option explodes the user file and seems to hit the radio limit, so must enable filters to 
-  # reduce the dataset size. 
+  # reduce the dataset size.
   # Todo-   Need to ask Travis what the upper limit is or why lookups fail over 3.1Megs
   touch ~/filter.sys.enable
 fi
 
-if [ -f filter.sys ] && [ -f ~/filter.sys.enable ]; then  
+if [ -f filter.sys ] && [ -f ~/filter.sys.enable ] && [ ! -f ~/filter.sys.disable ]; then  
   ./filter.sys $userfile
+fi
+
+if [ -f ~/md380tools/db/special.tmp ]; then
+	if [ ! -d ~/cache ]; then
+	  mkdir ~/cache
+	fi
+	cp ~/md380tools/db/special.tmp ~/cache 
 fi
 
 # now put back the header
@@ -61,7 +68,7 @@ wc -c < $userfile >$usertmp
 cat $userfile >>$usertmp
 cat $usertmp >$userfile
 rm $usertmp
-echo -e "${GREEN}GLV completed."  
+echo -e "${GREEN}Processing complete."
 sleep 4
 
 # local hook if desired for extra post processing

@@ -1,5 +1,7 @@
 #!/bin/bash
 # glvusers
+# KD4Z
+# Version:  3.08
 # builds the user.bin and flashes to radio.
 # skips the firmware build portion for faster updates
 
@@ -31,8 +33,9 @@ fi
 
 cd ~/md380tools/db
 make clean
-echo "250997,Parrot Service,Echo Function,,,,Russia," >~/md380tools/db/special.tmp
-echo "250999,APRS Gate,APRS Function,,,,Russia," >>~/md380tools/db/special.tmp
+if [ -f ~/cache/special.tmp ]; then
+    cp ~/cache/special.tmp ~/md380tools/db/special.tmp
+fi
 make stripped.csv
 
 # sanity check by uncommenting this line
@@ -66,8 +69,9 @@ if [ $actualsize -le $minimumsize ]; then
   sleep 1
   echo "${NC}"
   make clean
-  echo "250997,Parrot Service,Echo Function,,,,Russia," >~/md380tools/db/special.tmp
-  echo "250999,APRS Gate,APRS Function,,,,Russia," >>~/md380tools/db/special.tmp
+  if [ -f ~/cache/special.tmp ]; then
+    cp ~/cache/special.tmp ~/md380tools/db/special.tmp
+  fi
   if [ -f ~/md380tools/db/retry.tmp ]; then
     rm retry.tmp
   fi
