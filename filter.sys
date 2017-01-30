@@ -7,7 +7,7 @@
 # calls out to ~/filter.local if found in home directory
 # where user can add their own operations
 # receives filenameas first argument
-# assumes user file has octet count header, which is removed and replaced
+ 
 
 echo -e "${YELLOW}Applying system database filters${NC}"
 
@@ -102,7 +102,7 @@ fi
 
 # and one absurbly long, redundant name and other spastics
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
-sed -i -e 's/Beers Beers/Beers/g' $1
+sed -i -e 's/AsdruBal/Al/g' $1   # for KP3A
 
 sed -i -e 's/North /N. /g' $1
 sed -i -e 's/South /S. /g' $1

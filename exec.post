@@ -19,34 +19,27 @@ cd ~/md380tools-vm
 # 	id,callsign,fullname,city,state,nickname,country
 # new format (wtf)
 # 	id,callsign,fullname,state,country,city,comment
-
 # translate new format back to old, except nickname is now missing,
 # 
-
 #sed -i 1,1d $userfile
 #awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
-
 #cat $usertmp >$userfile
 #if [ -f ~/user.converted ]; then
 #  rm~/user.converted
 #fi
 #rm $usertmp
-
 ### end of data translation dance 
 
+# addstatic script returns user.bin merged
 ./addstatic
+
 
 if [ ! -f ~/fill.nickname.disable ]; then
   echo -e "${YELLOW}Touching up nicknames"
-
-  # old formatter saved just in case dmr-marc goes back to original format
-  # awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
-
-  awk -F, '{print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7}' $userfile >$usertmp
-
+  awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
   cat $usertmp >$userfile
   rm $usertmp
-  # nickname option explodes the user file and seems to hit the radio limit, so must enable filters to 
+  # nickname option explodes the user file size and seems to hit the radio limit, so must enable filters to 
   # reduce the dataset size.
   # Todo-   Need to ask Travis what the upper limit is or why lookups fail over 3.1Megs
   touch ~/filter.sys.enable
