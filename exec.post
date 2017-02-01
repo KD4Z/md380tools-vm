@@ -56,6 +56,14 @@ if [ -f ~/md380tools/db/special.tmp ]; then
 	cp ~/md380tools/db/special.tmp ~/cache 
 fi
 
+# local hook if desired for extra post processing
+# header record not present at this point
+if [ -f ~/exec.post.local ]; then
+  echo -e "${YELLOW}Executing ~/exec.post.local${NC}"
+  chmod +x ~/exec.post.local
+  ~/exec.post.local $userfile
+fi
+
 # now put back the header
 wc -c < $userfile >$usertmp
 cat $userfile >>$usertmp
@@ -64,12 +72,4 @@ rm $usertmp
 echo -e "${GREEN}Processing complete."
 sleep 4
 
-# local hook if desired for extra post processing
-if [ -f ~/exec.post.local ]; then
-  echo -e "${YELLOW}Executing ~/exec.post.local${NC}"
-  chmod +x ~/exec.post.local
-  ~/exec.post.local $userfile
-fi
 
-cd ~
-~/md380tools-vm/menuopts

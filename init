@@ -59,6 +59,10 @@ if [ -f ~/md380tools-vm/root/uploadfile ]; then
   cp ~/md380tools-vm/root/uploadfile ~
   chmod +x ~/uploadfile
 fi
+if [ -f ~/md380tools-vm/root/build ]; then
+  cp ~/md380tools-vm/root/build ~
+  chmod +x ~/build
+fi
 if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bash_aliases ~
 fi  

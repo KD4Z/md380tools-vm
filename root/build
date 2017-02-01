@@ -1,0 +1,26 @@
+#/bin/bash
+# KD4Z
+# master glv script
+# Version:  3.09
+
+now=`date "+%Y-%m-%d"`
+
+cd ~/md380tools-vm
+~/md380tools-vm/exec.pre
+
+cd ~/md380tools
+make dist
+
+cp dist/md380tools-${now}/firmware-${now}-NoGPS.bin ~/firmware-noGPS.bin
+cp dist/md380tools-${now}/firmware-${now}-GPS.bin ~/firmware-GPS.bin
+
+make updatedb
+
+cat db/stripped.csv >user.bin
+cp user.bin ~/user.bin
+
+cd ~/md380tools-vm 
+~/md380tools-vm/exec.post
+
+cd ~
+~/md380tools-vm/menuopts
