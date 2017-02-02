@@ -110,12 +110,15 @@ Noteable features:
 
   Able to update firmware on MD-380 and MD-390 radios with GPS
 
-  Multiple language support.   Currently 3 alternate languages are supported.
+  Multiple language support.   Currently 4 alternate languages are supported.
   
-  Dutch			(enable with:  touch lang.nl )  Courtesy of PD0DIB 
+  Dutch			(enable with:  touch lang.nl )  Courtesy of PD0DIB
+  
   Portuguese	(enable with:  touch lang.pt )  Courtesy of CS7AGH
+
   Italian		(enable with:  touch lang.it )  Courtesy of IW0QPP
-  
+
+  Spanish       (enable with : touch lang.es )  Courtesy of EA8EE
    
   If you can help translate into other languages, create a branch, and modify the
   "strings" script (found here), and request a pull.  Or send me the new language section in email.  
