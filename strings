@@ -14,7 +14,11 @@
 #### SECTION 1 ########################################################################
 # Do NOT alter this section
 #
-export ZPROJ="KD4Z - md380tools-vm"
+if [ -f /etc/motd.save ]; then
+  export ZPROJ="KD4Z - md380tools-vm"
+else
+  export ZPROJ="KD4Z - md380tools-menu"
+fi
 export ZCOM1="glv"
 export ZCOM2="flash"
 export ZCOM3="flashgps"
