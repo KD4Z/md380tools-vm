@@ -1,4 +1,5 @@
 #!/bin/bash 
+. ~/md380tools-vm/strings
 clear
 echo -e "                  ${WHITE}KD4Z - md380tools-vm - Tweaks ${NC}"
 echo -e ""
@@ -34,5 +35,10 @@ if [ -f ~/fill.nickname.enable ]; then
 fi
 echo -e ""
 echo -e ""
-echo -e "\t${YELLOW}menu${NC} -- Back to main menu (${ZCOM20} ${WHITE}Ctrl+D${NC})"
+echo -e -n "\t${YELLOW}menu${NC} -- Back to main menu "
+if [ -f /etc/motd.save ]; then
+  echo -e " (${ZCOM20} ${WHITE}Ctrl+D${NC})"
+else
+  echo -e ""
+fi
 echo -e ""

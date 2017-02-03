@@ -38,7 +38,9 @@ if [ -f $STATICFILEHOST ]; then
   timeout 8 wget -i $STATICFILEHOST -O $FILESTATIC
 fi
 
-if [ ! -f $FILESTATIC ]; then
+if [ -f $FILESTATIC ]; then
+  sed -i -e 's/\r//' $FILESTATIC
+else
   touch $FILESTATIC
 fi
 

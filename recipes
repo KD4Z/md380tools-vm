@@ -22,5 +22,10 @@ echo -e "\t${YELLOW}${ZCOM17}${NC} ${BLUE}${ZCOM19}${NC}"
 echo -e "\t${YELLOW}${ZCOM18}${NC} ${BLUE}${ZCOM19}${NC} ${ZCOM20} ${YELLOW}${ZCOM18}${NC} ${ZCOM21}"
 echo -e ""
 echo -e "\t${YELLOW}${ZCOM8}${NC}   -- ${ZCOM22}"
-echo -e "\t${YELLOW}menu${NC}     -- ${ZMESS61} (${ZCOM20} ${WHITE}Ctrl+D${NC})"
+echo -e -n "\t${YELLOW}menu${NC}     -- Back to main menu "
+if [ -f /etc/motd.save ]; then
+  echo -e " (${ZCOM20} ${WHITE}Ctrl+D${NC})"
+else
+  echo -e ""
+fi
 echo -e ""
