@@ -14,6 +14,21 @@ https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08
 
 You do not need to download any files list here on this github site, except the install pdf above!
 
+These instructions describe how to install software on your Windows or Mac, that runs linux in 
+a Virtual Machine environment.  You don't need to know anything about linux to use it!
+
+If you are linux savy, and would rather just use the scripting framework installed in the VM, see
+this pdf document for brief installation instructions that allow you to use your existing linux
+environment such as debian, ubuntu or Raspian on a Raspberry Pi.  This guide will install exactly
+the same scripting framework used in the VM.   It will update in the same way the VM does. 
+
+See MD380tools_Menu_installation_on_native_linux_KD4Z.pdf here:  
+https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_Menu_installation_on_native_linux_KD4Z.pdf
+If you run into something I missed in this brief document, please forward that information on to me
+so I can update the document.  
+
+
+For the rest of you, let's get started with the downloading and installing the VM version.
 
 You DO need to download the image from links below if you are not on version 3.x
 Don't download from these links if you already have version 3.x!  The 3.0 VM self updates
