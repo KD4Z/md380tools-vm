@@ -7,16 +7,20 @@ fi
 
 count=$(wc --lines ~/user.bin | cut -d" " -f1)
 clear
-echo -e "      ${WHITE}${ZPROJ} (v3.08)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
+echo -e "      ${WHITE}${ZPROJ} (v3.09)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
 echo -e ""
 echo -e " ${ZMESS11}"
 echo -e " ${ZMESS12}"
-echo -e " ${ZMESS13}"
-echo -e " ${ZMESS14}"
+if [ -f /etc/motd.save ]; then
+  echo -e " ${ZMESS13}"
+  echo -e " ${ZMESS14}"
+fi
 echo -e ""
-echo -e " ${ZMESS15}"
-echo -e " ${ZMESS16}"
-#echo -e " ${ZMESS17}"
+if [ -f /etc/motd.save ]; then
+  echo -e " ${ZMESS15}"
+  echo -e " ${ZMESS16}"
+  #echo -e " ${ZMESS17}"
+fi
 echo -e ""
 echo -e "  ${YELLOW}${ZCOM1}${NC}      -- (${YELLOW}G${NC}et ${YELLOW}L${NC}atest ${YELLOW}V${NC}ersion) ${ZCOM11}"
 echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"

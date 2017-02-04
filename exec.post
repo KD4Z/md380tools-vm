@@ -35,7 +35,7 @@ cd ~/md380tools-vm
 
 
 if [ ! -f ~/fill.nickname.disable ]; then
-  echo -e "${YELLOW}Touching up nicknames"
+  echo -e "${YELLOW}Touching up ${ZCOM44}"
   awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
   cat $usertmp >$userfile
   rm $usertmp
@@ -45,7 +45,7 @@ if [ ! -f ~/fill.nickname.disable ]; then
   touch ~/filter.sys.enable
 fi
 
-if [ -f filter.sys ] && [ -f ~/filter.sys.enable ] && [ ! -f ~/filter.sys.disable ]; then  
+if [ -f filter.sys ] && [ ! -f ~/filter.sys.disable ]; then  
   ./filter.sys $userfile
 fi
 

@@ -35,14 +35,17 @@ fi
 touch $TMPALL
 
 if [ -f $STATICFILEHOST ]; then
+  echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
   timeout 8 wget -i $STATICFILEHOST -O $FILESTATIC
 fi
 
 if [ -f $FILESTATIC ]; then
+  echo -e "${YELLOW}Appending Static IDs from ${$FILESTATIC}${NC}"
   sed -i -e 's/\r//' $FILESTATIC
 else
   touch $FILESTATIC
 fi
+countstatic=$(wc --lines ${FILESTATIC} | cut -d" " -f1)
 
 if [ -f ~/keep.seed.file ] && [ -f ~/seeds.zip ]; then
     cp ~/seeds.zip .
@@ -93,9 +96,13 @@ sort -t, -k 1,1 -n $TMPDEDUP >$TMPSORTED
   
 cat $TMPSORTED >~/user.bin
   
-if [ -f ~/keep.tmp ]; then
+
+countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
+countall=$(wc --lines ~/user.bin | cut -d" " -f1)
+echo -e "${GREEN}Contact Import completed."
+echo -e "  Static ID count:  ${countstatic}"
+echo -e "  DMR-MARC count :  ${countmarc}"
+echo -e "  Merged total   :  ${countall}${NC}"
+if [ ! -f ~/keep.tmp ]; then
     rm $TMPALL $TMPSORTED 
 fi
-
-wc --lines ~/md380tools/db/dmrmarc.tmp
-echo -e "${GREEN}Static DMR ID Import completed.  ID count on the line above.${NC}"

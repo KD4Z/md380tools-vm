@@ -30,6 +30,8 @@ export ZCOM8="tweaks"
 export ZRAD10="MD-380 / RT3"
 export ZRAD20="MD-390 / RT8"
 export ZCOM10="glvusers"
+export ZCOM29="touch"
+export ZCOM36="setting"
 
 export RED='\033[1;31m'
 export GREEN='\033[1;32m'
@@ -41,19 +43,26 @@ export BROWN='\033[1;33m'
 export CYAN='\033[1;36m'
 export NC='\033[0m'
 
+export ZCOM30="${YELLOW}${ZCOM29} ${BLUE}tweakfile${NC}"
+export ZCOM31="${YELLOW}rm ${BLUE}tweakfile${NC}"
+
+
 #### SECTION 2 ########################################################################
 #
 # Variables below this point will be considered for translation
+# These are the base English phrases
+# Use them to base your own language translations.
 #
+
 export ZRAD11="No GPS"
 export ZRAD12="with GPS"
 export ZCOUNT1="UsersCSV records"
 export ZRECIPS="Recipes"
 export ZCOM24="ON"
 export ZMESS11="Before running ${YELLOW}${ZCOM2}${NC} or ${YELLOW}${ZCOM3}${NC}, the radio must be in ${RED}DFU${NC} mode."
-export ZMESS12="${RED}Power on holding PTT and top button${NC}.  Verify in the 'Devices/USB' menu,"
-export ZMESS13="verify that 'AnyRoad Technology Digital Radio' is selected."
-export ZMESS14=""
+export ZMESS12="${RED}Power on holding PTT and top button${NC}."
+export ZMESS13="Verify in the 'Devices/USB' menu that"
+export ZMESS14=" 'AnyRoad Technology Digital Radio' is selected."
 export ZMESS15="Before running ${YELLOW}${ZCOM4}${NC} the radio should be in normal power ${RED}${ZCOM24}${NC} mode."
 export ZMESS16="In the 'Devices\USB' menu, the radio will be called '@0000:ffff Patched MD380'"
 export ZMESS17=""
@@ -77,6 +86,20 @@ export ZCOM20="or"
 export ZCOM21="without setname for previous build"
 export ZCOM22="Tweaks menu"
 export ZCOM23="Back to main"
+export ZCOM34="Active"
+export ZCOM35="Inactive"
+export ZCOM32="Option settings are controlled by file existence in the home directory."
+export ZCOM33="These take affect during your next ${YELLOW}glv${NC}.  ${RED}*${NC} indicates tweakfile present."
+export ZCOM37="Example"
+export ZCOM38="abbreviation"
+export ZCOM39="Add"
+export ZCOM40="Remove"
+export ZCOM41="Country"
+export ZCOM42="Enable"
+export ZCOM43="Disable"
+export ZCOM44="nicknames"
+
+
 
 #### SECTION 3 ########################################################################
 
@@ -103,9 +126,9 @@ export ZCOUNT1="UsersCSV records"
 export ZRECIPS="Commando-sets"
 export ZCOM24="AAN"
 export ZMESS11="Voor starten van ${YELLOW}${ZCOM2}${NC} of ${YELLOW}${ZCOM3}${NC}, zet de radio in ${RED}DFU${NC} mode:"
-export ZMESS12="${RED}Zet radio aan met PTT en top button ingedrukt${NC}. Controleer in het 'Devices/USB'"
-export ZMESS13="menu of 'AnyRoad Technology Digital Radio' is geselecteerd."
-export ZMESS14=""
+export ZMESS12="${RED}Zet radio aan met PTT en top button ingedrukt${NC}."
+export ZMESS13="Controleer in het 'Devices/USB' menu of"
+export ZMESS14=" 'AnyRoad Technology Digital Radio' is geselecteerd."
 export ZMESS15="Voordat je ${YELLOW}${ZCOM4}${NC} start, zet je de radio ${RED}${ZCOM24}${NC} voor normaal gebruik."
 export ZMESS16="In het 'Devices\USB' menu zie je de radio als '@0000:ffff Patched MD380'"
 export ZMESS17=""
@@ -185,9 +208,9 @@ export ZCOUNT1="Nominativi in UsersCSV "
 export ZRECIPS="Sequenza di istruzioni"
 export ZCOM24="ON"
 export ZMESS11="Prima di eseguire ${YELLOW}${ZCOM2}${NC} o ${YELLOW}${ZCOM3}${NC}, La radio deve essere in modalità ${RED}DFU${NC}"
-export ZMESS12="${RED}Accenderla premendo il PTT ed il tasto superiore${NC}. Verificare nel menu"
-export ZMESS13="'Devices/USB', che sia selezionato 'AnyRoad Technology Digital Radio'."
-export ZMESS14=""
+export ZMESS12="${RED}Accenderla premendo il PTT ed il tasto superiore${NC}."
+export ZMESS13="Verificare nel menu, 'Devices/USB' "
+export ZMESS14="che sia selezionato 'AnyRoad Technology Digital Radio'."
 export ZMESS15="Prima di eseguire ${YELLOW}${ZCOM4}${NC} deve essere accesa normalmente ${RED}${ZCOM24}${NC}."
 export ZMESS16="nel menu 'Devices\USB', la radio sarà indicata come '@0000:ffff Patched MD380'"
 export ZMESS17=""
@@ -216,13 +239,6 @@ fi
 # End Italian translation area
 
 
-# German translation area
-#if [ -f ~/lang.de ]; then
-# Copy export strings from above and translate them
-# Any takers for this language?
-#fi
-# End German translation area
-
 
 
 # Spanish translation area
@@ -234,9 +250,9 @@ export ZCOUNT1="Indicativo en UsersCSV "
 export ZRECIPS="Secuencia de las instruciones"
 export ZCOM24="ON"
 export ZMESS11="Antes de continuar ${YELLOW}${ZCOM2}${NC} o ${YELLOW}${ZCOM3}${NC}, La radio debe estar en modalidad  ${RED}DFU${NC}"
-export ZMESS12="${RED}Presione primero el PTT y el boton superior${NC}. Verificar en el menu"
-export ZMESS13="'Devices/USB', que este seleccionado 'AnyRoad Technology Digital Radio'."
-export ZMESS14=""
+export ZMESS12="${RED}Presione primero el PTT y el boton superior${NC}."
+export ZMESS13="Verificar en el menu, 'Devices/USB', que este seleccionado"
+export ZMESS14=" 'AnyRoad Technology Digital Radio'."
 export ZMESS15="Antes de continuar ${YELLOW}${ZCOM4}${NC} debe estar encendida  normalmente ${RED}${ZCOM24}${NC}."
 export ZMESS16="en el  menu 'Devices\USB', la radio debera indicar  '@0000:ffff Patched MD380'"
 export ZMESS17=""
@@ -264,6 +280,13 @@ export ZCOM23="Regresa al menu principal"
 fi
 # End Spanish translation area
 
+
+# German translation area
+#if [ -f ~/lang.de ]; then
+# Copy export strings from above and translate them
+# Any takers for this language?  Contact KD4Z
+#fi
+# End German translation area
 
 # no need to change this line.  It is computed from the lines above
 export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
