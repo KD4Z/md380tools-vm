@@ -16,9 +16,9 @@ if [ -f /etc/motd.save ]; then
   echo -e " ${ZMESS14}"
 fi
 echo -e ""
+echo -e " ${ZMESS15}"
 if [ -f /etc/motd.save ]; then
-  echo -e " ${ZMESS15}"
-  echo -e " ${ZMESS16}"
+   echo -e " ${ZMESS16}"
   #echo -e " ${ZMESS17}"
 fi
 echo -e ""
