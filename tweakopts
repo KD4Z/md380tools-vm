@@ -36,9 +36,31 @@ if [ -f ~/fill.nickname.disable ]; then
 else
  echo -e ""
 fi
-echo -e ""
-echo -e ""
-echo -e ""
+echo -e -n "  ${BLUE}~/lang.nl${NC}     ${ZCOM42} Dutch text"
+if [ -f ~/lang.nl ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+echo -e -n "  ${BLUE}~/lang.pt${NC}     ${ZCOM42} Portuguese text"
+if [ -f ~/lang.pt ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+echo -e -n "  ${BLUE}~/lang.it${NC}     ${ZCOM42} Italian text"
+if [ -f ~/lang.it ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+echo -e -n "  ${BLUE}~/lang.es${NC}     ${ZCOM42} Spanish text"
+if [ -f ~/lang.es ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+
 echo -e ""
 echo -e -n " ${YELLOW}menu${NC} -- Back to main menu "
 if [ -f /etc/motd.save ]; then
