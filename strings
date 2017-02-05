@@ -152,6 +152,18 @@ export ZCOM20="of"
 export ZCOM21="zonder setnaam: restore versie vóór glv"
 export ZCOM22="Tweaks menu met extra's"
 export ZCOM23="Terug naar hoofdmenu"
+export ZCOM34="Actief"
+export ZCOM35="Niet actief"
+export ZCOM32="Optie-instellingen worden gecontroleerd m.b.v. het bestand in de home directory"
+export ZCOM33="Deze worden actief na een ${YELLOW}glv${NC}. Een ${RED}*${NC} geeft aan dat deze optie actief is."
+export ZCOM37="Voorbeeld"
+export ZCOM38="afkorting"
+export ZCOM39="Toevoegen"
+export ZCOM40="Verwijderen"
+export ZCOM41="Land"
+export ZCOM42="Ingeschakeld"
+export ZCOM43="Uitgeschakeld"
+export ZCOM44="Roepnamen"
 fi
 # End of Dutch translation area
 
