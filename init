@@ -55,9 +55,9 @@ if [ -f ~/md380tools-vm/root/restore ]; then
   cp ~/md380tools-vm/root/restore ~
   chmod +x ~/restore
 fi
-if [ -f ~/md380tools-vm/root/uploadfile ]; then
-  cp ~/md380tools-vm/root/uploadfile ~
-  chmod +x ~/uploadfile
+if [ -f ~/md380tools-vm/root/uploadfile.sample ]; then
+  cp ~/md380tools-vm/root/uploadfile.sample ~
+  chmod +x ~/uploadfile.sample
 fi
 if [ -f ~/md380tools-vm/root/build ]; then
   cp ~/md380tools-vm/root/build ~

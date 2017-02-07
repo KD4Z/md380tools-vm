@@ -1,25 +1,28 @@
 #/bin/bash
 
-# uploadfile script
+# uploadfile.sample script
 # KD4Z
 # Version:  3.07
 #
 # upload a file from a given directory
 # to an ftp server outside the VM
 
+# First, rename this to uploadfile!
+#
 # you can execute this manually at the prompt with
 #
 #   ~/uploadfile
 #
-# or you can create a file called this
+# or you can create a script called exec.post.local and it will get
+# called automatically at the end of the glv or glvusers
 #
 #   nano ~/exec.post.local
 #
 # with this content
 
 
-#/bin/bash
-~/uploadfile
+#    #/bin/bash
+#   ~/uploadfile
 
 
 
