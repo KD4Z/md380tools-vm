@@ -103,6 +103,8 @@ echo -e "${GREEN}Contact Import completed."
 echo -e "  Static ID count:  ${countstatic}"
 echo -e "  DMR-MARC count :  ${countmarc}"
 echo -e "  Merged total   :  ${countall}${NC}"
-if [ ! -f ~/keep.tmp ]; then
-    rm $TMPALL $TMPSORTED 
+if [ -f ~/keep.tmp ]; then
+    echo -e "${RED}Keeping temporary files around for debug${NC}"
+else
+    rm $TMPALL $TMPSORTED $TMPDEDUP
 fi

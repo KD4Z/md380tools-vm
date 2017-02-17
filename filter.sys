@@ -11,7 +11,7 @@
 
 echo -e "${YELLOW}Applying UsersCSV filters${NC}"
 sleep 1
-if [ ! -f ~/filter.countries.disable ]; then
+if [ -f ~/filter.countries.enable ]; then
   echo -e "${YELLOW}-->Abbreviating countries${NC}"
   sed -i -e 's/United States/USA/g' $1
   sed -i -e 's/United Kingdom/UK/g' $1
@@ -47,7 +47,7 @@ if [ ! -f ~/filter.countries.disable ]; then
   sed -i -e 's/Brazil/BRA/g' $1
 fi
 
-if [ ! -f ~/filter.us.states.disable ]; then
+if [ -f ~/filter.us.states.enable ]; then
   echo -e "${YELLOW}-->Abbreviating US State names${NC}"
   sed -i -e 's/Alabama/AL/g' $1
   sed -i -e 's/Alaska/AK/g' $1

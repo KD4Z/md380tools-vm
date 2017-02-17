@@ -8,28 +8,28 @@ echo -e " ${ZCOM33}"
 echo -e ""
 echo -e "  ${ZCOM39} ${ZCOM36}: ${ZCOM30}${NC}    ${ZCOM40} ${ZCOM36}:  ${NC}${ZCOM31}${NC}"
 echo -e ""
-echo -e "  ${ZCOM37}:  ${YELLOW}${ZCOM29}${NC} ~/filter.countries.disable"
+echo -e "  ${ZCOM37}:  ${YELLOW}${ZCOM29}${NC} ~/filter.countries.enable"
 echo -e ""
 echo -e " ${WHITE}-- tweakfile list  --${NC}"
 echo -e ""
-echo -e -n "  ${BLUE}~/filter.countries.disable${NC}  ${ZCOM43} ${ZCOM41} ${ZCOM38}"
-if [ -f ~/filter.countries.disable ]; then
+echo -e -n "  ${BLUE}~/filter.countries.enable${NC}  ${ZCOM42} ${ZCOM41} ${ZCOM38}"
+if [ -f ~/filter.countries.enable ]; then
  echo -e "${RED} *${NC}"
 else
  echo -e ""
 fi
-echo -e -n "  ${BLUE}~/filter.us.states.disable${NC}  ${ZCOM43} US State ${ZCOM38}"
-if [ -f ~/filter.us.states.disable ]; then
+echo -e -n "  ${BLUE}~/filter.us.states.enable${NC}  ${ZCOM42} US State ${ZCOM38}"
+if [ -f ~/filter.us.states.enable ]; then
  echo -e "${RED} *${NC}"
 else
  echo -e ""
 fi
-echo -e -n "  ${BLUE}~/filter.sys.disable${NC}        ${ZCOM43} all filters"
-if [ -f ~/filter.sys.disable ]; then
- echo -e "${RED} *${NC}"
-else
- echo -e ""
-fi
+#echo -e -n "  ${BLUE}~/filter.sys.disable${NC}        ${ZCOM43} all filters"
+#if [ -f ~/filter.sys.disable ]; then
+# echo -e "${RED} *${NC}"
+#else
+# echo -e ""
+#fi
 echo -e -n "  ${BLUE}~/fill.nickname.disable${NC}     ${ZCOM43} ${ZCOM44}"
 if [ -f ~/fill.nickname.disable ]; then
  echo -e "${RED} *${NC}"
