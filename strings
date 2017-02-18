@@ -98,6 +98,8 @@ export ZCOM41="Country"
 export ZCOM42="Enable"
 export ZCOM43="Disable"
 export ZCOM44="nicknames"
+export ZCOM45="Restore to stable version"
+
 
 
 
@@ -162,6 +164,7 @@ export ZCOM41="Land"
 export ZCOM42="Ingeschakeld"
 export ZCOM43="Uitgeschakeld"
 export ZCOM44="Roepnamen"
+export ZCOM45="Terug plaatsen stabiele versie"
 fi
 # End of Dutch translation area
 
@@ -201,6 +204,7 @@ export ZCOM20="ou"
 export ZCOM21="para carregar a versão anterior"
 export ZCOM22="Menu de Testes"
 export ZCOM23="Regressar ao menu principal"
+export ZCOM45="Restaurar a versão estável"
 fi
 
 # End of Portuguese translation area
@@ -241,6 +245,7 @@ export ZCOM20="o"
 export ZCOM21="senza nome per versione precedente"
 export ZCOM22="Tweaks menu"
 export ZCOM23="Torna al menu principale"
+export ZCOM45="Ripristinare la versione stabile"
 fi
 # End Italian translation area
 
@@ -281,6 +286,7 @@ export ZCOM20="o"
 export ZCOM21="sin nombre para la version anterior"
 export ZCOM22="Tweaks menu"
 export ZCOM23="Regresa al menu principal"
+export ZCOM45="Restaurar a la versión estable"
 fi
 # End Spanish translation area
 
