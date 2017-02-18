@@ -92,6 +92,16 @@ if [ ! -f ~/filter.sys.disable ]; then
   touch ~/filter.sys.enable
 fi
 
+if [ -f ~/md380tools-vm/archive/firmware-GPS.bin.stable ]; then
+  cp ~/md380tools-vm/archive/firmware-GPS.bin.stable ~/archive
+fi
+if [ -f ~/md380tools-vm/archive/firmware-noGPS.bin.stable ]; then
+  cp ~/md380tools-vm/archive/firmware-noGPS.bin.stable ~/archive
+fi
+if [ -f ~/md380tools-vm/archive/user.bin.stable ]; then
+  cp ~/md380tools-vm/archive/user.bin.stable ~/archive
+fi
+
 # local hook if desired for user provided preprocessing
 if [ -f ~/exec.init.local ]; then
   echo -e "${YELLOW}Executing ~/exec.init.local${NC}"

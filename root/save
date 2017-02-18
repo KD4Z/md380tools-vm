@@ -4,14 +4,17 @@
 # takes argument 1, 2 or 3 to restore a specific save point
 # without argument, does nothing
 # KD4Z
-# Version:  3.06
+# Version:  3.10
 #
 
 if [ "$#" -ne 1 ] ; then
   echo -e "${GREEN}savebin -  requires argument for save point name or number (no embedded spaces)   Example:${YELLOW}  save 1${NC}"
   exit 1
 fi
-
+if [ "$1" == "stable" ] ; then
+  echo -e "${YELLOW}Setname 'stable' is reserved by the Toolkit.  Please choose a different setname${NC}"
+  exit 1
+fi
 echo -e -n "${YELLOW}Saving snapshot \"$1\" ... "
   if [ -f ~/user.bin ]; then
     cp ~/user.bin ~/archive/user.bin.$1
