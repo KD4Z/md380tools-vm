@@ -2,7 +2,7 @@
 # exec.pre
 # KD4Z
 # Version:  3.06
-# Runs before glv is started
+# Runs after git pulls and before build is started
 
 # copy existing build as default snapshot
 if [ -f ~/user.bin ]; then
@@ -14,10 +14,13 @@ fi
 if [ -f ~/firmware-noGPS.bin ]; then
   cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin.previous
 fi
+if [ -f ~/md380tools-vm/root/display.c ]; then
+  cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
+fi
 
 # local hook if desired for extra pre glv processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
   chmod +x ~/exec.pre.local
-  ~/exec.pre.local $userfile
+  ~/exec.pre.local
 fi
