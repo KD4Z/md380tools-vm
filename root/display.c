@@ -183,7 +183,7 @@ void draw_micbargraph()
 }
 
 #define RX_POPUP_Y_START 22 // 24
-#define RX_POPUP_X_START 3  // 10
+#define RX_POPUP_X_START 4  // 10
 
 void draw_rx_screen(unsigned int bg_color)
 {
@@ -261,7 +261,7 @@ void draw_rx_screen(unsigned int bg_color)
 	}
     y_index+=3;
     gfx_set_fg_color(0x0000FF);
-    gfx_blockfill( 1 , y_index , 155, y_index);
+    gfx_blockfill( 1 , y_index , 156, y_index);
     gfx_set_fg_color(0x000000);
     y_index+=2;
     gfx_select_font(gfx_font_small);
@@ -449,8 +449,6 @@ void display_credits()
 #ifdef MD380_s13_020
     drawtext(L"S13.020 KD4Z", 160, 140);
 #endif
-
     drawascii(GIT_VERSION, 160, 180);
-
     drawtext(VERSIONDATE, 160, 220);
 }

@@ -17,6 +17,7 @@ fi
 if [ -f ~/md380tools-vm/root/display.c ]; then
   cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
 fi
+sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
 
 # local hook if desired for extra pre glv processing
 if [ -f ~/exec.pre.local ]; then
