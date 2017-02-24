@@ -23,6 +23,7 @@
 #include "radiostate.h"
 #include "unclear.h"
 #include "etsi.h"
+#include "codeplug.h"
 
 char eye_paltab[] = {
     0xd7, 0xd8, 0xd6, 0x00, 0x88, 0x8a, 0x85, 0x00, 0xe1, 0xe2, 0xe0, 0x00, 0xff, 0xff, 0xff, 0x00,
@@ -189,17 +190,18 @@ void draw_rx_screen(unsigned int bg_color)
 {
     int dst;
     int src;
-    int grp ;
+    int grp;
     int nameLen;
+    char *timeSlot[3];
 	
     int primask = OS_ENTER_CRITICAL(); // for form sake
 //    dst = g_dst;
 //    src = g_src;
-    
+
     dst = rst_dst ;
     src = rst_src ;
     grp = rst_grp ;
-    
+
     OS_EXIT_CRITICAL(primask);
 
     // clear screen
@@ -224,11 +226,25 @@ void draw_rx_screen(unsigned int bg_color)
     int y_index = RX_POPUP_Y_START;
 
     gfx_select_font(gfx_font_small);
+#if defined(FW_D13_020) || defined(FW_S13_020)
+    channel_info_t *ci = &current_channel_info ;
+    int ts1 = ( ci->cc_slot_flags >> 2 ) & 0x1 ;
+    int ts2 = ( ci->cc_slot_flags >> 3 ) & 0x1 ;
+#else
+    int ts1 = 1;
+    int ts2 = 0;
+#endif	
+	
+
     if( grp ) {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> TG %d", src, dst );        
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->TG %d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );        
     } else {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> %d", src, dst );
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );
     }
+
+
+
+
     y_index += GFX_FONT_SMALL_HEIGHT ;
 
     gfx_select_font(gfx_font_norm);
@@ -405,9 +421,9 @@ void draw_alt_statusline()
 		gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "TA: %s", talkerAlias.text);
 	} else {										// 2017-02-18 otherwise show lastheard in status line
 	        if( usr_find_by_dmrid(&usr, src) == 0 ) {
-        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%d->%d %c", src, rst_dst, mode);
+        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%d->%d %c", src, rst_dst, mode);
         	} else {
-        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%s->%d %c", usr.callsign, rst_dst, mode);
+        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%s->%d %c", usr.callsign, rst_dst, mode);
 	        }	
 	}
     }
