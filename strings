@@ -292,11 +292,57 @@ fi
 
 
 # German translation area
-#if [ -f ~/lang.de ]; then
-# Copy export strings from above and translate them
-# Any takers for this language?  Contact KD4Z
-#fi
+# Courtesy of OE7BSH
+if [ -f ~/lang.de ]; then
+export ZRAD11="Ohne GPS"
+export ZRAD12="Mit GPS"
+export ZCOUNT1="Eintraege in UsersCSV"
+export ZRECIPS="Befehle"
+export ZCOM24="ON"
+export ZMESS11="Bevor ${YELLOW}${ZCOM2}${NC}/${YELLOW}${ZCOM3}${NC} ausgefuehrt werden, muss das Funkgeraet im ${RED}DFU${NC} Mode sein."
+export ZMESS12="${RED}Dazu PTT und oberen Sidekey gedrueckt halten und das Funkgeraet einschalten${NC}."
+export ZMESS13="Bitte im VM-Menue unter Geraete/USB ueberpruefen dass"
+export ZMESS14="'AnyRoad Technology Digital Radio' ausgewaehlt ist."
+export ZMESS15="Bevor ${YELLOW}${ZCOM4}${NC} ausgefuehrt wird, muss das Funkgeraet normal eingeschaltet sein."
+export ZMESS16="In der VM unter Geraete/USB steht das Funkgeraet als '@0000:ffff Patched MD380'"
+export ZMESS17=""
+export ZSEL4=" Nach ${ZCOM1} koennen alle weiteren Schritte ohne Internetverbindung erfolgen."
+export ZMESS61="Diesen Schirm wieder anzeigen"
+export ZMESS71="Zeige Hilfe zu den Befehlen"
+export ZCOM11="Alles downloaden und speichern"
+export ZCOM12="Nur UsersCSV downloaden und speichern"
+export ZCOM51="Suchbegriff"
+export ZWRITE1="Firmware auf Funkgeraet ohne GPS schreiben"
+export ZWRITE2="Firmware auf Funkgeraet mit GPS schreiben"
+export ZWRITE3="Schreibt 'UsersCSV' auf das Funkgeraet"
+export ZWRITE4="Fragt den Suchbegriff in der UserCSV ab"
+export ZCOM13="Speichern"
+export ZCOM14="Wiederherstellen"
+export ZCOM15="eines gespeicherten Builds"
+export ZCOM19="Dateiname"
+export ZCOM20="oder"
+export ZCOM21="(ohne Name) des letzten Builds"
+export ZCOM22="Tweak-Menu mit Extras"
+export ZCOM23="Zurueck zum Hauptmenue"
+export ZCOM34="Aktiv"
+export ZCOM35="Inaktiv"
+export ZCOM32="Optionen werden durch die Datei im Home-Verzeichnis festgelegt."
+export ZCOM33="Aenderungen wirken sich nach dem naechsten ${YELLOW}glv${NC} aus.  ${RED}*${NC} vorhandenes Tweak-File."
+export ZCOM37="Beispiel"
+export ZCOM38="Abkuerzung"
+export ZCOM39="Hinzufuegen"
+export ZCOM40="Entferne"
+export ZCOM41="Land"
+export ZCOM42="Aktiviere"
+export ZCOM43="Deaktiviere"
+export ZCOM44="Nickname"
+export ZCOM45="Stable Version wiederherstellen"
+fi
 # End German translation area
+
+# New languages?
+# Copy export strings from above and translate them
+# Contact KD4Z
 
 # no need to change this line.  It is computed from the lines above
 export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
