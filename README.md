@@ -1,7 +1,7 @@
-MD380tools VM for VirtualBox
+MD380tools VM for VirtualBox (aka KD4Z Toolkit)
 Warren Merkel, KD4Z
 
-Current Version: 3.08 (after you glv)
+Current Version: 3.11 (after glv is run)
 Image file updated:	 01/04/2017  Version 3.0
 Installation PDF updated: 01/28/2017
 
@@ -12,66 +12,72 @@ Follow the installation directions in the PDF found here:
 
 https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08.pdf
 
-You do not need to download any files list here on this github site, except the install pdf above!
+You only need to download a couple of files from this github site. 
+1. The Installlation instructions pdf 
+2. The Image File for the Virtual Machine.
 
 These instructions describe how to install software on your Windows or Mac, that runs linux in 
 a Virtual Machine environment.  You don't need to know anything about linux to use it!
 
-If you are linux savy, and would rather just use the scripting framework installed in the VM, see
-this pdf document for brief installation instructions that allow you to use your existing linux
-environment such as debian, ubuntu or Raspian on a Raspberry Pi.  This guide will install exactly
-the same scripting framework used in the VM.   It will update in the same way the VM does. 
+If you are linux savy, and would rather just use the scripting framework on your existing Linux box, see
+the linux install pdf document for brief installation instructions that allow you to use your existing linux
+environment such as Debian, Ubuntu or Raspian on a Raspberry Pi.  This guide will discribe how to install exactly
+the same scripting framework used in the VM.   Once installed, it will self update in the same way the VM does. 
 
 See MD380tools_Menu_installation_on_native_linux_KD4Z.pdf here:  
 https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_Menu_installation_on_native_linux_KD4Z.pdf
 If you run into something I missed in this brief document, please forward that information on to me
 so I can update the document.  
 
+Facebook Support group, specializing in Dutch and English, courtesy of Rob van Rheenen, PD0DIB.
+https://www.facebook.com/groups/KD4ZToolkit/
+ 
 
-For the rest of you, let's get started with the downloading and installing the VM version.
+What does this thing do?
 
-You DO need to download the image from links below if you are not on version 3.x
-Don't download from these links if you already have version 3.x!  The 3.0 VM self updates
-to the lastest version found in this github site every time that you run glv. 
+The VM allows you to create the latest firmware for the MD-380 / MD-390
+series of radios from Tytera (TYT) and Retevis RT3/RT8.  It leverages the MD380tools project by
+Travis Goodspeed found elsewhere on github.  It also downloads the whole dmr-marc contact
+database into the radio.  
 
-If you are still running version 2.x of this VM, you should upgrade to 3.0 to avoid
-issues that have already been resolved.
-
-This project allows you to create the latest firmware for the MD-380 / MD-390
-series of radios from Tytera (TYT).  It leverages the MD380tools project by
-Travis Goodspeed found elsewhere on github.  It also downloads the dmr-marc contact
-database into the radio.
-
-This VM provided in the image provides simple single-word menu that is easy to
+The VM provided provides simple single-word menu that is easy to
 use, and does all of the heavy lifting of installing the MD380tools project files.
  
-The most important benefit of using this VM instead of other solutions is you can 
-update radio firmware and user contact data while offline from the Internet.  Run
-one single command (glv) while online, and then you can disconnect your laptop, 
-and take it where you dont' have a live internet connection.  
+Other interesting tweaks in this VM make it stand out as producing better results than just
+using other scripting or VM solutions.
 
-If you are interested in adding in private DMR IDs to the user contact data, support
-for that has been recently added.  This feature may also be interesting to you if
-use a hotspot device and are annoyed that certain parts of the contact database 
-now show up with blank, redacted location data.
+* Automatically updates itself to the latest scripting and source code.  You will always, ALWAYS have the absolute latest features.
+* Single, one word commands to do the primary functions.
+* Builds the "firmware" for radios having GPS and not having GPS.  No need to download firmware from websites.
+* Builds the contact list on-the-fly, directly from the dmr-marc database.  Currently over 55K records worldwide.
+* After running one command, the computer with the VM can be offline from Internet, and still write
+firmware and contact data to the radio.
+* Larger font on contact name with redline data separator.
+* More detail in EU contact data.
+* Support for private DMR IDs pulled in with the full dmr-marc contact database.
+* Scripting framework functions can be extended for custom actions before firmware compilation,
+after compilation, and after contact data is downloaded.
+* Commands to save and restore firmware and contact data in snapshots.  Restores to a stable firmware if the latest gets sideways.
+* Lite weight version for Linux!  The scripting is all done using Bash scripts.  You can install just the scripting on Linux or Raspberry Pi.
 
-Other interesting tweaks in this VM make it stand out as being better than just
-the results from running the base md380tools scripts.
+Be sure to read the installation completely before emailing questions!  99% of all questions are
+answered in the installation PDF.  If you are stuck, join the Facebook group mentioned above for help.
 
-Be sure to read it completely before emailing questions!  99% of all questions are
-answered in the installation PDF.  
+You have to make a choice.  You can use Oracle Virtual Box or VMware player.  Choose one, and select the correct image download below. 
 
-European users have access to this Facebook group, specializing in Dutch,
-though English posts are welcome:
-https://www.facebook.com/groups/105977523245213
-courtesy of PD0DIB. 
+Get to the downloads:
 
-You will need to download the VirtualBox Appliance image file from these links:
+* For the VirtualBox Appliance image file, use these links*
 
 Single Image (Zip):
 https://drive.google.com/file/d/0Bwoi2MrlPb3vVEt3Ym4tVHF3SDQ/view?usp=sharing
+
+or 
+
+Mirror 1:
+https://www.dropbox.com/sh/ap0g1o9g48wyide/AAA1dXOHPWOMD3vbzXO-iBaIa/tyt_kd4z_3.0.ova
 	
-Use one of the above links, or the 4 links below.  Don't do both!
+Use one of the above links, or download all 4 links below.  Don't do both!
 	
 Parts - Must use 7-zip to extract  http://www.7-zip.org/download.html	
 	
@@ -80,16 +86,16 @@ Part 2: https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28/view?usp=sh
 Part 3:	https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU/view?usp=sharing
 Part 4: https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA/view?usp=sharing
 
-For the parts, download each one.  You will need to use the 7-zip program to extract them
+For the part files, download each one.  You will need to use the 7-zip program to extract them
 back into the original OVA Appliance file.
  
 Install 7-Zip, and then Right-Click on the first part file and find the 7-Zip menu, and
-follow it out to extract.
+ choose extract.
 
 ** Optional Image for VMware **
-User videobuff provided a converted image file, more suitable for 
-VMWare Fusion users: In case you wish to install a ready-to-go VMWare container,
-you can download it here.  (This is the full image):
+
+The links below are for a pre converted ready-to-go VMWare container.
+(This is the full image):
 
 https://drive.google.com/open?id=0BwED_-BHnZjSWklsNjY3VHBqMVE
 
