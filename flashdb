@@ -6,8 +6,11 @@
 
  
 if [ -f ~/user.bin ]; then
-  echo "Record Count `wc --lines ~/user.bin`"
- ~/md380tools/md380-tool spiflashwrite ~/user.bin 0x100000
+  echo 
+  echo -e "${YELLOW}Record Count `wc --lines ~/user.bin`"
+  sleep 1
+  echo -e "${RED}Radio should be turned ON (not DFU mode) and connected.${NC}"
+  ~/md380tools/md380-tool spiflashwrite ~/user.bin 0x100000
 else
   echo "${RED}Contact User file not present.  Run glv first."
 fi

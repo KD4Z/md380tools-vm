@@ -58,7 +58,7 @@ firmware and contact data to the radio.
 * Scripting framework functions can be extended for custom actions before firmware compilation,
 after compilation, and after contact data is downloaded.
 * Commands to save and restore firmware and contact data in snapshots.  Restores to a stable firmware if the latest gets sideways.
-* Screen language defaults to English.  Five alternate languages available: Dutch, Portuguese, Spanish, Italian and German.
+* Screen language defaults to English.  Six alternate languages available: Dutch, Portuguese, Spanish, Italian, German and French!
 * Lite weight version for Linux!  The scripting is all done using Bash scripts.  You can install just the scripting on Linux or Raspberry Pi.
 
 Be sure to read the installation completely before emailing questions!  99% of all questions are
@@ -109,17 +109,19 @@ Part 3: https://drive.google.com/open?id=0BwED_-BHnZjSb3NzSE41azhzN3M
 Part 4: https://drive.google.com/open?id=0BwED_-BHnZjSNmlOMTJvT3l4VWM
 
 
-* Multiple language support.   Currently 5 alternate languages are supported.
+* Multiple language support.   Currently 6 alternate languages are supported.
   
-  Dutch			(enable with:  touch lang.nl )  Courtesy of PD0DIB
+  Dutch			(enable with: touch lang.nl )  Courtesy of PD0DIB
   
-  Portuguese	(enable with:  touch lang.pt )  Courtesy of CS7AGH
+  Portuguese	(enable with: touch lang.pt )  Courtesy of CS7AGH
 
-  Italian		(enable with:  touch lang.it )  Courtesy of IW0QPP
+  Italian		(enable with: touch lang.it )  Courtesy of IW0QPP
 
-  Spanish       (enable with : touch lang.es )  Courtesy of EA8EE
+  Spanish       (enable with: touch lang.es )  Courtesy of EA8EE
    
-  German        (enable with : touch lang.de )  Courtesy of OE7BSH
+  German        (enable with: touch lang.de )  Courtesy of OE7BSH
+  
+  French		(enable with: touch lang.fr )  Courtesy of ON7CL
   
   If you can help translate into other languages, create a branch, and modify the
   "strings" script (found here), and request a pull.  Or send me the new language section in email.  

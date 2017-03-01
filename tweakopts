@@ -30,12 +30,12 @@ fi
 #else
 # echo -e ""
 #fi
-echo -e -n "  ${BLUE}~/fill.nickname.disable${NC}     ${ZCOM43} ${ZCOM44}"
-if [ -f ~/fill.nickname.disable ]; then
- echo -e "${RED} *${NC}"
-else
- echo -e ""
-fi
+#echo -e -n "  ${BLUE}~/fill.nickname.disable${NC}     ${ZCOM43} ${ZCOM44}"
+#if [ -f ~/fill.nickname.disable ]; then
+# echo -e "${RED} *${NC}"
+#else
+# echo -e ""
+#fi
 echo -e -n "  ${BLUE}~/lang.nl${NC}     ${ZCOM42} Dutch text"
 if [ -f ~/lang.nl ]; then
  echo -e "${RED} *${NC}"
@@ -62,6 +62,12 @@ else
 fi
 echo -e -n "  ${BLUE}~/lang.de${NC}     ${ZCOM42} German text"
 if [ -f ~/lang.de ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+echo -e -n "  ${BLUE}~/lang.fr${NC}     ${ZCOM42} French text"
+if [ -f ~/lang.fr ]; then
  echo -e "${RED} *${NC}"
 else
  echo -e ""

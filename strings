@@ -15,7 +15,7 @@
 # Do NOT alter this section
 #
 if [ -f /etc/motd.save ]; then
-  export ZPROJ="KD4Z - md380tools-vm"
+  export ZPROJ="KD4Z - md380tools-vm Toolkit"
 else
   export ZPROJ="KD4Z - md380tools-menu"
 fi
@@ -340,7 +340,57 @@ export ZCOM45="Stable Version wieder herstellen"
 fi
 # End German translation area
 
-# New languages?
+# French translation area
+# Courtesy of ON7CL
+if [ -f ~/lang.fr ]; then
+export ZRAD11="Sans GPS"
+export ZRAD12="Avec GPS"
+export ZCOUNT1="UsersCSV archive"
+export ZRECIPS="Récipes"
+export ZCOM24="ON"
+export ZMESS11="Avant Executer ${YELLOW}${ZCOM2}${NC} ou ${YELLOW}${ZCOM3}${NC}, le radio doit être dans ${RED}DFU${NC} mode."
+export ZMESS12="${RED}Met le radio en marge et maintien la touche PTT et top bouton${NC}."
+export ZMESS13="Vérifier si radio est dans 'Devices/USB' menu"
+export ZMESS14=" 'AnyRoad Technology Digital Radio' est sélectionné."
+export ZMESS15="Avant commencer ${YELLOW}${ZCOM4}${NC} le radio doit etre dans le mode usb power on ${RED}${ZCOM24}${NC}"
+export ZMESS16="Dans le menu 'Devices\USB', the radio est a voir sur '@0000:ffff Patched MD380'"
+export ZMESS17=""
+export ZSEL4=" Après ${ZCOM1}, tout les commandes peuver être exécuter sans connection internet."
+export ZMESS61="Display cette écran à nouveau"
+export ZMESS71="Display commandes typique récipes"
+export ZCOM11="Télecharger et générer tout"
+export ZCOM12="Simple téléchargement et générer UsersCSV"
+export ZCOM51="indexstring"
+export ZWRITE1="Ecrire firmware dans radios sans GPS"
+export ZWRITE2="Ecrire firmware dans radios avec GPS"
+export ZWRITE3="Ecrire 'UsersCSV' contact list dans radio"
+export ZWRITE4="Consultation le UserCSV data par indexstring"
+export ZCOM13="Enrégistrer"
+export ZCOM14="Rétablir"
+export ZCOM15="Révision set"
+export ZCOM19="set nom"
+export ZCOM20="ou"
+export ZCOM21="sans set nom pour version précedent"
+export ZCOM22="Tweaks menu"
+export ZCOM23="Retour menu principale"
+export ZCOM34="Activé"
+export ZCOM35="Inactivé"
+export ZCOM32="Options les paramètres sont controllé avec fiche existence dans le home dir."
+export ZCOM33="Ceci prend effet après votre denier ${YELLOW}glv${NC}.  ${RED}*${NC} il indique tweakfile present."
+export ZCOM37="Example"
+export ZCOM38="abréviations"
+export ZCOM39="Ajouter"
+export ZCOM40="Enlever"
+export ZCOM41="Pays"
+export ZCOM42="Permettre"
+export ZCOM43="Refuser"
+export ZCOM44="Surnoms"
+export ZCOM45="Restaurer version stable"
+fi
+# End French translation
+
+
+# Want your language supported?
 # Copy export strings from above and translate them
 # Contact KD4Z
 
