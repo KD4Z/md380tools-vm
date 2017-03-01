@@ -58,6 +58,7 @@ firmware and contact data to the radio.
 * Scripting framework functions can be extended for custom actions before firmware compilation,
 after compilation, and after contact data is downloaded.
 * Commands to save and restore firmware and contact data in snapshots.  Restores to a stable firmware if the latest gets sideways.
+* Screen language defaults to English.  Five alternate languages available: Dutch, Portuguese, Spanish, Italian and German.
 * Lite weight version for Linux!  The scripting is all done using Bash scripts.  You can install just the scripting on Linux or Raspberry Pi.
 
 Be sure to read the installation completely before emailing questions!  99% of all questions are
@@ -67,9 +68,9 @@ You have to make a choice.  You can use Oracle Virtual Box or VMware player.  Ch
 
 Get to the downloads:
 
-* For the VirtualBox Appliance image file, use these links*
+* For the VirtualBox Appliance image file, use these links
 
-Single Image (Zip):
+Single file download:
 https://drive.google.com/file/d/0Bwoi2MrlPb3vVEt3Ym4tVHF3SDQ/view?usp=sharing
 
 or 
@@ -79,59 +80,36 @@ https://www.dropbox.com/sh/ap0g1o9g48wyide/AAA1dXOHPWOMD3vbzXO-iBaIa/tyt_kd4z_3.
 	
 Use one of the above links, or download all 4 links below.  Don't do both!
 	
-Parts - Must use 7-zip to extract  http://www.7-zip.org/download.html	
+Parts - Use these links if you have trouble downloading the large file above.
 	
-Part 1: https://drive.google.com/file/d/0Bwoi2MrlPb3vY2hkb0lVZ3Z4R3c/view?usp=sharing
-Part 2: https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28/view?usp=sharing
-Part 3:	https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU/view?usp=sharing
-Part 4: https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA/view?usp=sharing
+Part 1: https://drive.google.com/file/d/0Bwoi2MrlPb3vY2hkb0lVZ3Z4R3c
+Part 2: https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28
+Part 3:	https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU
+Part 4: https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA
 
 For the part files, download each one.  You will need to use the 7-zip program to extract them
-back into the original OVA Appliance file.
+back into the actual OVA Appliance file.  You can get that from here -- http://www.7-zip.org/download.html 
  
-Install 7-Zip, and then Right-Click on the first part file and find the 7-Zip menu, and
- choose extract.
+Install 7-Zip, and then Right-Click on the first part file, find the 7-Zip menu, and
+choose extract.
 
-** Optional Image for VMware **
+* For VMware, use these links:
 
-The links below are for a pre converted ready-to-go VMWare container.
-(This is the full image):
+Single file download:
 
 https://drive.google.com/open?id=0BwED_-BHnZjSWklsNjY3VHBqMVE
 
 -OR Download the VMWare image in parts - don't download these if you download from the single link above.
 
-Parts - Must use 7-zip to extract  http://www.7-zip.org/download.html	
+Parts - Use these links if you have trouble downloading the large file above.
 
 Part 1:	https://drive.google.com/file/d/0BwED_-BHnZjSdERwY1BHc1Y3ekk
 Part 2: https://drive.google.com/open?id=0BwED_-BHnZjSYnZEeXJHcjh5R3c
 Part 3: https://drive.google.com/open?id=0BwED_-BHnZjSb3NzSE41azhzN3M
 Part 4: https://drive.google.com/open?id=0BwED_-BHnZjSNmlOMTJvT3l4VWM
 
-For the parts, download each one.  You will need to use the 7-zip program to extract them
-back into the original OVA Appliance file.
 
-Noteable features:
-
-  Simple, one word commands.   (It's really easy!)
-  
-  Runs under Windows or OS-X hosts using the free VirtualBox host software.  Runs under
-  VMware as well.  Use the Optional Image mentioned above.
- 
-  Able to update radios when not connected to the internet, great for laptops.
-
-  Able to add private DMR IDs to the UsersCSV using a local fixed file, or can FTP in
-  a static file on the fly.
-
-  Automatically adds back some missing userCSV data from the EU using static seed file
-
-  Automatically stays updated with changes going forward. You will not need to download
-  the VM Image again, after getting to Version 3.0, the glv command will self update all
-  portions of the VM.
-
-  Able to update firmware on MD-380 and MD-390 radios with GPS
-
-  Multiple language support.   Currently 5 alternate languages are supported.
+* Multiple language support.   Currently 5 alternate languages are supported.
   
   Dutch			(enable with:  touch lang.nl )  Courtesy of PD0DIB
   
