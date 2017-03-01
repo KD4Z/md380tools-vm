@@ -16,11 +16,13 @@ alias FLASHDB="flashdb"
 alias fl="flash"
 alias fdb="flashdb"
 alias dir="ls -lH"
+alias reboot="/sbin/reboot"
 lookup() { ~/lookup "$1"; }
 save() { ~/save "$1"; }
 restore() { ~/restore "$1"; }
 rdtwrite() { ~/md380tools/md380-dfu write "$1"; }
 rdtread() { ~/md380tools/md380-dfu read "$1"; }
+rdtpassreset() { echo -e 'Resetting codeplug password' ;echo -e -n 'Reading codeplug...' ; ~/md380tools/md380-dfu read _my.img; echo -e -n 'Patching codeplug...' ; printf '\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF' | dd conv=notrunc of=_my.img bs=1 seek=$((0x20a0)); echo -e -n 'Writing codeplug to radio...' ; ~/md380tools/md380-dfu write _my.img; rm _my.img; echo -e ' Done. Rebooting radio now.' ; ~/md380tools/md380-dfu reboot; }
 export RED='\033[1;31m'
 export GREEN='\033[1;32m'
 export BLUE='\033[1;34m'
