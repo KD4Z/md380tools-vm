@@ -7,7 +7,7 @@ fi
 
 count=$(wc --lines ~/user.bin | cut -d" " -f1)
 clear
-echo -e "      ${WHITE}${ZPROJ} (v3.11)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
+echo -e "   ${WHITE}${ZPROJ} (v3.11)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
 echo -e ""
 echo -e " ${ZMESS11}"
 echo -e " ${ZMESS12}"
