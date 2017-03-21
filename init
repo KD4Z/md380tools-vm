@@ -65,6 +65,7 @@ if [ -f ~/md380tools-vm/root/build ]; then
 fi
 if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bash_aliases ~
+  cp ~/md380tools-vm/root/.bashrc ~
 fi  
 if [ -f ~/md380tools-vm/root/glvusers ]; then
   cp ~/md380tools-vm/root/glvusers ~

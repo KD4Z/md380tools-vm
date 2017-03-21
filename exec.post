@@ -39,9 +39,6 @@ if [ ! -f ~/fill.nickname.disable ]; then
   awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
   cat $usertmp >$userfile
   rm $usertmp
-  # nickname option explodes the user file size and seems to hit the radio limit, so must enable filters to 
-  # reduce the dataset size.
-  # Todo-   Need to ask Travis what the upper limit is or why lookups fail over 3.1Megs
   touch ~/filter.sys.enable
 fi
 

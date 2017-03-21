@@ -24,6 +24,8 @@
 FILESTATIC=~/static.users
 FILESEED=user.seed
 FILESEEDZIP=seeds.zip
+FILESEEDZIPNEW=newseeds.zip
+FILESEEDZIPOLD=oldseeds.zip
 STATICFILEHOST=~/static.host
 TMPALL=~/userall.tmp
 TMPDEDUP=~/dedup.tmp
@@ -36,7 +38,7 @@ touch $TMPALL
 
 if [ -f $STATICFILEHOST ]; then
   echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
-  timeout 8 wget -i $STATICFILEHOST -O $FILESTATIC
+  timeout 60 wget -i $STATICFILEHOST -O $FILESTATIC
 fi
 
 if [ -f $FILESTATIC ]; then
@@ -48,13 +50,18 @@ fi
 countstatic=$(wc --lines ${FILESTATIC} | cut -d" " -f1)
 
 if [ -f ~/keep.seed.file ] && [ -f ~/seeds.zip ]; then
-    cp ~/seeds.zip
-else  
-  rm $FILESEEDZIP
+    cp ~/md380tools-vm/seeds.zip ~/
+fi
+
+if [ -f $FILESEEDZIPNEW ]; then
+  rm $FILESEEDZIPNEW
 fi
 
 if [ ! -f $FILESEEDZIP ]; then
-  timeout 8 wget --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIP
+  timeout 60 wget --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
+  if [ -f $FILESEEDZIPNEW ]; then
+	 mv $FILESEEDZIPNEW $FILESEEDZIP
+  fi	 
 fi
 
 if [ ! -f $FILESEEDZIP ]; then
@@ -82,14 +89,12 @@ if [ -f $FILESEEDZIP ]; then
 	fi
     cat $FILESEED >>$TMPALL
     if [ -f ~/keep.seed.file ]; then
-		echo -e "${GREEN}Keeping seed file for next ${YELLOW}glv${NC}."
-		echo -e "${GREEN}To force an update next glv: rm ~/keep.seed.file"
+		echo -e "${GREEN}Keeping seed file for next ${YELLOW}glv."
+		echo -e "${GREEN}To force an update next glv: rm ~/keep.seed.file${NC}"
 		cp $FILESEEDZIP ~
 		sleep 3
 	fi
-	if [ -f ~/keep.tmp ]; then
-	  rm $FILESEED $FILESEEDZIP
-	fi
+
 fi
   
 if [ -f $FILESTATIC ]; then
@@ -99,9 +104,6 @@ cat ~/user.bin >>$TMPALL
   
 awk -F',' '!seen[$1]++' $TMPALL >$TMPDEDUP
 sort -t, -k 1,1 -n $TMPDEDUP >$TMPSORTED
-  
-#sed -i 1,1d usersorted.tmp  # strip header
-  
 cat $TMPSORTED >~/user.bin
   
 countseed=$(wc --lines $FILESEED | cut -d" " -f1)
@@ -115,5 +117,5 @@ echo -e "${GREEN}  Merged total   :  ${YELLOW}${countall}${NC}"
 if [ -f ~/keep.tmp ]; then
     echo -e "${RED}Keeping temporary files around for debug.  rm ~/keep.tmp to disable this.${NC}"
 else
-    rm $TMPALL $TMPSORTED $TMPDEDUP
+    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED
 fi

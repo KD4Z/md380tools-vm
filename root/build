@@ -9,15 +9,16 @@ cd ~/md380tools-vm
 ~/md380tools-vm/exec.pre
 
 cd ~/md380tools
+make updatedb
+
+cat db/stripped.csv >user.bin
+cp user.bin ~/user.bin
+
 make dist
 
 cp dist/md380tools-${now}/firmware-${now}-NoGPS.bin ~/firmware-noGPS.bin
 cp dist/md380tools-${now}/firmware-${now}-GPS.bin ~/firmware-GPS.bin
 
-make updatedb
-
-cat db/stripped.csv >user.bin
-cp user.bin ~/user.bin
 
 cd ~/md380tools-vm 
 ~/md380tools-vm/exec.post
