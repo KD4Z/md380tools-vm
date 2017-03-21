@@ -60,6 +60,7 @@ if [ -f ~/exec.post.local ]; then
   chmod +x ~/exec.post.local
   ~/exec.post.local $userfile
 fi
+sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/Makefile
 
 # now put back the header
 wc -c < $userfile >$usertmp
