@@ -58,7 +58,7 @@ if [ -f $FILESEEDZIPNEW ]; then
 fi
 
 if [ ! -f $FILESEEDZIP ]; then
-  timeout 60 wget --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
+  timeout 120 wget --no-check-certificate --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
   if [ -f $FILESEEDZIPNEW ]; then
 	 mv $FILESEEDZIPNEW $FILESEEDZIP
   fi	 

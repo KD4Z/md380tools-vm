@@ -75,7 +75,7 @@ if [ $actualsize -le $minimumsize ]; then
   if [ -f ~/md380tools/db/retry.tmp ]; then
     rm retry.tmp
   fi
-  timeout 120 wget "http://www.dmr-marc.net/cgi-bin/trbo-database/datadump.cgi?table=users&format=csv&header=0" -O ~/md380tools/db/retry.tmp
+  timeout 120 wget --no-verbose --no-check-certificate "http://www.dmr-marc.net/cgi-bin/trbo-database/datadump.cgi?table=users&format=csv&header=0" -O ~/md380tools/db/retry.tmp
   
   count=$(wc --lines ~/md380tools/db/retry.tmp | cut -d" " -f1)
   if [ $count -lt 10 ]; then
