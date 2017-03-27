@@ -87,7 +87,7 @@ if [ -f $FILESEEDZIP ]; then
 	  sleep 5
 	  echo -e "${GREEN}Continuing without nickname and extra EU data...${NC}"
 	fi
-    echo -e "\n" $$TMPALL
+    echo -e "\n" >>$$TMPALL
     cat $FILESEED >>$TMPALL
     if [ -f ~/keep.seed.file ]; then
 		echo -e "${GREEN}Keeping seed file for next ${YELLOW}glv."
