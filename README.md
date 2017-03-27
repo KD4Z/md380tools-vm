@@ -1,7 +1,7 @@
 MD380tools VM for VirtualBox (aka KD4Z Toolkit)
 Warren Merkel, KD4Z
 
-Current Version: 3.11 (after glv is run)
+Current Version: 3.12 (after glv is run)
 Image file updated:	 01/04/2017  Version 3.0
 Installation PDF updated: 01/28/2017
 

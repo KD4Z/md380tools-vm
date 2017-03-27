@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  3.04
+# Version:  3.12
 # script to add static DMR ids into the usersCSV after glv
 # requires a simple file that mimics the exact field layout of user.bin
 # must contain seven fields, separated by commas
@@ -61,7 +61,7 @@ if [ ! -f $FILESEEDZIP ]; then
   timeout 120 wget --no-check-certificate --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
   if [ -f $FILESEEDZIPNEW ]; then
 	 mv $FILESEEDZIPNEW $FILESEEDZIP
-  fi	 
+  fi
 fi
 
 if [ ! -f $FILESEEDZIP ]; then
@@ -72,7 +72,7 @@ fi
 if [ -f $FILESTATIC ]; then
   cat $FILESTATIC >>$TMPALL
 fi
-  
+
 if [ -f $FILESEEDZIP ]; then
     if [ -f $FILESEED ]; then
 	  rm $FILESEED
@@ -105,7 +105,7 @@ cat ~/user.bin >>$TMPALL
 awk -F',' '!seen[$1]++' $TMPALL >$TMPDEDUP
 sort -t, -k 1,1 -n $TMPDEDUP >$TMPSORTED
 cat $TMPSORTED >~/user.bin
-  
+
 countseed=$(wc --lines $FILESEED | cut -d" " -f1)
 countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
 countall=$(wc --lines ~/user.bin | cut -d" " -f1)
