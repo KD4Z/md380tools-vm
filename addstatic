@@ -70,6 +70,7 @@ if [ ! -f $FILESEEDZIP ]; then
 fi
 
 if [ -f $FILESTATIC ]; then
+  echo -e "\n" $$TMPALL
   cat $FILESTATIC >>$TMPALL
 fi
 
