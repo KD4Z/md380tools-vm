@@ -1,4 +1,4 @@
-alias glv="cd ~/ && echo -e '\033[1;32mUpdating KD4Z Toolkit' &&  rm -rf ~/md380tools-vm ~/md380tools && git clone https://github.com/KD4Z/md380tools-vm.git && echo -e '\033[1;32mUpdating md380tools' && git clone https://github.com/travisgoodspeed/md380tools.git && chmod +x ~/md380tools-vm/init && ~/md380tools-vm/init && ~/build"
+alias glv="cd ~/ && echo -e '\033[1;37mUpdating KD4Z Toolkit' && echo -e '\033[1;32m' && rm -rf ~/md380tools-vm ~/md380tools && git clone https://github.com/KD4Z/md380tools-vm.git && echo -e '\033[1;37mUpdating md380tools' && echo -e '\033[1;32m' && git clone https://github.com/travisgoodspeed/md380tools.git && echo -e '\033[1;32m' && chmod +x ~/md380tools-vm/init && ~/md380tools-vm/init && ~/build"
 alias flash="echo -e '\033[1;31mRadio should be connected in DFU mode now...\033[0m' && sleep 1 && cd ~/md380tools && ./md380-dfu upgrade ~/firmware-noGPS.bin && echo -e '\033[1;32mFirmware write completed.  Turn radio off then on now.\033[0m' && sleep 5 && cd ~ && ~/md380tools-vm/menuopts"
 alias flashgps="echo -e '\033[1;31mRadio should be connected in DFU mode now...\033[0m' && sleep 1 && cd ~/md380tools && ./md380-dfu upgrade ~/firmware-GPS.bin && echo -e '\033[1;32mFirmware write completed.  Turn radio off then on now.\033[0m' && sleep 5 && cd ~ && ~/md380tools-vm/menuopts"
 alias flashdb="~/flashdb"
@@ -27,7 +27,7 @@ export RED='\033[1;31m'
 export GREEN='\033[1;32m'
 export BLUE='\033[1;34m'
 export YELLOW='\033[1;33m'
-export LGRAY='\033[1;37m'
+export LGRAY='\033[1;30m'
 export WHITE='\033[1;37m'
 export BROWN='\033[1;33m'
 export CYAN='\033[1;36m'

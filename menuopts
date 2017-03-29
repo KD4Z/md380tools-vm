@@ -5,9 +5,17 @@ if [ ! -f /etc/motd.save ]; then
 fi
 . ~/md380tools-vm/strings
 
-count=$(wc --lines ~/user.bin | cut -d" " -f1)
+countmarc=$(wc --lines ~/user.bin | cut -d" " -f1)
 clear
-echo -e "   ${WHITE}${ZPROJ} (v3.12)${NC}\t  ${RED}(${ZCOUNT1} ${count})${NC}"
+
+
+if (( countmarc < 57538 )); then
+  cntcolor=${RED}
+else
+  cntcolor=${GREEN}
+fi
+echo -e "   ${WHITE}${ZPROJ} (v3.13)${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc})${NC}"
+	
 echo -e ""
 echo -e " ${ZMESS11}"
 echo -e " ${ZMESS12}"
@@ -27,9 +35,24 @@ echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"
 echo -e ""
 echo -e " ${ZSEL4}"
 echo -e ""
-echo -e "  ${YELLOW}${ZCOM2}${NC}    -- ${RED}(DFU)${NC} ${ZWRITE1} (${ZRAD10})"
-echo -e "  ${YELLOW}${ZCOM3}${NC} -- ${RED}(DFU)${NC} ${ZWRITE2} (${ZRAD20})"
-echo -e "  ${YELLOW}${ZCOM4}${NC}  -- ${RED}(${ZCOM24}) ${NC} ${ZWRITE3}"
+if [ ! -f ~/firmware-noGPS.bin ]; then
+  echo -e "  ${YELLOW}${ZCOM2}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}again${NC}"
+else
+  echo -e "  ${YELLOW}${ZCOM2}${NC}    -- ${RED}(DFU)${NC} ${ZWRITE1} (${ZRAD10})"
+fi
+
+if [ ! -f ~/firmware-GPS.bin ]; then
+  echo -e "  ${YELLOW}${ZCOM3}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}again${NC}"
+else
+  echo -e "  ${YELLOW}${ZCOM3}${NC} -- ${RED}(DFU)${NC} ${ZWRITE2} (${ZRAD20})"
+fi
+
+if [ ! -f ~/user.bin ]; then
+  echo -e "  ${YELLOW}${ZCOM4}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}or ${YELLOW}glvusers ${RED}again{NC}"
+else
+  echo -e "  ${YELLOW}${ZCOM4}${NC}  -- ${RED}(${ZCOM24}) ${NC} ${ZWRITE3}"
+fi
+
 echo -e ""
 echo -e "  ${YELLOW}${ZCOM5}${NC} ${BLUE}${ZCOM51}${NC} -- ${ZWRITE4} "
 echo -e ""
