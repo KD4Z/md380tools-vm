@@ -10,7 +10,14 @@ https://github.com/KD4Z/md380tools-vm
 
 Follow the installation directions in the PDF found here:
 
+[English]
 https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08.pdf
+
+[Dutch]
+https://github.com/KD4Z/md380tools-vm/raw/master/Handleiding_NL_1.04.pdf
+
+[German]
+https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08_DE_(OE7BSH).pdf
 
 You only need to download a couple of files from this github site. 
 1. The Installlation instructions pdf 
