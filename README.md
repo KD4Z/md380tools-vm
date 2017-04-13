@@ -19,9 +19,13 @@ https://github.com/KD4Z/md380tools-vm/raw/master/Handleiding_NL_1.04.pdf
 [German]
 https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08_DE_(OE7BSH).pdf
 
-You only need to download a couple of files from this github site. 
-1. The Installlation instructions pdf 
-2. The Image File for the Virtual Machine.
+[Italian]
+https://github.com/KD4Z/md380tools-vm/raw/master/MD380tools_VM_installation_3.08_IT_(IU5FHF).pdf
+
+You only need to download a couple of files from this github site!  The rest are used by the installed VM.
+ 
+1. The Installation instructions pdf. (choose one above) 
+2. The Image File for the Virtual Machine. 
 
 These instructions describe how to install software on your Windows or Mac, that runs linux in 
 a Virtual Machine environment.  You don't need to know anything about linux to use it!
@@ -89,10 +93,10 @@ Use one of the above links, or download all 4 links below.  Don't do both!
 	
 Parts - Use these links if you have trouble downloading the large file above.
 	
-Part 1: https://drive.google.com/file/d/0Bwoi2MrlPb3vY2hkb0lVZ3Z4R3c
-Part 2: https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28
-Part 3:	https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU
-Part 4: https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA
+[Part 1] https://drive.google.com/file/d/0Bwoi2MrlPb3vY2hkb0lVZ3Z4R3c
+[Part 2] https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28
+[Part 3] https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU
+[Part 4] https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA
 
 For the part files, download each one.  You will need to use the 7-zip program to extract them
 back into the actual OVA Appliance file.  You can get that from here -- http://www.7-zip.org/download.html 
@@ -100,9 +104,10 @@ back into the actual OVA Appliance file.  You can get that from here -- http://w
 Install 7-Zip, and then Right-Click on the first part file, find the 7-Zip menu, and
 choose extract.
 
-* For VMware, use these links:
+* If you decide to use VMware instead of VirtualBox, use the following links, as this image has
+been pre-converted for easier import into VMWare.
 
-Single file download:
+Single file download for VMWare image:
 
 https://drive.google.com/open?id=0BwED_-BHnZjSWklsNjY3VHBqMVE
 
@@ -110,10 +115,10 @@ https://drive.google.com/open?id=0BwED_-BHnZjSWklsNjY3VHBqMVE
 
 Parts - Use these links if you have trouble downloading the large file above.
 
-Part 1:	https://drive.google.com/file/d/0BwED_-BHnZjSdERwY1BHc1Y3ekk
-Part 2: https://drive.google.com/open?id=0BwED_-BHnZjSYnZEeXJHcjh5R3c
-Part 3: https://drive.google.com/open?id=0BwED_-BHnZjSb3NzSE41azhzN3M
-Part 4: https://drive.google.com/open?id=0BwED_-BHnZjSNmlOMTJvT3l4VWM
+[Part 1] https://drive.google.com/file/d/0BwED_-BHnZjSdERwY1BHc1Y3ekk
+[Part 2] https://drive.google.com/open?id=0BwED_-BHnZjSYnZEeXJHcjh5R3c
+[Part 3] https://drive.google.com/open?id=0BwED_-BHnZjSb3NzSE41azhzN3M
+[Part 4] https://drive.google.com/open?id=0BwED_-BHnZjSNmlOMTJvT3l4VWM
 
 
 * Multiple language support.   Currently 6 alternate languages are supported.
