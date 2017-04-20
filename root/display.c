@@ -192,12 +192,9 @@ void draw_rx_screen(unsigned int bg_color)
     int src;
     int grp;
     int nameLen;
-    char *timeSlot[3];
-	
-    int primask = OS_ENTER_CRITICAL(); // for form sake
-//    dst = g_dst;
-//    src = g_src;
-
+    //char *timeSlot[3];
+	int primask = OS_ENTER_CRITICAL(); // for form sake
+   
     dst = rst_dst ;
     src = rst_src ;
     grp = rst_grp ;
@@ -218,52 +215,53 @@ void draw_rx_screen(unsigned int bg_color)
         usr.callsign = "ID unknown" ;
         usr.firstname = "" ;
         usr.name = "No entry in" ;
-        usr.place = "your users.csv" ;
+        usr.place = "your user.bin" ;
         usr.state = "see README.md" ;
         usr.country = "on Github" ;
     }
-
-    int y_index = RX_POPUP_Y_START;
-
+	
     gfx_select_font(gfx_font_small);
 #if defined(FW_D13_020) || defined(FW_S13_020)
     channel_info_t *ci = &current_channel_info ;
-    int ts1 = ( ci->cc_slot_flags >> 2 ) & 0x1 ;
+   // int ts1 = ( ci->cc_slot_flags >> 2 ) & 0x1 ;
     int ts2 = ( ci->cc_slot_flags >> 3 ) & 0x1 ;
 #else
-    int ts1 = 1;
+   // int ts1 = 1;
     int ts2 = 0;
 #endif	
-	
+    int y_index = RX_POPUP_Y_START;
 
     if( grp ) {
         gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->TG %d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );        
     } else {
         gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );
     }
-
-
-
-
     y_index += GFX_FONT_SMALL_HEIGHT ;
 
-    gfx_select_font(gfx_font_norm);
+    gfx_select_font(gfx_font_norm); // switch to large font
     gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, usr.firstname );
-    y_index += GFX_FONT_NORML_HEIGHT; // previous line was in big font
+    y_index += GFX_FONT_NORML_HEIGHT; 
 
     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
-	  if ( talkerAlias.length > 16 ) {  
+      // TA or TA/DB mode
+      if ( talkerAlias.length > 16 ) {  
 	    gfx_select_font(gfx_font_small);
-		gfx_puts_pos(RX_POPUP_X_START, y_index, talkerAlias.text );
+		gfx_printf_pos2(RX_POPUP_X_START, y_index,10, "%s", talkerAlias.text );
 	    y_index += GFX_FONT_SMALL_HEIGHT;
 	  }
 	  else {
-		  gfx_puts_pos(RX_POPUP_X_START, y_index, talkerAlias.text );
+		  if (talkerAlias.length < 1) {
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "DMRID: %d", src );
+	      } else {
+		    gfx_puts_pos(RX_POPUP_X_START, y_index, talkerAlias.text );
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s", talkerAlias.text );
+		  }
 		  y_index += GFX_FONT_NORML_HEIGHT;
 	  }
+	  
     } 
 	else {
-    
+      // user.bin or codeplug or talkerAlias length=0
       nameLen = strlen(usr.name);
       if (nameLen > 16) {  // print in smaller font
         gfx_select_font(gfx_font_small);
@@ -275,21 +273,58 @@ void draw_rx_screen(unsigned int bg_color)
         y_index += GFX_FONT_NORML_HEIGHT;
       }
 	}
-    y_index+=3;
-    gfx_set_fg_color(0x0000FF);
+	
+	y_index+=3;
+	if ( global_addl_config.userscsv > 1 ) {
+      gfx_set_fg_color(0x00FF00);
+	} else {
+      gfx_set_fg_color(0x0000FF);
+	}
     gfx_blockfill( 1 , y_index , 156, y_index);
     gfx_set_fg_color(0x000000);
     y_index+=2;
-    gfx_select_font(gfx_font_small);
-    gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
-    y_index += GFX_FONT_SMALL_HEIGHT ;
+	
+	gfx_select_font(gfx_font_small);
 
-    gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
-    y_index += GFX_FONT_SMALL_HEIGHT ;
+	switch( global_addl_config.userscsv ) {
+	case 0:
+		gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: CPS mode");
+        break;
+	
+    // not implemented. I don't want to waste space for this line in user.bin mode	
+	//case 1 :
+	//	gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: UserDB mode");
+    //    break;
 
-    gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
-    y_index += GFX_FONT_SMALL_HEIGHT ;
+	case 2:
+		if ( talkerAlias.length > 0 ) {
+            gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TalkerAlias");
+    //    } else {
+    //        gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA not rcvd!");
+	    }
+        break;
 
+	// not implemented due to same reason above
+	//case 3:
+	//	gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA/DB mode");
+    //    break;
+	}
+	switch( global_addl_config.userscsv ) {
+	case 1:
+	case 3:
+	  y_index += GFX_FONT_NORML_HEIGHT;
+	   
+      gfx_select_font(gfx_font_small);
+      gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
+      y_index += GFX_FONT_SMALL_HEIGHT ;
+
+      gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
+      y_index += GFX_FONT_SMALL_HEIGHT ;
+
+      gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
+      y_index += GFX_FONT_SMALL_HEIGHT ;
+	}
+	
     gfx_select_font(gfx_font_norm);
     gfx_set_fg_color(0xff8032);
     gfx_set_bg_color(0xff000000);
@@ -388,9 +423,9 @@ void draw_statusline_hook( uint32_t r0 )
 
 void draw_alt_statusline()
 {
-    int dst;
+    //int dst;
     int src;
-    int grp;
+    //int grp;
 
     gfx_set_fg_color(0);
     gfx_set_bg_color(0xff8032);
