@@ -476,16 +476,15 @@ void draw_datetime_row_hook()
     if( is_netmon_visible() ) {
         return ;
     }
-    if( is_statusline_visible() ) {
+    if( is_statusline_visible() || global_addl_config.datef == 6 ) {
         draw_alt_statusline();
-        return ;
+        return ; 
     }
     draw_datetime_row();
 #else
 #warning please consider hooking.    
-#endif
+#endif    
 }
-
 /* Displays a startup demo on the device's screen, including some of
    the setting information and a picture or two. */
 void display_credits()
