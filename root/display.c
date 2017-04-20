@@ -289,6 +289,7 @@ void draw_rx_screen(unsigned int bg_color)
 	switch( global_addl_config.userscsv ) {
 	case 0:
 		gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: CPS mode");
+		y_index += GFX_FONT_SMALL_HEIGHT ;
         break;
 	
     // not implemented. I don't want to waste space for this line in user.bin mode	
@@ -299,6 +300,7 @@ void draw_rx_screen(unsigned int bg_color)
 	case 2:
 		if ( talkerAlias.length > 0 ) {
             gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TalkerAlias");
+			y_index += GFX_FONT_SMALL_HEIGHT ;
     //    } else {
     //        gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA not rcvd!");
 	    }
@@ -312,7 +314,7 @@ void draw_rx_screen(unsigned int bg_color)
 	switch( global_addl_config.userscsv ) {
 	case 1:
 	case 3:
-	  y_index += GFX_FONT_NORML_HEIGHT;
+	 // y_index += GFX_FONT_NORML_HEIGHT;
 	   
       gfx_select_font(gfx_font_small);
       gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
