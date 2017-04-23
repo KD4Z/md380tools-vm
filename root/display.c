@@ -314,17 +314,18 @@ void draw_rx_screen(unsigned int bg_color)
 	switch( global_addl_config.userscsv ) {
 	case 1:
 	case 3:
-	 // y_index += GFX_FONT_NORML_HEIGHT;
-	   
-      gfx_select_font(gfx_font_small);
-      gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
-      y_index += GFX_FONT_SMALL_HEIGHT ;
+	
+	  if( src != 0 ) { 
+         gfx_select_font(gfx_font_small);
+         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
+         y_index += GFX_FONT_SMALL_HEIGHT ;
 
-      gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
-      y_index += GFX_FONT_SMALL_HEIGHT ;
+         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
+         y_index += GFX_FONT_SMALL_HEIGHT ;
 
-      gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
-      y_index += GFX_FONT_SMALL_HEIGHT ;
+         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
+         y_index += GFX_FONT_SMALL_HEIGHT ;
+	  }
 	}
 	
     gfx_select_font(gfx_font_norm);
