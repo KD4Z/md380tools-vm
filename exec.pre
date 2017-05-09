@@ -18,7 +18,7 @@ if [ -f ~/md380tools-vm/root/display.c ]; then
   cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
-sed -i -e 's/--max-time 25/--max-time 180/g' ~/md380tools/db/Makefile
+sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/db/Makefile
 sed -i -e 's/--retry-delay 1/--retry-delay 5/g' ~/md380tools/db/Makefile
 sed -i -e 's/intensity= 0x99/intensity= 0x09/g' ~/md380tools/applet/src/irq_handlers.c
 
