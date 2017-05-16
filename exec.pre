@@ -1,21 +1,26 @@
 #!/bin/bash
 # exec.pre
 # KD4Z
-# Version:  3.06
+# Version:  3.14
 # Runs after git pulls and before build is started
+# working directory is ~/md380tools-vm
 
-# copy existing build as default snapshot
+# copy existing build as default snapshot and rotate 2-9   
+# .previous will be #1 for backward compat
 if [ -f ~/user.bin ]; then
-  cp ~/user.bin  ~/archive/user.bin.previous
+  cp ~/user.bin  ~/archive/user.bin
 fi
 if [ -f ~/firmware-GPS.bin ]; then
-  cp ~/firmware-GPS.bin ~/archive/firmware-GPS.bin.previous
+  cp ~/firmware-GPS.bin ~/archive/firmware-GPS.bin
 fi
 if [ -f ~/firmware-noGPS.bin ]; then
-  cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin.previous
+  cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin
 fi
 if [ -f ~/md380tools-vm/root/display.c ]; then
   cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
+fi
+if [ -f ./rotatebins ]; then
+  ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
 sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/db/Makefile
@@ -23,9 +28,9 @@ sed -i -e 's/--retry-delay 1/--retry-delay 5/g' ~/md380tools/db/Makefile
 sed -i -e 's/intensity= 0x99/intensity= 0x09/g' ~/md380tools/applet/src/irq_handlers.c
 # workaround to commit fd6a253.  The VM builds the db first, so it can be manipulated with script before the build
 sed -i -e 's/make -C db clean all//g' ~/md380tools/Makefile
-sed -i -e 's/cp db/stripped.csv $(RELEASE)/callerid.csv//g' ~/md380tools/Makefile
+sed -i -e 's/cp /# /g' ~/md380tools/Makefile
 
-# local hook if desired for extra pre glv processing
+# local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
   chmod +x ~/exec.pre.local

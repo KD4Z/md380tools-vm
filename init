@@ -32,6 +32,9 @@ fi
 if [ -f ~/md380tools-vm/tweakopts ]; then
   chmod +x ~/md380tools-vm/tweakopts
 fi
+if [ -f ~/md380tools-vm/rotatebins ]; then
+  chmod +x ~/md380tools-vm/rotatebins
+fi
 if [ -f ~/md380tools-vm/root/flashdb ]; then
   cp ~/md380tools-vm/root/flashdb ~
   chmod +x ~/flashdb
