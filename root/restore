@@ -12,7 +12,7 @@ file2=~/archive/firmware-GPS.bin.previous
 file3=~/archive/firmware-noGPS.bin.previous
 
 
-if [ "$1" == "" ]; then
+if [ "$1" == "" -o "$1" == "1" ]; then
   echo -e "${YELLOW}Restoring previous firmware and contacts from the build prior to last glv${NC}"
   if [ -f ${file1} ]; then
     cp ${file1} ~/user.bin
@@ -41,18 +41,21 @@ fi
 echo -e "${YELLOW}Restoring snapshot $1 firmware and contact list.${NC}"
   if [ -f ~/archive/user.bin.$1 ]; then
     cp ~/archive/user.bin.$1 ~/user.bin
+	echo -e "${GREEN}File: ~/archive/user.bin.$1 now restored${NC}"
   else
     echo -e "${RED}Unable to find the file: ~/archive/user.bin.$1${NC}"
    fi
   if [ -f ~/archive/firmware-GPS.bin.$1 ]; then
     cp ~/archive/firmware-GPS.bin.$1 ~/firmware-GPS.bin
+	echo -e "${GREEN}File: ~/archive/firmware-GPS.bin.$1 now restored${NC}"
   else
      echo -e "${RED}Unable to find the file: ~/archive/firmware-GPS.bin.$1${NC}"
   fi
   if [ -f ~/archive/firmware-noGPS.bin.$1 ]; then
     cp ~/archive/firmware-noGPS.bin.$1 ~/firmware-noGPS.bin
+	echo -e "${GREEN}File: ~/archive/firmware-noGPS.bin.$1 now restored${NC}"
   else
      echo -e "${RED}Unable to find the file: ~/archive/firmware-noGPS.bin.$1${NC}"
   fi
-echo -e "${YELLOW}Done.${NC}"
+echo -e "${YELLOW}Snapshot $1 Restored.  Use Flash commands to write restored snap to your radio.${NC}"
 
