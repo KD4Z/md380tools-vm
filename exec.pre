@@ -23,12 +23,12 @@ if [ -f ./rotatebins ]; then
   ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
-sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/db/Makefile
-sed -i -e 's/--retry-delay 1/--retry-delay 5/g' ~/md380tools/db/Makefile
-sed -i -e 's/intensity= 0x99/intensity= 0x09/g' ~/md380tools/applet/src/irq_handlers.c
+#sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/db/Makefile
+#sed -i -e 's/--retry-delay 1/--retry-delay 5/g' ~/md380tools/db/Makefile
+#sed -i -e 's/intensity= 0x99/intensity= 0x09/g' ~/md380tools/applet/src/irq_handlers.c
 # workaround to commit fd6a253.  The VM builds the db first, so it can be manipulated with script before the build
-sed -i -e 's/make -C db clean all//g' ~/md380tools/Makefile
-sed -i -e 's/cp /# /g' ~/md380tools/Makefile
+#sed -i -e 's/make -C db clean all//g' ~/md380tools/Makefile
+#sed -i -e 's/cp /# /g' ~/md380tools/Makefile
 
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
