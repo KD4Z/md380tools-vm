@@ -98,7 +98,8 @@ export ZCOM41="Country"
 export ZCOM42="Enable"
 export ZCOM43="Disable"
 export ZCOM44="nicknames"
-export ZCOM45="Restore to stable version"
+export ZCOM45="Restore to known stable version"
+export ZCOM46="Restore X numbered prior build" 
 
 
 

@@ -14,7 +14,7 @@ if (( countmarc < 57538 )); then
 else
   cntcolor=${GREEN}
 fi
-echo -e "   ${WHITE}${ZPROJ} (v3.14)${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
+echo -e "   ${WHITE}${ZPROJ} (v3.15)${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
 	
 echo -e ""
 echo -e " ${ZMESS11}"

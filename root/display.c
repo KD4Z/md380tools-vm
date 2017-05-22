@@ -23,7 +23,10 @@
 #include "radiostate.h"
 #include "unclear.h"
 #include "etsi.h"
-#include "codeplug.h"
+#include "app_menu.h"
+#include "syslog.h"        // LOGB()
+#include "irq_handlers.h"  // boot_flags, BOOT_FLAG_DREW_STATUSLINE
+
 
 char eye_paltab[] = {
     0xd7, 0xd8, 0xd6, 0x00, 0x88, 0x8a, 0x85, 0x00, 0xe1, 0xe2, 0xe0, 0x00, 0xff, 0xff, 0xff, 0x00,
@@ -190,15 +193,16 @@ void draw_rx_screen(unsigned int bg_color)
 {
     int dst;
     int src;
-    int grp;
+    int grp ;
     int nameLen;
-    //char *timeSlot[3];
-	int primask = OS_ENTER_CRITICAL(); // for form sake
-   
+    int primask = OS_ENTER_CRITICAL(); // for form sake
+  
+  
+  
     dst = rst_dst ;
     src = rst_src ;
     grp = rst_grp ;
-
+    
     OS_EXIT_CRITICAL(primask);
 
     // clear screen
@@ -213,55 +217,43 @@ void draw_rx_screen(unsigned int bg_color)
 
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
         usr.callsign = "ID unknown" ;
-        usr.firstname = "" ;
-        usr.name = "No entry in" ;
-        usr.place = "your user.bin" ;
-        usr.state = "see README.md" ;
-        usr.country = "on Github" ;
+        usr.firstname = "No entry in" ;
+        usr.name = "your User DB" ;
+        usr.place = "Fix with " ;
+        usr.state = "glvusers" ;
+        usr.country = "and flashdb";
     }
-	
-    gfx_select_font(gfx_font_small);
-#if defined(FW_D13_020) || defined(FW_S13_020)
-    channel_info_t *ci = &current_channel_info ;
-   // int ts1 = ( ci->cc_slot_flags >> 2 ) & 0x1 ;
-    int ts2 = ( ci->cc_slot_flags >> 3 ) & 0x1 ;
-#else
-   // int ts1 = 1;
-    int ts2 = 0;
-#endif	
+
     int y_index = RX_POPUP_Y_START;
 
+
+
+
+    gfx_select_font(gfx_font_small);
     if( grp ) {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->TG %d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );        
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> TG %d", src, dst );        
     } else {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> %d", src, dst );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ;
 
-    gfx_select_font(gfx_font_norm); // switch to large font
+    gfx_select_font(gfx_font_norm);
     gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, usr.firstname );
-    y_index += GFX_FONT_NORML_HEIGHT; 
+    y_index += GFX_FONT_NORML_HEIGHT; // previous line was in big font
 
     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
-      // TA or TA/DB mode
-      if ( talkerAlias.length > 16 ) {  
+	  if ( talkerAlias.length > 16 ) {  
 	    gfx_select_font(gfx_font_small);
-		gfx_printf_pos2(RX_POPUP_X_START, y_index,10, "%s", talkerAlias.text );
+		gfx_puts_pos(RX_POPUP_X_START, y_index, talkerAlias.text );
 	    y_index += GFX_FONT_SMALL_HEIGHT;
 	  }
 	  else {
-		  if (talkerAlias.length < 1) {
-			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "DMRID: %d", src );
-	      } else {
-		    gfx_puts_pos(RX_POPUP_X_START, y_index, talkerAlias.text );
-			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s", talkerAlias.text );
-		  }
+		  gfx_puts_pos(RX_POPUP_X_START, y_index, talkerAlias.text );
 		  y_index += GFX_FONT_NORML_HEIGHT;
 	  }
-	  
     } 
 	else {
-      // user.bin or codeplug or talkerAlias length=0
+    
       nameLen = strlen(usr.name);
       if (nameLen > 16) {  // print in smaller font
         gfx_select_font(gfx_font_small);
@@ -273,61 +265,21 @@ void draw_rx_screen(unsigned int bg_color)
         y_index += GFX_FONT_NORML_HEIGHT;
       }
 	}
-	
-	y_index+=3;
-	if ( global_addl_config.userscsv > 1 ) {
-      gfx_set_fg_color(0x00FF00);
-	} else {
-      gfx_set_fg_color(0x0000FF);
-	}
+    y_index+=3;
+    gfx_set_fg_color(0x0000FF);
     gfx_blockfill( 1 , y_index , 156, y_index);
     gfx_set_fg_color(0x000000);
     y_index+=2;
-	
-	gfx_select_font(gfx_font_small);
+    gfx_select_font(gfx_font_small);
+    gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
+    y_index += GFX_FONT_SMALL_HEIGHT ;
 
-	switch( global_addl_config.userscsv ) {
-	case 0:
-		gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: CPS mode");
-		y_index += GFX_FONT_SMALL_HEIGHT ;
-        break;
-	
-    // not implemented. I don't want to waste space for this line in user.bin mode	
-	//case 1 :
-	//	gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: UserDB mode");
-    //    break;
+    gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
+    y_index += GFX_FONT_SMALL_HEIGHT ;
 
-	case 2:
-		if ( talkerAlias.length > 0 ) {
-            gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TalkerAlias");
-			y_index += GFX_FONT_SMALL_HEIGHT ;
-    //    } else {
-    //        gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA not rcvd!");
-	    }
-        break;
+    gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
+    y_index += GFX_FONT_SMALL_HEIGHT ;
 
-	// not implemented due to same reason above
-	//case 3:
-	//	gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA/DB mode");
-    //    break;
-	}
-	switch( global_addl_config.userscsv ) {
-	case 1:
-	case 3:
-	
-	  if( src != 0 ) { 
-         gfx_select_font(gfx_font_small);
-         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
-
-         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
-
-         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
-	  }
-	}
-	
     gfx_select_font(gfx_font_norm);
     gfx_set_fg_color(0xff8032);
     gfx_set_bg_color(0xff000000);
@@ -340,6 +292,7 @@ void draw_ta_screen(unsigned int bg_color)
     int grp ;
     
     int primask = OS_ENTER_CRITICAL(); // for form sake
+    int y_index = RX_POPUP_Y_START;
     
     dst = rst_dst ;
     src = rst_src ;
@@ -357,7 +310,7 @@ void draw_ta_screen(unsigned int bg_color)
 
     user_t usr ;
     
-    int y_index = RX_POPUP_Y_START;
+    
     
     gfx_select_font(gfx_font_small);
     if( grp ) {
@@ -417,6 +370,24 @@ int main(void)
 
 void draw_statusline_hook( uint32_t r0 )
 {
+if( ! (boot_flags & BOOT_FLAG_DREW_STATUSLINE) )
+    { LOGB("t=%d: draw_stat\n", (int)IRQ_dwSysTickCounter ); // 4383(!) SysTicks after power-on
+    }
+   boot_flags |= BOOT_FLAG_DREW_STATUSLINE; // important for SysTick_Handler to know when we're "open for business" !
+
+# if (CONFIG_APP_MENU)
+    // If the screen is occupied by the optional 'red button menu', 
+    // update or even redraw it completely:
+    if( Menu_DrawIfVisible(AM_CALLER_STATUSLINE_HOOK) )  
+     { return; // the menu covers the entire screen, so don't draw anything else
+     }
+    // NOTE: draw_statusline_hook() isn't called when the squelch
+    //       is 'open' in FM, i.e. when the channel is BUSY .
+    // Of course we don't want to be tyrannized by the radio like that.
+    // It's THE OPERATOR'S decision what to do and when to invoke the menu,
+    // not the radio's. 
+    // Fixed by also calling Menu_DrawIfVisible() from other places .
+# endif // CONFIG_APP_MENU ?
     if( is_netmon_visible() ) {
         con_redraw();
         return ;
@@ -426,9 +397,9 @@ void draw_statusline_hook( uint32_t r0 )
 
 void draw_alt_statusline()
 {
-    //int dst;
+  
     int src;
-    //int grp;
+   
 
     gfx_set_fg_color(0);
     gfx_set_bg_color(0xff8032);
@@ -459,9 +430,9 @@ void draw_alt_statusline()
 		gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "TA: %s", talkerAlias.text);
 	} else {										// 2017-02-18 otherwise show lastheard in status line
 	        if( usr_find_by_dmrid(&usr, src) == 0 ) {
-        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%d->%d %c", src, rst_dst, mode);
+        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%d->%d %c", src, rst_dst, mode);
         	} else {
-        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%s->%d %c", usr.callsign, rst_dst, mode);
+        	    gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%s->%d %c", usr.callsign, rst_dst, mode);
 	        }	
 	}
     }
@@ -473,19 +444,27 @@ void draw_alt_statusline()
 
 void draw_datetime_row_hook()
 {
+# if (CONFIG_APP_MENU)
+    // If the screen is occupied by the optional 'red button menu', 
+    // update or even redraw it completely:
+    if( Menu_DrawIfVisible(AM_CALLER_DATETIME_HOOK) )  
+     { return; // the menu covers the entire screen, so don't draw anything else
+     }
+# endif
 #if defined(FW_D13_020) || defined(FW_S13_020)
     if( is_netmon_visible() ) {
         return ;
     }
-    if( is_statusline_visible() || global_addl_config.datef == 6 ) {
+    if( is_statusline_visible() ) {
         draw_alt_statusline();
-        return ; 
+        return ;
     }
     draw_datetime_row();
 #else
 #warning please consider hooking.    
-#endif    
+#endif
 }
+
 /* Displays a startup demo on the device's screen, including some of
    the setting information and a picture or two. */
 void display_credits()
