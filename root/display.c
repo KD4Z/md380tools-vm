@@ -215,12 +215,22 @@ void draw_rx_screen(unsigned int bg_color)
     user_t usr ;
 
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
-        usr.callsign = "ID unknown" ;
-        usr.firstname = "No entry in" ;
-        usr.name = "your User DB" ;
-        usr.place = "Update with " ;
-        usr.state = "glvusers," ;
-        usr.country = "then flashdb";
+		if( src==4000 ) {
+			usr.callsign = "Message" ;
+            usr.firstname = "from" ;
+            usr.name = "Server" ;
+            usr.place = "" ;
+            usr.state = "" ;
+            usr.country = "";
+		}
+		else {
+            usr.callsign = "ID" ;
+            usr.firstname = "not found" ;
+            usr.name = "in User DB." ;
+            usr.place = "Update with" ;
+            usr.state = "glvusers," ;
+            usr.country = "then flashdb";
+		}
     }
 	
     gfx_select_font(gfx_font_small);
@@ -334,7 +344,7 @@ void draw_rx_screen(unsigned int bg_color)
 	
     gfx_select_font(gfx_font_norm);
     gfx_set_fg_color(0xff8032);
-    gfx_set_bg_color(0xff000000);
+    gfx_set_bg_color(0xff0000);
 }
 
 void draw_ta_screen(unsigned int bg_color)
