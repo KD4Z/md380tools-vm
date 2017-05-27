@@ -26,7 +26,8 @@ fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
 #sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/db/Makefile
 #sed -i -e 's/--retry-delay 1/--retry-delay 5/g' ~/md380tools/db/Makefile
-
+# undo PR #768 until it runs on Raspian Jessie
+sed -i -e 's/device.manufacturer/#device.manufacturer/g' ~/md380tools/md380_tool.py
 
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
