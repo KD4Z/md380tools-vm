@@ -24,10 +24,7 @@ if [ -f ./rotatebins ]; then
   ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
-#sed -i -e 's/--max-time 20/--max-time 180/g' ~/md380tools/db/Makefile
-#sed -i -e 's/--retry-delay 1/--retry-delay 5/g' ~/md380tools/db/Makefile
-# undo PR #768 until it runs on Raspian Jessie
-sed -i -e 's/device.manufacturer/#device.manufacturer/g' ~/md380tools/md380_tool.py
+sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
 
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
