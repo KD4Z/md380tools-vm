@@ -24,8 +24,9 @@ if [ -f ./rotatebins ]; then
   ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
-sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
-
+if [ -f ~/beep.disable ]; then
+  sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
+fi
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
