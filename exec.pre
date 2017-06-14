@@ -27,6 +27,11 @@ sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
 if [ -f ~/beep.disable ]; then
   sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
 fi
+sed -i -e 's/import sys/import sys\nsys.exit(0)/g' ~/md380tools/db/get_special_IDs.py
+touch ~/md380tools/db/special.tmp
+if [ -f ~/cache/special.tmp ]; then
+    cp ~/cache/special.tmp ~/md380tools/db/special.tmp
+fi
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
