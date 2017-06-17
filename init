@@ -6,7 +6,7 @@ if [ -d ~/save ] && [ ! -d ~/archive ]; then
   mv ~/save ~/archive
 fi
 if [ ! -d ~/archive ]; then
-  md ~/archive
+  mkdir ~/archive
 fi
 if [ -f ~/md380tools-vm/exec.pre ]; then
   chmod +x ~/md380tools-vm/exec.pre
