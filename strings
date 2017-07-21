@@ -27,6 +27,7 @@ export ZCOM5="lookup"
 export ZCOM6="menu"
 export ZCOM7="help"
 export ZCOM8="tweaks"
+export ZCOM9="rdtpassreset"
 export ZRAD10="MD-380 / RT3"
 export ZRAD20="MD-390 / RT8"
 export ZCOM10="glvusers"
@@ -34,6 +35,7 @@ export ZCOM29="touch"
 export ZCOM36="setting"
 export ZCOM17="save"
 export ZCOM18="restore"
+
 
 export RED='\033[1;31m'
 export GREEN='\033[1;32m'
@@ -99,7 +101,8 @@ export ZCOM42="Enable"
 export ZCOM43="Disable"
 export ZCOM44="nicknames"
 export ZCOM45="Restore to known stable version"
-export ZCOM46="Restore X numbered prior build" 
+export ZCOM46="Restore X numbered prior build"
+export ZCOM47="Clear Codeplug Password"
 
 
 
