@@ -404,6 +404,57 @@ export ZCOM45="Restaurer version stable"
 fi
 # End French translation
 
+# Slovenian translation area
+# Courtesy of S55DB
+if [ -f ~/lang.sl ]; then
+export ZRAD11="Brez GPS"
+export ZRAD12="z GPS"
+export ZCOUNT1="Podatkovna baza uporabnikov"
+export ZRECIPS="Recepti"
+export ZCOM24="ON"
+export ZMESS11="Pred zagonom ${YELLOW}${ZCOM2}${NC} ali ${YELLOW}${ZCOM3}${NC}, mora biti postaja v ${RED}DFU${NC} načinu."
+export ZMESS12="${RED}Vključite postajo med tem ko držite PTT in zgornjo tipko${NC}."
+export ZMESS13="Preverite če je v meniju 'Devices/USB' izbran"
+export ZMESS14=" 'AnyRoad Technology Digital Radio'."
+export ZMESS15="Pred zagonom ${YELLOW}${ZCOM4}${NC} mora biti postaja normalno prižgana v ${RED}${ZCOM24}${NC} načinu."
+export ZMESS16="V 'Devices\USB' meniju, bo postaja poimenovana '@0000:ffff Patched MD380'"
+export ZMESS17=""
+export ZSEL4=" Po zagonu ${ZCOM1}, lahko vse spodaj navedene ukaze uporabljate brez internetne povezave."
+export ZMESS61="Ponovno prikaži trenutni zaslon"
+export ZMESS71="Prikaži pogoste recepte za ukaze"
+export ZCOM11="Prenese in pripravi vse."
+export ZCOM12="Prenese in pripravi samo podatkovno bazo o uporabnikih."
+export ZCOM51="iskani_niz"
+export ZWRITE1="Zapiši programsko opremo na postajo brez GPS."
+export ZWRITE2="Zapiši programsko opremo na postajo z GPS."
+export ZWRITE3="Zapiši podatkovno bazo uporabnikov na postajo"
+export ZWRITE4="V podatkovni bazi uporabnikov poišči podan tekst"
+export ZCOM13="Shrani"
+export ZCOM14="Obnovi"
+export ZCOM15="pripravi različico"
+export ZCOM19="ime_različice"
+export ZCOM20="ali"
+export ZCOM21="brez imena različice za predhodno pripravo"
+export ZCOM22="Meni dodatkov"
+export ZCOM23="Nazaj na glavni"
+export ZCOM34="Omogočeno"
+export ZCOM35="Onemogočeno"
+export ZCOM32="Nastavitve se upoštevajo glede na obstoj datoteke v domačem imeniku."
+export ZCOM33="Upoštevajo se pri naslednjem zagonu ${YELLOW}glv${NC}.  ${RED}*${NC} prikazuje obstoj datoteke dodatkov."
+export ZCOM37="Primer"
+export ZCOM38="okrajšava"
+export ZCOM39="Dodaj"
+export ZCOM40="Odstrani"
+export ZCOM41="Država"
+export ZCOM42="Omogoči"
+export ZCOM43="Onemogoči"
+export ZCOM44="nadimki"
+export ZCOM45="Obnovi zadnjo stabilno različico"
+export ZCOM46="Obnovi prejšnjo pripravo oštevilčeno: X"
+export ZCOM47="Odstrani Codeplug geslo"
+fi
+# End of Slovenian translation area
+
 
 # Want your language supported?
 # Copy export strings from above and translate them

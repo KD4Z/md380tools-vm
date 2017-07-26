@@ -72,6 +72,12 @@ if [ -f ~/lang.fr ]; then
 else
  echo -e ""
 fi
+echo -e -n "  ${BLUE}~/lang.sl${NC}     ${ZCOM42} Slovenian text"
+if [ -f ~/lang.sl ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
 echo -e ""
 echo -e -n " ${YELLOW}menu${NC} -- Back to main menu "
 if [ -f /etc/motd.save ]; then
