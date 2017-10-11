@@ -105,6 +105,12 @@ fi
 if [ -f ~/md380tools-vm/archive/user.bin.stable ]; then
   cp ~/md380tools-vm/archive/user.bin.stable ~/archive
 fi
+if [ -f ~/md380tools-vm/archive/blankplugMD380.bin ]; then
+  cp ~/md380tools-vm/archive/blankplugMD380.bin ~/archive
+fi
+if [ -f ~/md380tools-vm/archive/blankplugMD380.rdt ]; then
+  cp ~/md380tools-vm/archive/blankplugMD380.rdt ~/archive
+fi
 
 # local hook if desired for user provided preprocessing
 if [ -f ~/exec.init.local ]; then
