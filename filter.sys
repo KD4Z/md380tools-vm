@@ -105,7 +105,30 @@ fi
 # and one absurbly long, redundant name and other spastics
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
 sed -i -e 's/AsdruBal/Al/g' $1   # for KP3A
+sed -i -e 's/Russia5,KE5CCG,Eric M Nichols,Frisco,Texas,Eric,United States/Russia/g' $1
+sed -i -e 's/Station (B/Station/g' $1
+sed -i -e 's/Nikolopoulos Nikolopoulos/Nikolopoulos/g' $1
+sed -i -e 's/Zuravin Zuravin/Zuravin/g' $1
+sed -i -e 's/Schwartz Schwartz/Schwartz/g' $1
+sed -i -e 's/Smith Smith/Smith/g' $1
+sed -i -e 's/Sweeney Sweeney/Sweeney/g' $1
+sed -i -e 's/Cale Cale/Cale/g' $1
+sed -i -e 's/Jones Jones/Jones/g' $1
+sed -i -e 's/Pope Pope/Pope/g' $1
+sed -i -e 's/Edens Edens/Edens/g' $1
+sed -i -e 's/Lemmel Lemmel/Lemmel/g' $1
+sed -i -e 's/Weatherby Weatherby/Weatherby/g' $1
+sed -i -e 's/Stull Stull/Stull/g' $1
+sed -i -e 's/Beebe Beebe/Beebe/g' $1
+sed -i -e 's/Gahm Gahm/Gahm/g' $1
+sed -i -e 's/Knox Knox/Knox/g' $1
+sed -i -e 's/SILENT KEY/SK/g' $1
+sed -i -e 's/Blair Blair/Blair/g' $1
+sed -i -e 's/NATCHEZ/Natchez/g' $1
+sed -i -e 's/Communications/Comm/g' $1
+sed -i -e 's/Drammissi Drammissi/Drammissi/g' $1
 
+sed -i -e 's/  / /g' $1
 sed -i -e 's/North /N. /g' $1
 sed -i -e 's/South /S. /g' $1
 sed -i -e 's/East /E. /g' $1

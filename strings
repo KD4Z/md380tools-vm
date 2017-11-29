@@ -60,7 +60,7 @@ export ZCOM31="${YELLOW}rm ${BLUE}tweakfile${NC}"
 
 export ZRAD11="No GPS"
 export ZRAD12="with GPS"
-export ZCOUNT1="User DB records"
+export ZCOUNT1="Contacts"
 export ZRECIPS="Recipes"
 export ZCOM24="ON"
 export ZMESS11="Before running ${YELLOW}${ZCOM2}${NC} or ${YELLOW}${ZCOM3}${NC}, the radio must be in ${RED}DFU${NC} mode."
@@ -103,6 +103,7 @@ export ZCOM44="nicknames"
 export ZCOM45="Restore to known stable version"
 export ZCOM46="Restore X numbered prior build"
 export ZCOM47="Clear Codeplug Password"
+export ZCOM48="Extra Contact Data"
 
 
 

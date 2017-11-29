@@ -30,16 +30,31 @@ STATICFILEHOST=~/static.host
 TMPALL=~/userall.tmp
 TMPDEDUP=~/dedup.tmp
 TMPSORTED=~/sorted.tmp
+TMPALTERNATE=~/alter.tmp
+ALTERNATESEMADISABLE=~/extra.data.disable
+ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
 
 if [ -f $TMPALL ]; then
 	rm $TMPALL
 fi
 touch $TMPALL
 
-if [ -f $STATICFILEHOST ]; then
-  echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
-  timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
+if [ ! -f $STATICFILEHOST ]; then
+  if [ ! -f $ALTERNATESEMADISABLE ]; then
+     if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
+     timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE >/dev/null 2>&1
+     if [ -f $TMPALTERNATE ]; then
+       sed -i '2d' $TMPALTERNATE
+       mv $TMPALTERNATE $FILESTATIC
+     fi
+  fi
 fi
+
+if [ -f $STATICFILEHOST ]; then
+    echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
+    timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
+fi
+
 
 if [ -f $FILESTATIC ]; then
   echo -e "${YELLOW}Appending Static IDs from ${FILESTATIC}${NC}"
@@ -56,11 +71,13 @@ if [ -f $FILESEEDZIPNEW ]; then
 fi
 
 if [ ! -f $FILESEEDZIP ]; then
-  timeout 120 wget --no-verbose --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
+  timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
   if [ -f $FILESEEDZIPNEW ]; then
 	 mv $FILESEEDZIPNEW $FILESEEDZIP
   fi
 fi
+
+
 
 if [ ! -f $FILESEEDZIP ]; then
   echo -e "${RED}Unable to download seed file for nickname and extra EU data.${NC}"
@@ -112,7 +129,7 @@ echo -e "${GREEN}Contact Import completed."
 echo -e "${GREEN}  Seed count     :  ${YELLOW}${countseed}"
 echo -e "${GREEN}  Static ID count:  ${YELLOW}${countstatic}"
 echo -e "${GREEN}  DMR-MARC count :  ${YELLOW}${countmarc}"
-if (( countmarc < 65200 )); then
+if (( countmarc < 72200 )); then
   echo -e "${RED} ** The Download from dmr-marc seems to have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"
