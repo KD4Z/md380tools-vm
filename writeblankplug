@@ -1,0 +1,104 @@
+#!/bin/bash
+# writeblankplug
+# KD4Z
+# Version:  3.19
+# Writes a totally blank codeplug to the radio as a last resort to recover a sick radio
+
+BACKUPFQN=~/archive/myplug.bin
+
+while true
+do
+    echo ""
+    echo -e "${RED}WRITE A BLANK CODEPLUG TO RADIO"
+    echo -e ""
+    echo -e " ${WHITE}1${YELLOW}) VHF MD-380 / RT-3 (no GPS)"
+    echo -e " ${WHITE}2${YELLOW}) UHF MD-380 / RT-3 (no GPS)"
+    echo -e " ${WHITE}3${YELLOW}) VHF MD-390 / RT-8 (with GPS)"
+    echo -e " ${WHITE}4${YELLOW}) UHF MD-390 / RT-8 (with GPS)"
+    echo ""
+    echo -e "   or Press Enter to abort"
+    echo -e "${WHITE}"
+    echo ""
+    read -p 'Choose 1, 2, 3 or 4 and then press Enter ' userval
+	case $userval in
+	1)
+        echo -e "${YELLOW}Making a backup of your current codeplug..."
+        echo -e "${RED}"
+        if [ -f $BACKUPFQN ]; then
+          rm $BACKUPFQN
+        fi
+        ~/md380tools/md380-dfu read $BACKUPFQN
+        echo -e "${YELLOW}Writing blank codeplug to VHF MD-380 / RT-3"
+        echo -e "${RED}"
+
+        ~/md380tools/md380-dfu write ~/md380tools-vm/archive/blankplugMD380vhf.rdt
+		~/md380tools/md380-dfu reboot
+
+        if [ -f $BACKUPFQN ]; then
+          echo -e "${WHITE}If you just made a mistake, you can restore your previous codeplug with this:"
+          echo -e "${BLUE}~/md380tools/md380-dfu write $BACKUPFQN"
+        fi
+        break;;
+	2)
+        echo -e "${YELLOW}Making a backup of your current codeplug..."
+        echo -e "${RED}"
+        if [ -f $BACKUPFQN ]; then
+          rm $BACKUPFQN
+        fi
+        ~/md380tools/md380-dfu read $BACKUPFQN
+        echo -e "${YELLOW}Writing blank codeplug to UHF MD-380 / RT-3"
+        echo -e "${RED}"
+
+        ~/md380tools/md380-dfu write ~/md380tools-vm/archive/blankplugMD380uhf.rdt
+		~/md380tools/md380-dfu reboot
+
+        if [ -f $BACKUPFQN ]; then
+          echo -e "${WHITE}If you just made a mistake, you can restore your previous codeplug with this:"
+          echo -e "${BLUE}~/md380tools/md380-dfu write $BACKUPFQN"
+        fi
+        break;;
+
+	3)
+        echo -e "${YELLOW}Making a backup of your current codeplug..."
+        echo -e "${RED}"
+        if [ -f $BACKUPFQN ]; then
+          rm $BACKUPFQN
+        fi
+        ~/md380tools/md380-dfu read $BACKUPFQN
+        echo -e "${YELLOW}Writing blank codeplug to VHF MD-390 / RT-8"
+        echo -e "${RED}"
+
+        ~/md380tools/md380-dfu write ~/md380tools-vm/archive/blankplugMD390vhf.rdt
+		~/md380tools/md380-dfu reboot
+
+        echo -e "${WHITE}If you just made a mistake, you can restore your previous codeplug with this:"
+		if [ -f $BACKUPFQN ]; then
+        echo -e "${BLUE}~/md380tools/md380-dfu write $BACKUPFQN"
+		fi
+        break;;
+		
+	4)
+        echo -e "${YELLOW}Making a backup of your current codeplug..."
+        echo -e "${RED}"
+        if [ -f $BACKUPFQN ]; then
+          rm $BACKUPFQN
+        fi
+        ~/md380tools/md380-dfu read $BACKUPFQN
+        echo -e "${YELLOW}Writing blank codeplug to UHF MD-390 / RT-8"
+        echo -e "${RED}"
+
+        ~/md380tools/md380-dfu write ~/md380tools-vm/archive/bblankplugMD390uhf.rdt
+		~/md380tools/md380-dfu reboot
+
+        echo -e "${WHITE}If you just made a mistake, you can restore your previous codeplug with this:"
+		if [ -f $BACKUPFQN ]; then
+        echo -e "${BLUE}~/md380tools/md380-dfu write $BACKUPFQN"
+		fi
+        break;;
+        *)
+        break;;
+    esac
+done
+sleep 3
+echo ""
+echo -e "${NC}Run the ${YELLOW}menu${NC} command to return to main screen"
