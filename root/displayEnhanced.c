@@ -557,7 +557,7 @@ void draw_adhoc_statusline()
 	char dmr_compact[5];								// [1|2| ... CC/TS prefix
 	char ch_offset[4];								// repeater offset
 	char ch_tmp[10];								// temp
-//	char ch_cc[1];									// temp CC
+	char ch_cc[1];									// temp CC
 
 	char fm_bw_stat[2];								// |N or |W
 	char mic_gain_stat[3];								// off, 3dB, 6dB
@@ -650,7 +650,7 @@ void draw_adhoc_statusline()
 		int ch_ts = current_channel_info_E.Slot;				// current timeslot
 		int tgNum = (ad_hoc_tg_channel ? ad_hoc_talkgroup : current_TG());	// current talkgroup
 		int callType = (ad_hoc_tg_channel ? ad_hoc_call_type : contact.type);	// current calltype
-		sprintf(dmr_cc, ch_cc);
+		sprintf(dmr_cc, (char*)ch_cc);
 
 		// build the top statusline -------------------------------------------------------------------
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
