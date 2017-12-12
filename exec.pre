@@ -18,7 +18,7 @@ if [ -f ~/firmware-noGPS.bin ]; then
 fi
 
 if [ ! -f ~/md380tools-vm/glv.mike ] || [ ! -f ~/md380tools-vm/glv.wolf ]; then
-  if [ ! -f ~/advanced.disable ]; then
+  if [ -f ~/advanced.enable ]; then
     cp ~/md380tools-vm/root/*.c ~/md380tools/applet/src
     cp ~/md380tools-vm/root/*.h ~/md380tools/applet/src
     if [ -f ~/md380tools-vm/root/symbols_s13.020 ]; then
