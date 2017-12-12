@@ -27,8 +27,10 @@ if [ ! -f ~/md380tools-vm/glv.mike ] || [ ! -f ~/md380tools-vm/glv.wolf ]; then
     if [ -f ~/md380tools-vm/root/Makefile ]; then
       cp ~/md380tools-vm/root/Makefile ~/md380tools/applet/
     fi
+    cp ~/md380tools-vm/root/displayEnhanced.c ~/md380tools/applet/src/display.c
+  else
+    cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
   fi
-  cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
 fi
 if [ -f ./rotatebins ]; then
   ./rotatebins
