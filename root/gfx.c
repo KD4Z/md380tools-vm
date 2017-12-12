@@ -29,7 +29,7 @@
 	#include "amenu_set_tg.h"
 #else
 #warning old firmware
-#endif    
+#endif
 
 
 uint8_t GFX_backlight_on=0; // not used anywhere ?
@@ -394,10 +394,8 @@ void gfx_drawtext4_hook(wchar_t *str, int x, int y, int xlen, int ylen)
             return ;
         }
     }
-
+    
 	/*if (x == D_TEXT_CHANNAME_X && y == D_TEXT_CHANNAME_Y) {
-
-		
 		if (ad_hoc_tg_channel)
 		{
 			//gfx_drawtext4(str, x, y, xlen, ylen);
@@ -405,9 +403,7 @@ void gfx_drawtext4_hook(wchar_t *str, int x, int y, int xlen, int ylen)
 			return;
 		}
 	}*/
-	
-	
-    
+
 #if defined(FW_D13_020) || defined(FW_S13_020)
     gfx_drawtext4(str,x,y,xlen,ylen);
 #else

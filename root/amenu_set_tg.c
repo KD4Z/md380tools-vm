@@ -20,9 +20,11 @@
 #include "codeplug.h"     // struct 'contact' contains the current talkgroup number
 #include "printf.h"       // Kustaa Nyholm's tinyprintf (printf.c, snprintfw)
 #include "amenu_set_tg.h" // header for THIS module (to check prototypes,etc)
+#include "amenu_channels.h"
 
 int     ad_hoc_talkgroup = 0; // "temporarily wanted" talkgroup, entered by user in the alternative menu
 uint8_t ad_hoc_tg_channel= 0; // current channel number when the above TG had been set
+
 int     ad_hoc_call_type = 0;
 //---------------------------------------------------------------------------
 int am_cbk_SetTalkgroup(app_menu_t *pMenu, menu_item_t *pItem, int event, int param )
@@ -45,7 +47,7 @@ int am_cbk_SetTalkgroup(app_menu_t *pMenu, menu_item_t *pItem, int event, int pa
   switch( event ) // what happened, why did the menu framework call us ?
    { case APPMENU_EVT_GET_VALUE : // called to retrieve the current value
         // How to retrieve the talkgroup number ? Inspired by Brad's PR #708 :
-        return current_TG();
+        return ((int)contact.id_h<<16) | ((int)contact.id_m<<8) | (int)contact.id_l;
      case APPMENU_EVT_END_EDIT: // the operator finished or aborted editing,
         if( param ) // "finished", not "aborted" -> write back the new ("edited") value
          { contact.id_l =  pMenu->iEditValue & 0xFF ;
@@ -60,7 +62,7 @@ int am_cbk_SetTalkgroup(app_menu_t *pMenu, menu_item_t *pItem, int event, int pa
            // the alternative menu (by setting channel_num = 0 to redraw the idle screen
            // even when tuned to a BUSY FM CHANNEL), also store the "wanted" TG here:
            ad_hoc_talkgroup = pMenu->iEditValue;
-	   ad_hoc_call_type = CONTACT_GROUP;
+           ad_hoc_call_type = CONTACT_GROUP;
            // The above TG shall only be used as long as we're on the same channel.
            // When QSYing via rotary knob, the TG for the new channel shall be taken
            // from the codeplug again. So remember the channel FOR WHICH THE TG WAS SET:
@@ -86,7 +88,7 @@ int am_cbk_SetCallType(app_menu_t *pMenu, menu_item_t *pItem, int event, int par
 		{
 			ad_hoc_call_type = pMenu->iEditValue;
 
-			ad_hoc_talkgroup = current_TG();
+			ad_hoc_talkgroup = ((int)contact.id_h<<16) | ((int)contact.id_m<<8) | (int)contact.id_l;
 			ad_hoc_tg_channel = channel_num;
 			CheckTalkgroupAfterChannelSwitch(); // ad_hoc_talkgroup -> contact.xyz
 		} // end if < FINISHED (not ABORTED) editing >
@@ -104,19 +106,14 @@ void CheckTalkgroupAfterChannelSwitch(void) // [in] ad_hoc_tg_channel,ad_hoc_tal
   // Called from somewhere (display task?) after a channel-switch,
   // including the transition of channel_num = 0 -> channel_num from channel knob.
 {
-
-	extern wchar_t channel_name[];
+  extern wchar_t channel_name[];
 
   // red_led_timer = 5; // detected a transition in channel_num ? very short pulse with the red LED !
   if( channel_num==0 )  // still on the "dummy channel" to force redrawing the 'idle' screen ?
    { // Don't modify anything here. Tytera is just going to overwrite the "wanted" talkgroup !
    }
-  else if (channel_num == ad_hoc_tg_channel)
-  { // When on THIS channel, should we be on the 'ad-hoc entered' talkgroup ? 
-
-	  
-
-
+  else if( channel_num == ad_hoc_tg_channel )
+   { // When on THIS channel, should we be on the 'ad-hoc entered' talkgroup ? 
      if( ad_hoc_talkgroup <= 0 ) // ... no 'wanted' talkgroup so don't modify 'contact' 
       {
       }
@@ -140,7 +137,6 @@ void CheckTalkgroupAfterChannelSwitch(void) // [in] ad_hoc_tg_channel,ad_hoc_tal
      // so we can quickly recall it via app-menu in "up-down"-edit mode.
 	 fDrawOncePer = 0;
 
-	 
 	 ParseChannel((channel_t*)&current_channel_info, &current_channel_info_E);
 
 	 wchar_t *cn_override_group_prefix = L"TG--";

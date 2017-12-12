@@ -18,13 +18,12 @@
 #include "irq_handlers.h" 	// boot_flags, BOOT_FLAG_LOADED_CONFIG defined here
 #include "system_hrc5000.h"	// set HRC5000 FM register during startup to config values
 #include "app_menu.h"
-//#include "codeplug.h"
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
 	#include "amenu_set_tg.h"
 #else
 #warning old firmware
-#endif 
+#endif
 
 addl_config_t global_addl_config;
 
@@ -103,6 +102,7 @@ void cfg_load()
     R(global_addl_config.keyb_mode,3);		// 2017-05-25	0-legacy, 1-modern, 2-MD446, 3-develop
     R(global_addl_config.scroll_mode,2);  	// 2017-06-10   0=off, 1=fast, 2=slow
     R(global_addl_config.devmode_level,3);	// 2017-06-06	0-off, 1-show FM options, 2-extended USB logging, 3-hide menus
+
     R(global_addl_config.sms_mode,1);		// 2017-07-23	SMS Mode 0=off, 1=on
     R(global_addl_config.sms_rpt,1);		// 2017-07-23	RPT SMS 0=off, 1=on
     R(global_addl_config.sms_wx,2);		// 2017-07-28	WX  SMS 0=off, 1=RPT 2=GPS

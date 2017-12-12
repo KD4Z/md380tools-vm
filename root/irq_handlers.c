@@ -70,7 +70,7 @@
 #include "narrator.h" // optional: tells channel, zone, menu in Morse code
 #include "app_menu.h" // optional 'application' menu, activated by red BACK-button
 #include "irq_handlers.h" // header for THIS module
-#include "keyb.h"
+
 
 #ifndef IRQ_ORIGINAL_SYSTICK_HDLR  // Do we know the address of SysTick_Handler in the *original* firmware ?
 #  error "Missing address of the original SysTick_Handler in 'irq_handlers.h' !"
@@ -115,10 +115,6 @@ uint8_t  keypress_ascii_at_power_on = 0; // snapshot of keypress_ascii at power-
                 //  they are never updated, e.g. in D002.032-based firmware. )
 uint8_t  keypress_ascii_remote; // for control via remote keyboard (USB).
                 // Merged with the "local" keys in irq_handlers.c:PollKeys() .
-
-#if( CONFIG_DIMMED_LIGHT )
- static uint8_t may_turn_on_backlight = 0; // ok to turn on the backlight ? 0=no, 1=yes
-#endif // CONFIG_DIMMED_LIGHT ?
 
 #if( CONFIG_MORSE_OUTPUT )
 typedef struct tMorseGenerator
@@ -1395,9 +1391,6 @@ void SysTick_Handler(void)
   // vector table, and the address of the original handler must be known
   // because we also call the original handler from here.
 {
-#if( CONFIG_DIMMED_LIGHT )
-  uint32_t dw;
-#endif
   uint32_t oldSysTickCounter = IRQ_dwSysTickCounter++; 
     // this local copy is more efficient to read than the global variable,
     // because the C compiler needs to load addresses of global variables

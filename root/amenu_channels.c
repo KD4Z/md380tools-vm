@@ -3,7 +3,7 @@
 //
 // Date:    2017-04-29
 //  Highly experimental 'alternative zone list' and similar codeplug-related displays.
-//  Most list-like displays are implemented as a callback function 
+//  Most list-like displays are implemented as a callback function
 //  for the 'application menu' (app_menu.c) .
 
 #include "config.h"
@@ -145,7 +145,9 @@ int readFrequency(channel_t* ch, frequency_t* freq, char fRx)
 int readTone(channel_t* chan, tone_t* tone, char fEnc)
 {
 	tone_t tt;
-	if (*(uint16_t*)&chan->settings[(fEnc ? 26 : 24)] == 0xFFFF) {
+	uint16_t setting;
+	memcpy(&setting, &chan->settings[(fEnc ? 26 : 24)], sizeof(setting));
+	if (setting == 0xFFFF) {
 		tone->fType = 0;
 		sprintf(tone->text, "None");
 		return 0;
@@ -195,7 +197,7 @@ int readTone(channel_t* chan, tone_t* tone, char fEnc)
 
 int ParseChannel(channel_t* chan, channel_easy* chanE)
 {
-	
+
 	memcpy(chanE->name, chan->name, 32);
 	chanE->name[15] = '\0';
 
@@ -225,4 +227,5 @@ int ParseChannel(channel_t* chan, channel_easy* chanE)
 		sprintf(chanE->DecTone.text, "N/A");
 		sprintf(chanE->EncTone.text, "N/A");
 	}
+	return 0;
 }
