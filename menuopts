@@ -30,7 +30,14 @@ if [ -f /etc/motd.save ]; then
   #echo -e " ${ZMESS17}"
 fi
 echo -e ""
-echo -e "  ${YELLOW}${ZCOM1}${NC}      -- (${YELLOW}G${NC}et ${YELLOW}L${NC}atest ${YELLOW}V${NC}ersion) ${ZCOM11}"
+echo -e -n "  ${YELLOW}${ZCOM1}${NC}      -- (${YELLOW}G${NC}et ${YELLOW}L${NC}atest ${YELLOW}V${NC}ersion) ${ZCOM11}"
+if [ -f ~/md380tools-vm/glv.mike ]; then
+  echo -e -n " ${RED}(Mike)"
+fi
+if [ -f ~/md380tools-vm/glv.wolf ]; then
+  echo -e -n " ${RED}(Wolf)"
+fi
+echo -e "${NC}"
 echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"
 echo -e ""
 echo -e " ${ZSEL4}"

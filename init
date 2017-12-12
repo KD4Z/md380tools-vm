@@ -8,6 +8,9 @@ fi
 if [ ! -d ~/archive ]; then
   mkdir ~/archive
 fi
+if [ ! -d ~/screenshots ]; then
+  mkdir ~/screenshots
+fi
 if [ -f ~/md380tools-vm/exec.pre ]; then
   chmod +x ~/md380tools-vm/exec.pre
 fi
@@ -77,6 +80,10 @@ if [ -f ~/md380tools-vm/root/glvusers ]; then
   cp ~/md380tools-vm/root/glvusers ~
   chmod +x ~/glvusers
 fi
+if [ -f ~/md380tools-vm/snap ]; then
+  chmod +x ~/md380tools-vm/snap
+fi
+
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 

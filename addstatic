@@ -42,7 +42,11 @@ touch $TMPALL
 if [ ! -f $STATICFILEHOST ]; then
   if [ ! -f $ALTERNATESEMADISABLE ]; then
      if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
-     timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE >/dev/null 2>&1
+	   if [ -f ~/keep.tmp ]; then
+         timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
+	   else
+	     timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE >/dev/null 2>&1
+	   fi 
      if [ -f $TMPALTERNATE ]; then
        sed -i '2d' $TMPALTERNATE
        mv $TMPALTERNATE $FILESTATIC

@@ -1,0 +1,5 @@
+#!/bin/bash
+ 
+ pushd ~/screenshots >null 
+ ~/md380tools/md380_tool.py screenshot "$1"
+ popd >null
