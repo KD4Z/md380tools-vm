@@ -656,7 +656,7 @@ void draw_adhoc_statusline()
 	//========================================================================================================================//
 		int ch_cc = current_channel_info_E.CC;					// current color code
 		int ch_ts = current_channel_info_E.Slot;				// current timeslot
-		int tgNum = (ad_hoc_tg_channel ? ad_hoc_talkgroup : current_TG());	// current talkgroup
+		int tgNum = (ad_hoc_tg_channel ? ad_hoc_talkgroup : (((int)contact.id_h<<16) | ((int)contact.id_m<<8) | (int)contact.id_l));	// current talkgroup
 		int callType = (ad_hoc_tg_channel ? ad_hoc_call_type : contact.type);	// current calltype
 		sprintf(dmr_cc, (char*)ch_cc);
 
