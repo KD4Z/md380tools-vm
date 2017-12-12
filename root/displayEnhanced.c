@@ -29,7 +29,11 @@
 #include "irq_handlers.h"  // boot_flags, BOOT_FLAG_DREW_STATUSLINE
 #include "lcd_driver.h"
 #include "codeplug.h"
-#include "amenu_set_tg.h"
+#if defined(FW_D13_020) || defined(FW_S13_020)
+  #include "amenu_set_tg.h"
+#else
+#warning old firmware
+#endif
 //#include "amenu_channels.h"
 #include <stdlib.h>
 
@@ -105,7 +109,9 @@ void draw_txt(char* testStr, int x, int y, char font){
 	char c=0;
 	int maxLen=16;
 	uint16_t fg_color = 0, bg_color = 0;
+#if defined(FW_D13_020) || defined(FW_S13_020)
 	Menu_GetColours(SEL_FLAG_NONE, &fg_color, &bg_color);
+#endif
 	while( ((c=*testStr)!=0)  && maxLen>0)
 	{ x = LCD_DrawCharAt( c, x, y, fg_color, bg_color, font);
 		//++i; // character index and limiting counter
@@ -530,6 +536,8 @@ void draw_alt_statusline()
     gfx_set_bg_color(0xff000000);
     gfx_select_font(gfx_font_norm);
 }
+
+#if defined(FW_D13_020) || defined(FW_S13_020)
 void draw_adhoc_statusline()
 {
 //	int x = RX_POPUP_X_START + 36;							// 36=standard position aligned with channel info
@@ -829,6 +837,8 @@ void draw_adhoc_statusline()
 	gfx_set_bg_color(0xff0000);
 	gfx_select_font(gfx_font_norm);
 }
+#endif
+
 void draw_datetime_row_hook()
 {
 # if (CONFIG_APP_MENU)
