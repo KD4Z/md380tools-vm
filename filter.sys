@@ -26,7 +26,6 @@ if [ -f ~/filter.countries.enable ]; then
   sed -i -e 's/Russia/RUS/g' $1
   sed -i -e 's/Poland/POL/g' $1
   sed -i -e 's/Luxembourg/LUX/g' $1
-  sed -i -e 's/Italy/ITA/g' $1
   sed -i -e 's/Portugal/PRT/g' $1
   sed -i -e 's/Ireland/IRL/g' $1
   sed -i -e 's/Greece/GRC/g' $1
