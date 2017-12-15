@@ -14,7 +14,7 @@ if (( countmarc < 77000 )); then
 else
   cntcolor=${GREEN}
 fi
-echo -e "${WHITE}${ZPROJ} (v3.19)${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
+echo -e "${WHITE}${ZPROJ} (v3.20)${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
 	
 echo -e ""
 echo -e " ${ZMESS11}"
@@ -36,6 +36,9 @@ if [ -f ~/md380tools-vm/glv.mike ]; then
 fi
 if [ -f ~/md380tools-vm/glv.wolf ]; then
   echo -e -n " ${RED}(Wolf)"
+fi
+if [ -f ~/md380tools-vm/glv.dale ]; then
+  echo -e -n " ${RED}(Dale)"
 fi
 echo -e "${NC}"
 echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"
