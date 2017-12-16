@@ -39,6 +39,7 @@
 
 #define RX_POPUP_Y_START 22 // 24
 #define RX_POPUP_X_START 4  // 10
+#define FIRSTNAME_BUFSIZE 30
 
 char eye_paltab[] = {
     0xd7, 0xd8, 0xd6, 0x00, 0x88, 0x8a, 0x85, 0x00, 0xe1, 0xe2, 0xe0, 0x00, 0xff, 0xff, 0xff, 0x00,
@@ -219,7 +220,19 @@ void draw_micbargraph()
     }
 }
 
+char *get_firstname(user_t *up, char *buf, int buflen) {
+    if (*up->firstname != 0)
+	return up->firstname;
 
+    char *p = buf;
+    char *q = up->name;
+    for (int i = 0; i < buflen-1 && *q != ' ' && *q != 0; i++)
+	*p++ = *q++;
+
+    *p = 0;
+
+    return buf;
+}
 
 void draw_rx_screen(unsigned int bg_color)
 {
@@ -245,7 +258,7 @@ void draw_rx_screen(unsigned int bg_color)
     gfx_select_font(gfx_font_small);
 
     user_t usr ;
-
+    char firstname_buf[FIRSTNAME_BUFSIZE];
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
 		if( src==4000 ) {
 			usr.callsign = "Message" ;
@@ -285,7 +298,8 @@ void draw_rx_screen(unsigned int bg_color)
     y_index += GFX_FONT_SMALL_HEIGHT ;
 
     gfx_select_font(gfx_font_norm); // switch to large font
-    gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, usr.firstname );
+	char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+    gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, firstname );
     y_index += GFX_FONT_NORML_HEIGHT; 
 
     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
@@ -658,7 +672,7 @@ void draw_adhoc_statusline()
 		int ch_ts = current_channel_info_E.Slot;				// current timeslot
 		int tgNum = (ad_hoc_tg_channel ? ad_hoc_talkgroup : (((int)contact.id_h<<16) | ((int)contact.id_m<<8) | (int)contact.id_l));	// current talkgroup
 		int callType = (ad_hoc_tg_channel ? ad_hoc_call_type : contact.type);	// current calltype
-		sprintf(dmr_cc, (char*)ch_cc);
+		sprintf(dmr_cc, (char*)ch_cc);  // or sprintf(dmr_cc, "%s", ch_cc);
 
 		// build the top statusline -------------------------------------------------------------------
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
