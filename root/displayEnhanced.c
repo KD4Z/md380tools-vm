@@ -618,9 +618,9 @@ void draw_adhoc_statusline()
 
 	if (strcmp(ch_rx, ch_tx) == 0) {
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
-			strcpy(ch_offset, "|   ");
+			strcpy(ch_offset, "|S  ");
 		} else {
-			strcpy(ch_offset, "|  ");
+			strcpy(ch_offset, "|S ");
 		}
 	} else if (strcmp(ch_rx, ch_tx) > 0) {
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
