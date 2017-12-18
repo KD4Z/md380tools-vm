@@ -736,18 +736,25 @@ void draw_adhoc_statusline()
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
 
-						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", "RX", freq_rx );
-						gfx_printf_pos2(x, y + 10, 120, "%s:%s MHz   ", "TX", freq_tx);
+						if (strcmp(ch_rx, ch_tx) == 0) {
+							gfx_printf_pos2(x - 12, y, 120, "Simplex:%s MHz   ", freq_rx );
+						} else {
+							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
+						}
 					}
 				}
 			} else {
 				if (global_addl_config.chan_stat != 4) {
 					//gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? ch_tx : ch_rx) );
-					gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), freq_rx );
+					gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 				} else {
-
-					gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", "RX", freq_rx );
-					gfx_printf_pos2(x, y + 10, 120, "%s:%s MHz   ", "TX", freq_tx);
+						if (strcmp(ch_rx, ch_tx) == 0) {
+							gfx_printf_pos2(x - 12, y, 120, "Simplex:%s MHz   ", freq_rx );
+						} else {
+							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
+						}
 				}
 			}
 
@@ -760,8 +767,12 @@ void draw_adhoc_statusline()
 					if (global_addl_config.chan_stat < 4) {
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
-						gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
-						gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
+						if (strcmp(ch_rx, ch_tx) == 0) {
+							gfx_printf_pos2(x - 12, y, 120, "Simplex:%s MHz   ", freq_rx );
+						} else {
+							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
+						}
 					}
 			}
 		    }
