@@ -1,0 +1,50 @@
+# stats
+# KD4Z
+# Version:  3.20
+# displays stats of various items
+
+clear
+. ~/md380tools-vm/strings
+FILESTATIC=~/static.users
+
+echo -e "Collecting information..."
+ipin=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+up=$(/usr/bin/uptime)
+countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
+countall=$(wc --lines ~/user.bin | cut -d" " -f1)
+if [ -f ~/user.bin ]; then
+	userbinsize=$(ls -l ~/user.bin | awk '{print $5,$6,$7,$8,$9}')
+else
+	userbinsize="Not present"
+fi
+if [ -f ~/firmware-noGPS.bin ]; then
+	fwnogps=$(ls -l ~/firmware-noGPS.bin | awk '{print $5,$6,$7,$8,$9}')
+else
+	fwnogps="Not present"
+fi
+if [ -f ~/firmware-GPS.bin ]; then
+	fwgps=$(ls -l ~/firmware-GPS.bin | awk '{print $5,$6,$7,$8,$9}')
+else
+	fwgps="Not present"
+fi
+
+clear
+echo -e "${WHITE}KD4Z Toolkit Stats${NC}"
+echo -e ""
+echo -e "${GREEN} Internal IP       : ${YELLOW}${ipin}"
+echo -e "${GREEN} Host Uptime       :${YELLOW}${up}"
+echo -e ""
+echo -e "${WHITE}Last build${NC}"
+echo -e "${GREEN} Firmware Bin     : ${YELLOW}${fwnogps}"
+echo -e "${GREEN} Firmware Bin GPS : ${YELLOW}${fwgps}"
+echo -e ""
+echo -e "${WHITE}Contact Data${NC}"
+echo -e "${GREEN} Contact datafile : ${YELLOW}${userbinsize}"
+echo -e "${GREEN} DMR-MARC count   : ${YELLOW}${countmarc}"
+echo -e "${GREEN} Contact records  : ${YELLOW}${countall}"
+
+echo -e "${NC}"
+echo -e ""
+ 
+echo -e "${YELLOW} menu${NC}\t\t-- Back to main menu "
+echo -e ""

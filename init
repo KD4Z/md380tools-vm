@@ -83,7 +83,9 @@ fi
 if [ -f ~/md380tools-vm/snap ]; then
   chmod +x ~/md380tools-vm/snap
 fi
-
+if [ -f ~/md380tools-vm/stats ]; then
+  chmod +x ~/md380tools-vm/stats
+fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 
