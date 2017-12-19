@@ -737,7 +737,7 @@ void draw_adhoc_statusline()
 					} else {
 
 						if (strcmp(ch_rx, ch_tx) == 0) {
-							gfx_printf_pos2(x, y, 120, "- Simplex - " );
+							gfx_printf_pos2(x, y, 120, "-- Simplex -- " );
 							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
 							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
@@ -750,7 +750,7 @@ void draw_adhoc_statusline()
 					gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 				} else {
 						if (strcmp(ch_rx, ch_tx) == 0) {
-							gfx_printf_pos2(x, y, 120, "- Simplex - " );
+							gfx_printf_pos2(x, y, 120, "-- Simplex -- " );
 							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
 							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
@@ -768,7 +768,7 @@ void draw_adhoc_statusline()
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
 						if (strcmp(ch_rx, ch_tx) == 0) {
-							gfx_printf_pos2(x, y, 120, "- Simplex - " );
+							gfx_printf_pos2(x, y, 120, "-- Simplex -- " );
 							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
 							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
