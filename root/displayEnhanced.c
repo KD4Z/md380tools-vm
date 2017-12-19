@@ -529,7 +529,7 @@ void draw_alt_statusline()
     if( src == 0 ) {
 	if ( global_addl_config.datef == 5 )
 	{
-	        gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:");
+	        gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:");
 	} else {
 	        gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "TA:");
 	}
@@ -737,7 +737,8 @@ void draw_adhoc_statusline()
 					} else {
 
 						if (strcmp(ch_rx, ch_tx) == 0) {
-							gfx_printf_pos2(x - 12, y, 120, "Simplex:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y, 120, "- Simplex - " );
+							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
 							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
 							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
@@ -746,11 +747,11 @@ void draw_adhoc_statusline()
 				}
 			} else {
 				if (global_addl_config.chan_stat != 4) {
-					//gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? ch_tx : ch_rx) );
 					gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 				} else {
 						if (strcmp(ch_rx, ch_tx) == 0) {
-							gfx_printf_pos2(x - 12, y, 120, "Simplex:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y, 120, "- Simplex - " );
+							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
 							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
 							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
@@ -761,14 +762,14 @@ void draw_adhoc_statusline()
 		    } else {
 			if (global_addl_config.chan_color == 1) { gfx_set_fg_color(0x261162); gfx_set_bg_color(0xff9f32);}
 			if (global_addl_config.chan_stat == 1) { 
-				//gfx_printf_pos2(x, y, 320, "%s - %s", (ad_hoc_call_type == CONTACT_GROUP ? "TG" : "Priv"), usr.callsign);
 				gfx_printf_pos2(x, y, 120, "%s%d %s%s:%s          ", bot_status, ch_ts, (ad_hoc_tg_channel ? "Ad" : ""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "TG" : "Priv"), usr.callsign);
 			} else {
 					if (global_addl_config.chan_stat < 4) {
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
 						if (strcmp(ch_rx, ch_tx) == 0) {
-							gfx_printf_pos2(x - 12, y, 120, "Simplex:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y, 120, "- Simplex - " );
+							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
 							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
 							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
