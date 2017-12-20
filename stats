@@ -5,7 +5,7 @@
 
 clear
 . ~/md380tools-vm/strings
-FILESTATIC=~/static.users
+ 
 
 echo -e "Collecting information..."
 ipin=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
@@ -31,7 +31,7 @@ fi
 clear
 echo -e "${WHITE}KD4Z Toolkit Stats${NC}"
 echo -e ""
-echo -e "${GREEN} Internal IP       : ${YELLOW}${ipin}"
+echo -e "${GREEN} IP Address        : ${YELLOW}${ipin}"
 echo -e "${GREEN} Host Uptime       :${YELLOW}${up}"
 echo -e ""
 echo -e "${WHITE}Last build${NC}"

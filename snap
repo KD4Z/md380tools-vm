@@ -1,5 +1,10 @@
 #!/bin/bash
  
  pushd ~/screenshots >null 
+ echo "Saving screenshot to filename: $1"
  ~/md380tools/md380_tool.py screenshot "$1"
+ if [ -f "$1" ] && [ -d /media/sf_TytScreenshots ] ; then
+   echo "Copying to TytScreenshots shared folder on host"
+   cp ./"$1" /media/sf_TytScreenshots/
+ fi
  popd >null

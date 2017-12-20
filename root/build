@@ -1,7 +1,7 @@
 #/bin/bash
 # KD4Z
 # master glv script
-# Version:  3.09
+# Version:  3.21
 
 now=`date "+%Y-%m-%d"`
 
@@ -14,11 +14,15 @@ make dist
 cat db/stripped.csv >user.bin
 cp user.bin ~/user.bin
 
-#make dist
-
 cp dist/md380tools-${now}/firmware-${now}-NoGPS.bin ~/firmware-noGPS.bin
 cp dist/md380tools-${now}/firmware-${now}-GPS.bin ~/firmware-GPS.bin
+if [ ! -d ~/screenshots ]; then
+  mkdir ~/screenshots
+fi
 
+cp ~/firmware-noGPS.bin ~/screenshots
+cp ~/firmware-GPS.bin ~/screenshots
+cp ~/user.bin ~/screenshots
 
 cd ~/md380tools-vm 
 ~/md380tools-vm/exec.post
