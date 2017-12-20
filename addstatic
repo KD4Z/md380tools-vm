@@ -28,6 +28,8 @@ FILESEEDZIPNEW=newseeds.zip
 FILESEEDZIPOLD=oldseeds.zip
 STATICFILEHOST=~/static.host
 TMPALL=~/userall.tmp
+TMP1=~/file1.tmp
+TMP2=~/file2.tmp
 TMPDEDUP=~/dedup.tmp
 TMPSORTED=~/sorted.tmp
 TMPALTERNATE=~/alter.tmp
@@ -38,37 +40,6 @@ if [ -f $TMPALL ]; then
 	rm $TMPALL
 fi
 touch $TMPALL
-
-if [ ! -f $STATICFILEHOST ]; then
-  if [ ! -f $ALTERNATESEMADISABLE ]; then
-     if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
-	   if [ -f ~/keep.tmp ]; then
-         timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
-	   else
-	     timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE >/dev/null 2>&1
-	   fi 
-     if [ -f $TMPALTERNATE ]; then
-       sed -i '2d' $TMPALTERNATE
-       mv $TMPALTERNATE $FILESTATIC
-     fi
-  fi
-fi
-
-if [ -f $STATICFILEHOST ]; then
-    echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
-    timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
-fi
-
-
-if [ -f $FILESTATIC ]; then
-  echo -e "${YELLOW}Appending Static IDs from ${FILESTATIC}${NC}"
-  if [ ! -f ~/strip.nickname.disable ]; then
-    awk -F, '{print $1","$2","$3","$4","$5",,"$7}' $FILESTATIC >$TMPDEDUP
-    cat $TMPDEDUP >$FILESTATIC
-  fi
-  sed -i -e 's/\r//' $FILESTATIC
-  cat $FILESTATIC >>$TMPALL
-fi
 
 if [ -f ~/keep.seed.file ] && [ -f ~/seeds.zip ]; then
     cp ~/md380tools-vm/seeds.zip ~/
@@ -85,13 +56,10 @@ if [ ! -f $FILESEEDZIP ]; then
   fi
 fi
 
-
-
 if [ ! -f $FILESEEDZIP ]; then
   echo -e "${RED}Unable to download seed file for nickname and extra EU data.${NC}"
   sleep 8
 fi
-
 
 if [ -f $FILESEEDZIP ]; then
     if [ -f $FILESEED ]; then
@@ -119,7 +87,36 @@ if [ -f $FILESEEDZIP ]; then
 	fi
 
 fi
- 
+ if [ ! -f $STATICFILEHOST ]; then
+  if [ ! -f $ALTERNATESEMADISABLE ]; then
+     if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
+	   if [ -f ~/keep.tmp ]; then
+         timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
+	   else
+	     timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE >/dev/null 2>&1
+	   fi 
+     if [ -f $TMPALTERNATE ]; then
+       sed -i '2d' $TMPALTERNATE
+       mv $TMPALTERNATE $FILESTATIC
+     fi
+  fi
+fi
+
+if [ -f $STATICFILEHOST ]; then
+    echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
+    timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
+fi
+
+if [ -f $FILESTATIC ]; then
+  echo -e "${YELLOW}Appending Static IDs from ${FILESTATIC}${NC}"
+  if [ ! -f ~/strip.nickname.disable ]; then
+    awk -F, '{print $1","$2","$3","$4","$5",,"$7}' $FILESTATIC >$TMP1
+    cat $TMP1 >$FILESTATIC
+  fi
+  sed -i -e 's/\r//' $FILESTATIC
+  cat $FILESTATIC >>$TMPALL
+fi
+
 cat ~/user.bin >>$TMPALL
 
 awk -F',' '!seen[$1]++' $TMPALL >$TMPDEDUP
@@ -133,19 +130,21 @@ fi
 countseed=$(wc --lines $FILESEED | cut -d" " -f1)
 countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
 countall=$(wc --lines ~/user.bin | cut -d" " -f1)
+userbinsize=$(ls -l ~/user.bin | cut -d" " -f5)
 echo -e "${GREEN}Contact Import completed."
-echo -e "${GREEN}  Seed count     :  ${YELLOW}${countseed}"
-echo -e "${GREEN}  Static ID count:  ${YELLOW}${countstatic}"
-echo -e "${GREEN}  DMR-MARC count :  ${YELLOW}${countmarc}"
+echo -e "${GREEN}  Seed count       :  ${YELLOW}${countseed}"
+echo -e "${GREEN}  Static ID count  :  ${YELLOW}${countstatic}"
+echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}"
 if (( countmarc < 72200 )); then
   echo -e "${RED} ** The Download from dmr-marc seems to have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"
   sleep 8
 fi
-echo -e "${GREEN}  Merged total   :  ${YELLOW}${countall}${NC}"
+echo -e "${GREEN}  Merged total     :  ${YELLOW}${countall}${NC}"
+echo -e "${GREEN}  User.bin filesize:  ${YELLOW}${userbinsize}${NC}"
 if [ -f ~/keep.tmp ]; then
     echo -e "${RED}Keeping temporary files around for debug.  rm ~/keep.tmp to disable this.${NC}"
 else
-    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED
+    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED $TMP1 $TMP2 $FILESEEDZIPNEW
 fi
