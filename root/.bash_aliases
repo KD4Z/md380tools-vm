@@ -18,7 +18,9 @@ alias FLASHDB="flashdb"
 alias fl="flash"
 alias fdb="flashdb"
 alias dir="ls -lH"
-alias reboot="/sbin/reboot"
+alias reboot="/bin/sync && /sbin/reboot"
+alias shutdown="/bin/sync && /sbin/shutdown -h now"
+alias stats="~/md380tools-vm/stats"
 lookup() { ~/lookup "$1"; }
 save() { ~/save "$1"; }
 restore() { ~/restore "$1"; }
