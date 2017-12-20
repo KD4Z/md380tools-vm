@@ -62,6 +62,10 @@ fi
 
 if [ -f $FILESTATIC ]; then
   echo -e "${YELLOW}Appending Static IDs from ${FILESTATIC}${NC}"
+  if [ ! -f ~/strip.nickname.disable ]; then
+    awk -F, '{print $1","$2","$3","$4","$5",,"$7}' $FILESTATIC >$usertmp
+    cat $usertmp >$FILESTATIC
+  fi
   sed -i -e 's/\r//' $FILESTATIC
   cat $FILESTATIC >>$TMPALL
 fi

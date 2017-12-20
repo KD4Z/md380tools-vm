@@ -1,7 +1,7 @@
 #!/bin/bash
 # exec.post
 # KD4Z
-# Version:  3.02
+# Version:  3.20
 # Runs after glv is completed
 
 
@@ -11,36 +11,8 @@ usertmp=~/header.tmp
 
 cd ~/md380tools-vm
 
-# Jan 11, 2017  dmr-marc has removed the nickname field completely and is now
-# Jan 17, 2017  md380tools source was changed to workaround the issue, now removing my workaround
-# pumping in the comment at the end of the record
-# by the time md380tools massages it, the formats look like this:
-# old format prior to Jan 11, 2017
-# 	id,callsign,fullname,city,state,nickname,country
-# new format (wtf)
-# 	id,callsign,fullname,state,country,city,comment
-# translate new format back to old, except nickname is now missing,
-# 
-#sed -i 1,1d $userfile
-#awk -F, '{print $1","$2","$3","$6","$4",,"$5}' $userfile >$usertmp
-#cat $usertmp >$userfile
-#if [ -f ~/user.converted ]; then
-#  rm~/user.converted
-#fi
-#rm $usertmp
-### end of data translation dance 
-
-# addstatic script returns user.bin merged
+# addstatic script returns user.bin merged as $userfile
 ./addstatic
-
-
-#if [ ! -f ~/fill.nickname.disable ]; then
-#  echo -e "${YELLOW}Touching up ${ZCOM44}"
-#  awk -F, '!length($6) {print $1","$2","$3","$4","$5","substr($3,1,index($3," ")-1)","$7;next} {print}' $userfile >$usertmp
-#  cat $usertmp >$userfile
-#  rm $usertmp
-#  touch ~/filter.sys.enable
-#fi
 
 if [ -f filter.sys ] && [ ! -f ~/filter.sys.disable ]; then  
   ./filter.sys $userfile

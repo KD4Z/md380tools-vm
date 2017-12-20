@@ -22,6 +22,16 @@ echo -e " ${WHITE}Recover Locked Radio:${NC}"
 echo -e "\t${YELLOW}${ZCOM9}${NC}\t\t-- ${ZCOM47}"
 echo -e "\t${YELLOW}rdtblank${NC}\t\t-- ${RED}Force Blank Codeplug to Radio${NC}"
 echo -e ""
+if [ -f /etc/kd4z.toolkit.4 ] && [ -f /etc/motd.save ]; then
+  echo -e " ${WHITE}Utility:${NC}"
+  echo -e "\t${YELLOW}snap ${BLUE}filename.bmp${NC}       -- Create screenshot in 'screenshot' folder.  Must be named .bmp"
+  echo -e "\t${YELLOW}rdtread ${BLUE}codeplug.bin${NC}    -- Read codeplug out of radio into binary file."
+  echo -e "\t${YELLOW}rdtwrite ${BLUE}codeplug.rdt${NC}   -- Write codeplug to radio from RDT,DFU or BIN file."
+  echo -e ""
+  echo -e "\t${YELLOW}shutdown${NC} or ${YELLOW}reboot${NC}      -- Safely Shutdown or Reboot the Virtual Machine"
+  echo -e ""
+  echo -e "\t${YELLOW}stats${NC}                   -- VM information menu"
+fi
 echo -e "\t${YELLOW}${ZCOM8}${NC}\t\t\t-- ${ZCOM22}"
 echo -e -n "\t${YELLOW}menu${NC}\t\t\t-- Back to main menu "
 if [ -f /etc/motd.save ]; then

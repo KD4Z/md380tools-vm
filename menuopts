@@ -37,9 +37,7 @@ fi
 if [ -f ~/md380tools-vm/glv.wolf ]; then
   echo -e -n " ${RED}(Wolf)"
 fi
-if [ -f ~/md380tools-vm/glv.dale ]; then
-  echo -e -n " ${RED}(Dale)"
-fi
+
 echo -e "${NC}"
 echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"
 echo -e ""
