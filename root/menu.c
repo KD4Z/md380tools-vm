@@ -244,7 +244,7 @@ const static wchar_t wt_button_set_tg[]     = L"Set Talkgroup";
 const static wchar_t wt_button_narrator[]   = L"Morse Narrator";
 const static wchar_t wt_button_cw_repeat[]  = L"Morse Repeat";
 #endif
-const static wchar_t wt_button_toggle[]     = L"Screen Toogle";
+const static wchar_t wt_button_toggle[]     = L"Screen Toggle";
 const static wchar_t wt_button_micgain[]    = L"Micgain 0/3/6dB";
 const static wchar_t wt_button_promisc[]    = L"Promisc On/Off";
 
