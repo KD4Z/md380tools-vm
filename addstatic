@@ -130,7 +130,7 @@ fi
 countseed=$(wc --lines $FILESEED | cut -d" " -f1)
 countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
 countall=$(wc --lines ~/user.bin | cut -d" " -f1)
-userbinsize=$(ls -l ~/user.bin | cut -d" " -f5)
+
 echo -e "${GREEN}Contact Import completed."
 echo -e "${GREEN}  Seed count       :  ${YELLOW}${countseed}"
 echo -e "${GREEN}  Static ID count  :  ${YELLOW}${countstatic}"
@@ -142,7 +142,7 @@ if (( countmarc < 72200 )); then
   sleep 8
 fi
 echo -e "${GREEN}  Merged total     :  ${YELLOW}${countall}${NC}"
-echo -e "${GREEN}  User.bin filesize:  ${YELLOW}${userbinsize}${NC}"
+
 if [ -f ~/keep.tmp ]; then
     echo -e "${RED}Keeping temporary files around for debug.  rm ~/keep.tmp to disable this.${NC}"
 else

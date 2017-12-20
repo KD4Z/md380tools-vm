@@ -33,6 +33,8 @@ if [ -f ~/exec.post.local ]; then
   ~/exec.post.local $userfile
 fi
 
+userbinsize=$(ls -l $userfile | cut -d" " -f5)
+echo -e "${GREEN}  User.bin filesize:  ${YELLOW}${userbinsize}${NC}"
 
 # now put back the header
 wc -c < $userfile >$usertmp

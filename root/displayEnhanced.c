@@ -40,6 +40,7 @@
 #define RX_POPUP_Y_START 22 // 24
 #define RX_POPUP_X_START 4  // 10
 #define FIRSTNAME_BUFSIZE 30
+#define COUNTRY_BUFSIZE 20
 
 char eye_paltab[] = {
     0xd7, 0xd8, 0xd6, 0x00, 0x88, 0x8a, 0x85, 0x00, 0xe1, 0xe2, 0xe0, 0x00, 0xff, 0xff, 0xff, 0x00,
@@ -259,6 +260,8 @@ void draw_rx_screen(unsigned int bg_color)
 
     user_t usr ;
     char firstname_buf[FIRSTNAME_BUFSIZE];
+	char country_buf[COUNTRY_BUFSIZE];
+	
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
 		if( src==4000 ) {
 			usr.callsign = "Message" ;
@@ -382,10 +385,37 @@ void draw_rx_screen(unsigned int bg_color)
 
          gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
          y_index += GFX_FONT_SMALL_HEIGHT ;
-
-         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
+		// stupid little test hack to reduce user.bin size 
+		if (strcmp(usr.country, "US") == 0) {
+			strcpy(country_buf, "United States");
+		} else if (strcmp(usr.country, "UK") == 0) {
+			strcpy(country_buf, "United Kingdom");
+		} else if (strcmp(usr.country, "CAN") == 0) {
+			strcpy(country_buf, "Canada");
+		} else if (strcmp(usr.country, "CN") == 0) {
+			strcpy(country_buf, "China");
+		} else if (strcmp(usr.country, "DEU") == 0) {
+			strcpy(country_buf, "Germany");	
+		} else if (strcmp(usr.country, "NDL") == 0) {
+			strcpy(country_buf, "Netherlands");	
+		} else if (strcmp(usr.country, "ESP") == 0) {
+			strcpy(country_buf, "Spain");
+		} else if (strcmp(usr.country, "ITA") == 0) {
+			strcpy(country_buf, "Italy");	
+		} else if (strcmp(usr.country, "BEL") == 0) {
+			strcpy(country_buf, "Belgium");	
+		} else if (strcmp(usr.country, "AUS") == 0) {
+			strcpy(country_buf, "Australia");	
+		} else if (strcmp(usr.country, "FRA") == 0) {
+			strcpy(country_buf, "France");			
+		} else {
+			strcpy(country_buf, usr.country);
+		}
+	
+		gfx_puts_pos(RX_POPUP_X_START, y_index, country_buf );
+        y_index += GFX_FONT_SMALL_HEIGHT ;
 	  }
+	  
 	}
 	
     gfx_select_font(gfx_font_norm);

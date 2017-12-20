@@ -10,15 +10,21 @@
  
 
 echo -e "${YELLOW}Applying UsersCSV filters${NC}"
-sleep 1
-if [ -f ~/filter.countries.enable ]; then
-  echo -e "${YELLOW}-->Abbreviating countries${NC}"
-  sed -i -e 's/United States/USA/g' $1
+
+  sed -i -e 's/United States/US/g' $1
   sed -i -e 's/United Kingdom/UK/g' $1
+  sed -i -e 's/Germany/DEU/g' $1
   sed -i -e 's/Australia/AUS/g' $1
   sed -i -e 's/Canada/CAN/g' $1
-  sed -i -e 's/Germany/DEU/g' $1
   sed -i -e 's/Italy/ITA/g' $1
+  sed -i -e 's/Netherlands/NLD/g' $1
+  sed -i -e 's/Belgium/BEL/g' $1
+  sed -i -e 's/France/FRA/g' $1
+  sed -i -e 's/Spain/ESP/g' $1
+  sed -i -e 's/China/CN/g' $1
+  
+if [ -f ~/filter.countries.enable ]; then
+  echo -e "${YELLOW}-->Abbreviating countries${NC}"
   sed -i -e 's/Switzerland/CHE/g' $1
   sed -i -e 's/Austria/AUT/g' $1
   sed -i -e 's/Denmark/DNK/g' $1
@@ -29,17 +35,12 @@ if [ -f ~/filter.countries.enable ]; then
   sed -i -e 's/Portugal/PRT/g' $1
   sed -i -e 's/Ireland/IRL/g' $1
   sed -i -e 's/Greece/GRC/g' $1
-  sed -i -e 's/Netherlands/NLD/g' $1
-  sed -i -e 's/Belgium/BEL/g' $1
-  sed -i -e 's/France/FRA/g' $1
-  sed -i -e 's/Spain/ESP/g' $1
   sed -i -e 's/Hungary/HUN/g' $1
   sed -i -e 's/Bosnia and Hercegovi/BIH/g' $1
   sed -i -e 's/Czech Republic/CZE/g' $1
   sed -i -e 's/Slovakia/SVK/g' $1
   sed -i -e 's/Norway/NOR/g' $1
   sed -i -e 's/Finland/FIN/g' $1
-  sed -i -e 's/China/CN/g' $1
   sed -i -e 's/Taiwan/TAI/g' $1
   sed -i -e 's/Malaysia/MYS/g' $1
   sed -i -e 's/New Zealand/NZL/g' $1
