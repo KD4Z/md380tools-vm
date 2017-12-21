@@ -9,12 +9,18 @@ countmarc=$(wc --lines ~/user.bin | cut -d" " -f1)
 clear
 
 
-if (( countmarc < 77000 )); then
+if (( countmarc < 79000 )); then
   cntcolor=${RED}
 else
   cntcolor=${GREEN}
 fi
-echo -e "${WHITE}${ZPROJ} (v3.21)${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
+if [ -f /etc/kd4z.toolkit.4 ]; then
+  vers="4.00"
+else
+  vers="3.21"
+fi
+
+echo -e " ${WHITE}${ZPROJ} (v${vers})${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
 	
 echo -e ""
 echo -e " ${ZMESS11}"
