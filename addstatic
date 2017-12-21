@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  3.16
+# Version:  3.21
 # script to add static DMR ids into the usersCSV after glv
 # requires a simple file that mimics the exact field layout of user.bin
 # must contain seven fields, separated by commas
@@ -29,7 +29,6 @@ FILESEEDZIPOLD=oldseeds.zip
 STATICFILEHOST=~/static.host
 TMPALL=~/userall.tmp
 TMP1=~/file1.tmp
-TMP2=~/file2.tmp
 TMPDEDUP=~/dedup.tmp
 TMPSORTED=~/sorted.tmp
 TMPALTERNATE=~/alter.tmp
@@ -40,7 +39,7 @@ if [ -f $TMPALL ]; then
 	rm $TMPALL
 fi
 touch $TMPALL
-
+touch $TMP1
 if [ -f ~/keep.seed.file ] && [ -f ~/seeds.zip ]; then
     cp ~/md380tools-vm/seeds.zip ~/
 fi
@@ -135,7 +134,7 @@ echo -e "${GREEN}Contact Import completed."
 echo -e "${GREEN}  Seed count       :  ${YELLOW}${countseed}"
 echo -e "${GREEN}  Static ID count  :  ${YELLOW}${countstatic}"
 echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}"
-if (( countmarc < 72200 )); then
+if (( countmarc < 80000 )); then
   echo -e "${RED} ** The Download from dmr-marc seems to have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"
@@ -146,5 +145,5 @@ echo -e "${GREEN}  Merged total     :  ${YELLOW}${countall}${NC}"
 if [ -f ~/keep.tmp ]; then
     echo -e "${RED}Keeping temporary files around for debug.  rm ~/keep.tmp to disable this.${NC}"
 else
-    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED $TMP1 $TMP2 $FILESEEDZIPNEW
+    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED $TMP1 $FILESEEDZIPNEW
 fi
