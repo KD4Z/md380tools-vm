@@ -1,12 +1,14 @@
 MD380tools VM for VirtualBox (aka KD4Z Toolkit)
 Warren Merkel, KD4Z
 
+From github project
+https://github.com/KD4Z/md380tools-vm
+
 Current Version: 4.00 (after glv is run)
 Image file updated:	 12/25/2017  Version 4.0
 Installation PDF updated: 01/28/2017
-
-From github project
-https://github.com/KD4Z/md380tools-vm
+Version 4 Release Notes:
+https://github.com/KD4Z/md380tools-vm/blob/master/KD4Z_Toolkit_Version_4.0_enhancement_notes.pdf
 
 Follow the installation directions in the PDF found here:
 
