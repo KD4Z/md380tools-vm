@@ -4,7 +4,12 @@
  echo "Saving screenshot to filename: $1"
  ~/md380tools/md380_tool.py screenshot "$1"
  if [ -f "$1" ] && [ -d /media/sf_TytScreenshots ] ; then
-   echo "Copying to TytScreenshots shared folder on host"
    cp ./"$1" /media/sf_TytScreenshots/
+   if [ -f /media/sf_TytScreenshots/"$1" ]; then
+     echo "Moving file to TytScreenshots shared folder on host"
+     if [ -f ./"$1" ]; then  
+	     rm ./"$1"
+     fi
+   fi
  fi
  popd >null

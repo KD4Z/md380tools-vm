@@ -1,12 +1,15 @@
-MD380tools VM for VirtualBox (aka KD4Z Toolkit)
+KD4Z Toolkit - MD380tools VM for VirtualBox,  VMWare or just BASH
 Warren Merkel, KD4Z
 
 From github project
 https://github.com/KD4Z/md380tools-vm
 
 Current Version: 4.00 (after glv is run)
+
 Image file updated:	 12/25/2017  Version 4.0
+
 Installation PDF updated: 01/28/2017
+
 Version 4 Release Notes:
 https://github.com/KD4Z/md380tools-vm/blob/master/KD4Z_Toolkit_Version_4.0_enhancement_notes.pdf
 
@@ -126,7 +129,9 @@ Install 7-Zip, and then Right-Click on the first part file, find the 7-Zip menu,
 choose the extract option.  You will end up with a single, large ".OVA" file.  This file is imported
 into the Virtual Box software.
 
-# THE VMWare Images are for the version 3.0 - 4.0 version not ready yet
+
+# THE VMWare Images are still for the version 3.0
+# 4.0 version is not ready yet.. work in progress
 
 * If you decide to use VMware instead of VirtualBox, use the following links, as this image has
 been pre-converted for easier import into VMWare.
@@ -140,8 +145,11 @@ https://drive.google.com/open?id=0BwED_-BHnZjSWklsNjY3VHBqMVE
 Parts - Use these links if you have trouble downloading the large file above.
 
 [Part 1] - https://drive.google.com/file/d/0BwED_-BHnZjSdERwY1BHc1Y3ekk
+
 [Part 2] - https://drive.google.com/open?id=0BwED_-BHnZjSYnZEeXJHcjh5R3c
+
 [Part 3] - https://drive.google.com/open?id=0BwED_-BHnZjSb3NzSE41azhzN3M
+
 [Part 4] - https://drive.google.com/open?id=0BwED_-BHnZjSNmlOMTJvT3l4VWM
 
 

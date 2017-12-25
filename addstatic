@@ -86,19 +86,26 @@ if [ -f $FILESEEDZIP ]; then
 	fi
 
 fi
- if [ ! -f $STATICFILEHOST ]; then
-  if [ ! -f $ALTERNATESEMADISABLE ]; then
-     if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
-	   if [ -f ~/keep.tmp ]; then
+if [ ! -f $STATICFILEHOST ]; then
+   if [ ! -f $ALTERNATESEMADISABLE ]; then
+      if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
+      if [ -f ~/keep.tmp ]; then
          timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
-	   else
+	  else
 	     timeout 120 wget -quiet --no-verbose --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE >/dev/null 2>&1
-	   fi 
-     if [ -f $TMPALTERNATE ]; then
-       sed -i '2d' $TMPALTERNATE
-       mv $TMPALTERNATE $FILESTATIC
-     fi
-  fi
+	  fi 
+	  if [ -f ~/keep.tmp ]; then
+	     if [ -f $TMPALTERNATE ]; then 
+		    echo "Alternate file downloaded" 
+		 else
+            echo "Alternte file not downloaded"		 
+	     fi
+	  fi
+      if [ -f $TMPALTERNATE ]; then
+         sed -i '2d' $TMPALTERNATE
+         mv $TMPALTERNATE $FILESTATIC
+      fi
+   fi
 fi
 
 if [ -f $STATICFILEHOST ]; then
@@ -132,7 +139,9 @@ countall=$(wc --lines ~/user.bin | cut -d" " -f1)
 
 echo -e "${GREEN}Contact Import completed."
 echo -e "${GREEN}  Seed count       :  ${YELLOW}${countseed}"
+if [ -f $FILESTATIC ] ; then
 echo -e "${GREEN}  Static ID count  :  ${YELLOW}${countstatic}"
+fi
 echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}"
 if (( countmarc < 80000 )); then
   echo -e "${RED} ** The Download from dmr-marc seems to have failed - run ${YELLOW}glvusers${RED} again"
@@ -145,5 +154,6 @@ echo -e "${GREEN}  Merged total     :  ${YELLOW}${countall}${NC}"
 if [ -f ~/keep.tmp ]; then
     echo -e "${RED}Keeping temporary files around for debug.  rm ~/keep.tmp to disable this.${NC}"
 else
-    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED $TMP1 $FILESEEDZIPNEW
+    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED $TMP1 
+	if [ -f $FILESEEDZIPNEW ]; then rm $FILESEEDZIPNEW ; fi
 fi
