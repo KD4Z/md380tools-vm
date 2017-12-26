@@ -10,18 +10,18 @@
  
 
 echo -e "${YELLOW}Applying UsersCSV filters${NC}"
-
+  # these abbreviations are reversed by the firmware now
   sed -i -e 's/United States/US/g' $1
   sed -i -e 's/United Kingdom/UK/g' $1
-  sed -i -e 's/Germany/DEU/g' $1
+  sed -i -e 's/,Germany/,DEU/g' $1
   sed -i -e 's/Australia/AUS/g' $1
-  sed -i -e 's/Canada/CAN/g' $1
-  sed -i -e 's/Italy/ITA/g' $1
+  sed -i -e 's/,Canada/,CAN/g' $1
+  sed -i -e 's/,Italy/,ITA/g' $1
   sed -i -e 's/Netherlands/NLD/g' $1
-  sed -i -e 's/Belgium/BEL/g' $1
-  sed -i -e 's/France/FRA/g' $1
-  sed -i -e 's/Spain/ESP/g' $1
-  sed -i -e 's/China/CN/g' $1
+  sed -i -e 's/,Belgium/,BEL/g' $1
+  sed -i -e 's/,France/,FRA/g' $1
+  sed -i -e 's/,Spain/,ESP/g' $1
+  sed -i -e 's/,China/,CN/g' $1
   
 if [ -f ~/filter.countries.enable ]; then
   echo -e "${YELLOW}-->Abbreviating countries${NC}"
