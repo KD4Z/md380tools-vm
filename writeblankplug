@@ -87,7 +87,7 @@ do
         echo -e "${YELLOW}Writing blank codeplug to UHF MD-390 / RT-8"
         echo -e "${RED}"
 
-        ~/md380tools/md380-dfu write ~/md380tools-vm/archive/bblankplugMD390uhf.rdt
+        ~/md380tools/md380-dfu write ~/md380tools-vm/archive/blankplugMD390uhf.rdt
 		~/md380tools/md380-dfu reboot
 
         echo -e "${WHITE}If you just made a mistake, you can restore your previous codeplug with this:"
