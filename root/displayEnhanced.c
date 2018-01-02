@@ -571,15 +571,15 @@ void draw_alt_statusline()
 		} else {										// 2017-02-18 otherwise show lastheard in status line
 				if( usr_find_by_dmrid(&usr, src) == 0 ) {
 					if( usr_find_by_dmrid(&usr, rst_dst) != 0 ) {
-						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%d->%s %c", src, usr.callsign, mode);
+						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%d->%s %c", src, usr.callsign, mode);
 					} else  {
-						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%d->%d %c", src, rst_dst, mode);
+						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%d->%d %c", src, rst_dst, mode);
 					}
 				} else {
 	                if( usr_find_by_dmrid(&dst, rst_dst) != 0 ) {
-						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%s->%s %c", usr.callsign, dst.callsign, mode);
+						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%s->%s %c", usr.callsign, dst.callsign, mode);
 					} else  {
-						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "lh:%s->%d %c", usr.callsign, rst_dst, mode);
+						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%s->%d %c", usr.callsign, rst_dst, mode);
 					}
 				}
 		}
