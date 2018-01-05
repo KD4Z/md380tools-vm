@@ -41,7 +41,10 @@ if [ -f ~/beep.disable ]; then
 fi
 sed -i -e 's/# Add ID/\nfile.close()\nsys.exit(0)\n# Add ID/g' ~/md380tools/db/get_special_IDs.py
 sed -i -e 's/getattr(device, "manufacturer")/#/g' ~/md380tools/md380_tool.py
-
+if [ -f ~/volumebar.enable ]; then
+  sed -i -e 's/patcher.nopout((0x0801FED2/# patcher.nopout((0x0801FED2/g' ~/md380tools/patches/d13.020/patch.py
+  sed -i -e 's/patcher.nopout((0x0801FED2/# patcher.nopout((0x0801FED2/g' ~/md380tools/patches/s13.020/patch.py
+fi
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
