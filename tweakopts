@@ -29,7 +29,13 @@ if [ -f ~/filter.us.states.enable ]; then
 else
  echo -e ""
 fi
-echo -e "  ${BLUE}~/volumebar.enable${NC}  ${ZCOM42} ${ZCOM49}"
+
+echo -e -n "  ${BLUE}~/volumebar.enable${NC}  ${ZCOM42} ${ZCOM49}"
+if [ -f ~/volumebar.enable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
 #echo -e -n "  ${BLUE}~/filter.sys.disable${NC}        ${ZCOM43} all filters"
 #if [ -f ~/filter.sys.disable ]; then
 # echo -e "${RED} *${NC}"
