@@ -72,6 +72,9 @@ if [ -f ~/md380tools-vm/root/build ]; then
   cp ~/md380tools-vm/root/build ~
   chmod +x ~/build
 fi
+if [ -f ~/md380tools-vm/root/get_special_IDs.py ]; then
+  cp ~/md380tools-vm/root/get_special_IDs.py ~/md380tools/db/get_special_IDs.py
+fi
 if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bash_aliases ~
   cp ~/md380tools-vm/root/.bashrc ~
