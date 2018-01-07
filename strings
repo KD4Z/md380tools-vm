@@ -105,6 +105,7 @@ export ZCOM46="Restore X numbered prior build"
 export ZCOM47="Clear Codeplug Password"
 export ZCOM48="Extra Contact Data"
 export ZCOM49="Volume Control Bargraph"
+export ZCOM50="Beep Tones"
 
 
 

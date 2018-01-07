@@ -36,6 +36,13 @@ if [ -f ~/volumebar.enable ]; then
 else
  echo -e ""
 fi
+echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
+if [ -f ~/beep.disable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+
 #echo -e -n "  ${BLUE}~/filter.sys.disable${NC}        ${ZCOM43} all filters"
 #if [ -f ~/filter.sys.disable ]; then
 # echo -e "${RED} *${NC}"
