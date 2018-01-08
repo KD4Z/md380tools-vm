@@ -16,7 +16,9 @@ fi
 if [ -f ~/firmware-noGPS.bin ]; then
   cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin
 fi
-
+if [ -f ~/firmware-GPS.bin ]; then
+  cp ~/firmware-OLD.bin ~/archive/firmware-OLD.bin
+fi
 if [ ! -f ~/md380tools-vm/glv.mike ] || [ ! -f ~/md380tools-vm/glv.wolf ] ; then
   if [ ! -f ~/advanced.disable ]; then
     cp ~/md380tools-vm/root/*.c ~/md380tools/applet/src
@@ -43,6 +45,7 @@ sed -i -e 's/# Add ID/\nfile.close()\nsys.exit(0)\n# Add ID/g' ~/md380tools/db/g
 sed -i -e 's/getattr(device, "manufacturer")/#/g' ~/md380tools/md380_tool.py
 if [ -f ~/volumebar.enable ]; then
   sed -i -e 's/patcher.nopout((0x0801FED2/# patcher.nopout((0x0801FED2/g' ~/md380tools/patches/d13.020/patch.py
+  # need correct address for the md-390 as this isn't really needed until corrected
   sed -i -e 's/patcher.nopout((0x0801FED2/# patcher.nopout((0x0801FED2/g' ~/md380tools/patches/s13.020/patch.py
 fi
 # local hook if desired for extra pre build processing

@@ -25,6 +25,9 @@ echo -e -n "${YELLOW}Saving snapshot \"$1\" ... "
   if [ -f ~/firmware-noGPS.bin ]; then
     cp ~/firmware-noGPS.bin ~/archive/firmware-noGPS.bin.$1
   fi
+  if [ -f ~/firmware-OLD.bin ]; then
+    cp ~/firmware-OLD.bin ~/archive/firmware-OLD.bin.$1
+  fi
   sleep 1
 echo -e "Done.${NC}"
 

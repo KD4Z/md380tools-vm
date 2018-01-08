@@ -9,19 +9,21 @@ cd ~/md380tools-vm
 ~/md380tools-vm/exec.pre
 
 cd ~/md380tools
-#make updatedb
+
 make dist
 cat db/stripped.csv >user.bin
 cp user.bin ~/user.bin
 
 cp dist/md380tools-${now}/firmware-${now}-NoGPS.bin ~/firmware-noGPS.bin
 cp dist/md380tools-${now}/firmware-${now}-GPS.bin ~/firmware-GPS.bin
+cp dist/md380tools-${now}/firmware-${now}-OLD.bin ~/firmware-OLD.bin
 if [ ! -d ~/screenshots ]; then
   mkdir ~/screenshots
 fi
 
 cp ~/firmware-noGPS.bin ~/screenshots
 cp ~/firmware-GPS.bin ~/screenshots
+cp ~/firmware-OLD.bin ~/screenshots
 cp ~/user.bin ~/screenshots
 
 cd ~/md380tools-vm 

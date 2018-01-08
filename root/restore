@@ -4,13 +4,13 @@
 # takes argument 1, 2 or 3 to restore a specific save point
 # without argument, just restores prior build
 # KD4Z
-# Version:  3.06
+# Version:  3.14
 #
 
 file1=~/archive/user.bin.previous
 file2=~/archive/firmware-GPS.bin.previous
 file3=~/archive/firmware-noGPS.bin.previous
-
+file4=~/archive/firmware-OLD.bin.previous
 
 if [ "$1" == "" -o "$1" == "1" ]; then
   echo -e "${YELLOW}Restoring previous firmware and contacts from the build prior to last glv${NC}"
@@ -34,6 +34,13 @@ if [ "$1" == "" -o "$1" == "1" ]; then
     echo -e "${RED}Unable to restore previous glv file, file not found ${NC}"
     echo -3 $file3
   fi
+  
+  if [ -f ${file4} ]; then
+    cp ${file4} ~/firmware-OLD.bin
+  else
+    echo -e "${RED}Unable to restore previous glv file, file not found ${NC}"
+    echo -3 $file4
+  fi
   echo -e "${YELLOW}Done.${NC}"
   exit 1
 fi
@@ -56,6 +63,12 @@ echo -e "${YELLOW}Restoring snapshot $1 firmware and contact list.${NC}"
 	echo -e "${GREEN}File: ~/archive/firmware-noGPS.bin.$1 now restored${NC}"
   else
      echo -e "${RED}Unable to find the file: ~/archive/firmware-noGPS.bin.$1${NC}"
+  fi
+  if [ -f ~/archive/firmware-OLD.bin.$1 ]; then
+    cp ~/archive/firmware-OLD.bin.$1 ~/firmware-OLD.bin
+	echo -e "${GREEN}File: ~/archive/firmware-OLD.bin.$1 now restored${NC}"
+  else
+     echo -e "${RED}Unable to find the file: ~/archive/firmware-OLD.bin.$1${NC}"
   fi
 echo -e "${YELLOW}Snapshot $1 Restored.  Use Flash commands to write restored snap to your radio.${NC}"
 

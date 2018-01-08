@@ -5,11 +5,14 @@
 # Rotates archive directory 2-9 iterations
 # previous is really number 1
 
-
+  F0="../archive/firmware-OLD.bin"
   F1="../archive/firmware-noGPS.bin"
   F2="../archive/firmware-GPS.bin"
   F3="../archive/user.bin"
 
+  D0="$(dirname "$F0")"
+  E0=${F0##*.}
+  B0="$(basename "$F0" ."$E0")"
   D1="$(dirname "$F1")"
   E1=${F1##*.}
   B1="$(basename "$F1" ."$E1")"
@@ -24,19 +27,24 @@
      echo -e "${YELLOW}Rotating firmware binaries${GREEN}"
      for i in 8 7 6 5 4 3 2; do
 
-       s="$D1/$B1.$E1.$i"
+	   s="$D0/$B0.$E0.$i"
+       echo -e "$s"
+       test -e "$s" && mv $s "$D0/$B0.$E0.$((i+1))"
+   	   s="$D1/$B1.$E1.$i"
        echo -e "$s"
        test -e "$s" && mv $s "$D1/$B1.$E1.$((i+1))"
-       s="$D2/$B2.$E2.$i"
+	   s="$D2/$B2.$E2.$i"
        test -e "$s" && mv $s "$D2/$B2.$E2.$((i+1))"
-       s="$D3/$B3.$E3.$i"
+	   s="$D3/$B3.$E3.$i"
        test -e "$s" && mv $s "$D3/$B3.$E3.$((i+1))"
        :;
      done &&
-
+     
+	 test -e "$D0/$B0.$E0.previous" && mv "$D0/$B0.$E0.previous" "$D0/$B0.$E0.2"
      test -e "$D1/$B1.$E1.previous" && mv "$D1/$B1.$E1.previous" "$D1/$B1.$E1.2"
      test -e "$D2/$B2.$E2.previous" && mv "$D2/$B2.$E2.previous" "$D2/$B2.$E2.2"
      test -e "$D3/$B3.$E3.previous" && mv "$D3/$B3.$E3.previous" "$D3/$B3.$E3.2"
+	 mv "$F0" "$D0/$B0.$E0.previous"
      mv "$F1" "$D1/$B1.$E1.previous"
      mv "$F2" "$D2/$B2.$E2.previous"
      mv "$F3" "$D3/$B3.$E3.previous"
