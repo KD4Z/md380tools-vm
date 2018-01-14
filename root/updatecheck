@@ -3,7 +3,7 @@
 # Version:  4.01
 # updatecheck
 # Update script for non-vm users
-
+#
 	
 currentfile=~/.bash_aliases
 updatefile=~/md380tools-vm/root/.bash_aliases
