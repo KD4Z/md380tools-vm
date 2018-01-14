@@ -64,8 +64,8 @@ if [ -f ~/md380tools-vm/root/restore ]; then
   cp ~/md380tools-vm/root/restore ~
   chmod +x ~/restore
 fi
-if [ -f ~/md380tools-vm/root/updatecheck ]; then
-  cp ~/md380tools-vm/root/updatecheck ~
+if [ -f ~/md380tools-vm/updatecheck ]; then
+  cp ~/md380tools-vm/updatecheck ~
   chmod +x ~/updatecheck
 fi
 if [ -f ~/md380tools-vm/root/uploadfile.sample ]; then
