@@ -3,12 +3,16 @@
 # Version:  4.01
 # updatecheck
 # Update script for non-vm users
-
+#
 	
 currentfile=~/.bash_aliases
 updatefile=~/md380tools-vm/root/.bash_aliases
+updateverfile=~/.bash_aliases.version
 
-if [ $updatefile -nt $currentfile ]; then
+if [ -f $updateverfile ]; then
+  exit 1
+fi
+if [ $updateverfile -nt $currentfile ]; then
 	while true
 	do	
 		clear
@@ -22,8 +26,8 @@ if [ $updatefile -nt $currentfile ]; then
 		echo -e "the VM, you may have customized your aliases file.  Just so I don't blow your "
 		echo -e "possible custom aliases out, here are your choices..."
 		echo ""
-		echo -e " The current alias file:${WHITE} $currentfile"
-		echo -e " The new alias file    :${WHITE} $updatefile"
+		echo -e " ${GREEN}The current alias file:${WHITE} $currentfile"
+		echo -e " ${GREEN}The new alias file    :${WHITE} $updatefile"
 		echo ""
 		echo -e "${WHITE}1${YELLOW}) Automatically apply update${GREEN}"
 		echo -e "       This will overwrite your current alias file."
@@ -41,6 +45,7 @@ if [ $updatefile -nt $currentfile ]; then
 		1)
 			echo -e "${YELLOW}Updating command aliases..."
 			cp $updatefile $currentfile
+			touch $currentfile
 			sleep 1
 			echo -e "${YELLOW}Done.  You will need to logout or reopen your terminal to finish installation."
 			echo -e "${NC}"
