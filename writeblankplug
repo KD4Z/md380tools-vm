@@ -95,7 +95,7 @@ do
         echo -e "${BLUE}~/md380tools/md380-dfu write $BACKUPFQN"
 		fi
         break;;
-        *)
+    *)
         break;;
     esac
 done

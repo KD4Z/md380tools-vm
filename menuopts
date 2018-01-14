@@ -14,11 +14,9 @@ if (( countmarc < 79000 )); then
 else
   cntcolor=${GREEN}
 fi
-if [ -f /etc/kd4z.toolkit.4 ]; then
-  vers="4.00"
-else
-  vers="3.21"
-fi
+ 
+vers="4.00"
+ 
 
 echo -e " ${WHITE}${ZPROJ} (v${vers})${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
 	

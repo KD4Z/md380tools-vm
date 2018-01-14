@@ -64,6 +64,10 @@ if [ -f ~/md380tools-vm/root/restore ]; then
   cp ~/md380tools-vm/root/restore ~
   chmod +x ~/restore
 fi
+if [ -f ~/md380tools-vm/root/updatecheck ]; then
+  cp ~/md380tools-vm/root/updatecheck ~
+  chmod +x ~/updatecheck
+fi
 if [ -f ~/md380tools-vm/root/uploadfile.sample ]; then
   cp ~/md380tools-vm/root/uploadfile.sample ~
   chmod +x ~/uploadfile.sample
@@ -75,10 +79,7 @@ fi
 if [ -f ~/md380tools-vm/root/get_special_IDs.py ]; then
   cp ~/md380tools-vm/root/get_special_IDs.py ~/md380tools/db/get_special_IDs.py
 fi
-if [ -f /etc/motd.save ]; then
-  cp ~/md380tools-vm/root/.bash_aliases ~
-  cp ~/md380tools-vm/root/.bashrc ~
-fi  
+ 
 if [ -f ~/md380tools-vm/root/glvusers ]; then
   cp ~/md380tools-vm/root/glvusers ~
   chmod +x ~/glvusers
@@ -92,12 +93,18 @@ fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 
+if [ -f /etc/motd.save ]; then
+  cp ~/md380tools-vm/root/.bash_aliases ~
+  cp ~/md380tools-vm/root/.bashrc ~
+else
+  ~/md380tools-vm/updatecheck
+fi 
 
 # clean out unmonitored files if found
 if [ -f ~/fill.nickname.enable ]; then
   rm ~/fill.nickname.enable
 fi
-# abbreviations are OFF by default now
+# abbreviations are ON now by default now
 if [ -f ~/filter.countries.disable ]; then
   rm ~/filter.countries.disable
 fi
