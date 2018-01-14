@@ -64,10 +64,7 @@ if [ -f ~/md380tools-vm/root/restore ]; then
   cp ~/md380tools-vm/root/restore ~
   chmod +x ~/restore
 fi
-if [ -f ~/md380tools-vm/updatecheck ]; then
-  cp ~/md380tools-vm/updatecheck ~
-  chmod +x ~/updatecheck
-fi
+
 if [ -f ~/md380tools-vm/root/uploadfile.sample ]; then
   cp ~/md380tools-vm/root/uploadfile.sample ~
   chmod +x ~/uploadfile.sample
@@ -97,6 +94,7 @@ if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bash_aliases ~
   cp ~/md380tools-vm/root/.bashrc ~
 else
+  chmod +x ~/md380tools-vm/updatecheck
   ~/md380tools-vm/updatecheck
 fi 
 
