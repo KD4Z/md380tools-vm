@@ -27,19 +27,26 @@ if [ -f ~/firmware-GPS.bin ]; then
 else
 	fwgps="Not present"
 fi
+if [ -f ~/firmware-OLD.bin ]; then
+	fwold=$(ls -l ~/firmware-OLD.bin | awk '{print $5,$6,$7,$8,$9}')
+else
+	fwold="Not present"
+fi
 
 clear
+echo -e ""
 echo -e "${WHITE}KD4Z Toolkit Stats${NC}"
 echo -e ""
 echo -e "${GREEN} IP Address        : ${YELLOW}${ipin}"
 echo -e "${GREEN} Host Uptime       :${YELLOW}${up}"
 echo -e ""
 echo -e "${WHITE}Last build${NC}"
-echo -e "${GREEN} Firmware Bin     : ${YELLOW}${fwnogps}"
-echo -e "${GREEN} Firmware Bin GPS : ${YELLOW}${fwgps}"
+echo -e "${GREEN} Firmware Bin     : ${YELLOW}${fwnogps}	${WHITE}(flash)"
+echo -e "${GREEN} Firmware Bin GPS : ${YELLOW}${fwgps}	${WHITE}(flashgps)"
+echo -e "${GREEN} Firmware OLD     : ${YELLOW}${fwold}	${WHITE}(flashold)"
 echo -e ""
 echo -e "${WHITE}Contact Data${NC}"
-echo -e "${GREEN} Contact datafile : ${YELLOW}${userbinsize}"
+echo -e "${GREEN} Contact datafile : ${YELLOW}${userbinsize}		${WHITE}(flashdb)"
 echo -e "${GREEN} DMR-MARC count   : ${YELLOW}${countmarc}"
 echo -e "${GREEN} Contact records  : ${YELLOW}${countall}"
 

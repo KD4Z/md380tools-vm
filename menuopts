@@ -6,19 +6,20 @@ fi
 . ~/md380tools-vm/strings
 
 countmarc=$(wc --lines ~/user.bin | cut -d" " -f1)
+userbinsize=$(ls -l ~/user.bin | cut -d" " -f5)
 clear
 
 
-if (( countmarc < 79000 )); then
+if (( countmarc < 80000 )); then
   cntcolor=${RED}
 else
   cntcolor=${GREEN}
 fi
  
-vers="4.00"
+vers="4.10"
  
 
-echo -e " ${WHITE}${ZPROJ} (v${vers})${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc}${NC})"
+echo -e " ${WHITE}${ZPROJ} (v${vers})${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc} / ${userbinsize}${NC} bytes)"
 	
 echo -e ""
 echo -e " ${ZMESS11}"

@@ -34,14 +34,14 @@ if [ -f ~/exec.post.local ]; then
 fi
 
 userbinsize=$(ls -l $userfile | cut -d" " -f5)
-echo -e "${GREEN}  User.bin filesize:  ${YELLOW}${userbinsize}${NC}"
+echo -e "${GREEN}  User.bin filesize:  ${YELLOW}${userbinsize}  bytes  ${GREEN}(not including header record) ${NC}"
 
 # now put back the header
 wc -c < $userfile >$usertmp
 cat $userfile >>$usertmp
 cat $usertmp >$userfile
 rm $usertmp
-echo -e "${GREEN}Processing complete."
-sleep 4
+echo -e "${WHITE}Processing complete.${NC}"
+sleep 5
 
 

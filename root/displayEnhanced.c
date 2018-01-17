@@ -41,6 +41,7 @@
 #define RX_POPUP_X_START 4  // 10
 #define FIRSTNAME_BUFSIZE 30
 #define COUNTRY_BUFSIZE 20
+#define STATE_BUFSIZE 20
 
 char eye_paltab[] = {
     0xd7, 0xd8, 0xd6, 0x00, 0x88, 0x8a, 0x85, 0x00, 0xe1, 0xe2, 0xe0, 0x00, 0xff, 0xff, 0xff, 0x00,
@@ -222,6 +223,7 @@ void draw_micbargraph()
 }
 
 char *get_firstname(user_t *up, char *buf, int buflen) {
+// Thanks to Dale Farnsworth dale@farnsworth.org for providing this little ditty.
     if (*up->firstname != 0)
 	return up->firstname;
 
@@ -235,6 +237,217 @@ char *get_firstname(user_t *up, char *buf, int buflen) {
     return buf;
 }
 
+char *countries[] = {
+	"AT,Austria",
+	"AU,Australia",
+	"BA,Bosnia and Hercegovi",
+	"BE,Belgium",
+	"BR,Brazil",
+	"CA,Canada",
+	"CH,Switzerland",
+	"CL,Chile",
+	"CN,China",
+	"CZ,Czech Republic",
+	"DE,Germany",
+	"DK,Denmark",
+	"DO,Dominican Republic",
+	"ES,Spain",
+	"FI,Finland",
+	"FR,France",
+	"GR,Greece",
+	"HK,Hong Kong",
+	"HU,Hungary",
+	"IE,Ireland",
+	"IT,Italy",
+	"JP,Japan",
+	"LU,Luxembourg",
+	"MK,Macedonia",
+	"MY,Malaysia",
+	"NL,Netherlands",
+	"NO,Norway",
+	"NZ,New Zealand",
+	"PH,Philippines",
+	"PL,Poland",
+	"PT,Portugal",
+	"RU,Russia",
+	"SE,Sweden",
+	"SI,Slovenia",
+	"SK,Slovakia",
+	"TH,Thailand",
+	"TR,Turkey",
+	"TW,Taiwan",
+	"UK,United Kingdom",
+	"US,United States",
+	"ZA,South Africa",
+};
+
+char *states[] = {
+	"AB,Alberta",
+	"ACT,Austrailian Capital T.",
+	"AK,Alaska",
+	"AL,Alabama",
+	"AN,Antwerpen",
+	"AR,Arkansas",
+	"AZ,Arizona",
+	"BB,Brandenburg",
+	"BC,British Columbia",
+	"BE,Berlin",
+	"BW,Baden-Wurttemberg",
+	"BY,Bavaria",
+	"CA,California",
+	"CO,Colorada",
+	"CT,Connecticut",
+	"DC,District of Columbia",
+	"DE,Delaware",
+	"DR,Drenthe",
+	"FD,Flevoland",
+	"FL,Florida",
+	"FR,Friesland",
+	"GA,Georgia",
+	"GE,Gelderland",
+	"GR,Groningen",
+	"HB,Bremen",
+	"HE,Hessen",
+	"HH,Hamburg",
+	"HI,Hawaii",
+	"IA,Iowa",
+	"ID,Idaho",
+	"IF,Ile-de-France",
+	"IL,Illinois",
+	"IN,Indiana",
+	"JK,England",
+	"KS,Kansas",
+	"KY,Kentucky",
+	"LI,Limburg",
+	"LA,Louisiana",
+	"NI,Lower Saxony",
+	"MA,Massachusetts",
+	"MB,Manitoba",
+	"MD,Maryland",
+	"ME,Maine",
+	"MI,Michigan",
+	"MN,Minnesota",
+	"MO,Missouri",
+	"MS,Mississippi",
+	"MT,Montana",
+	"MV,Mecklenburg-Vorpommern",
+	"NB,New Brunswick",
+	"N-B,North Brabant",
+	"NC,North Carolina",
+	"ND,North Dakota",
+	"NE,Nebraska",
+	"NH,New Hampshire",
+	"N-H,North Holland",
+	"NJ,New Jersey",
+	"NL,Newfoundland",
+	"NM,New Mexico",
+	"NS,Nova Scotia",
+	"NSW,New South Wales",
+	"NT,Northern Territory",
+	"NV,Nevada",
+	"NW,North Rhine-Westphalia",
+	"NY,New York",
+	"OA,All Others",
+	"OH,Ohio",
+	"OK,Oklahoma",
+	"ON,Ontario",
+	"OR,Oregon",
+	"O-V,Oost-Vlaanderen",
+	"OV,Overijssel",
+	"PA,Pennsylvania",
+	"PE,Prince Edward Is.",
+	"PR,Puerto Rico",
+	"QC,Quebec",
+	"QLD,Queensland",
+	"RI,Rhode Island",
+	"RP,Rhineland-Palatinate",
+	"SA,South Australia",
+	"SC,South Carolina",
+	"SD,South Dakota",
+	"SH,Schleswig-Holstein",
+	"SK,Saskatchewan",
+	"SL,Saarland",
+	"SN,Saxony",
+	"ST,Saxony-Anhalt",
+	"TAS,Tasmania",
+	"TH,Thuringia",
+	"TN,Tennessee",
+	"TX,Texas",
+	"UTR,Utrecht",
+	"UT,Utah",
+	"VA,Virginia",
+	"VAN,Antwerp",
+	"VB,Vlaams-Brabant",
+	"VBR,Flemish Brabant",
+	"VIC,Victoria",
+	"VLI,Limburg",
+	"VOV,East Flanders",
+	"VT,Vermont",
+	"VWV,West Flanders",
+	"WAU,Western Australia",
+	"WA,Washington",
+	"WBR,Walloon Brabant",
+	"WI,Wisconsin",
+	"WHT,Hainaut",
+	"WLG,Leige",
+	"WLX,Luxembourg",
+	"WNA,Namur",
+	"WV,West Virginia",
+	"WY,Wyoming",
+	"YT,Yukon",
+	"ZE,Zeeland",
+	"ZH,South Holland",
+};
+
+char *lookupAbbrev(char *abbrev, char *abbrevs[], int length) {
+	int left = 0;
+	int right = length - 1;
+
+	while (left <= right) {
+		int middle = left + (right-left)/2;
+		char *p, *q;
+		for (p=abbrev, q=abbrevs[middle]; *q != 0; p++, q++) {
+			if (*p < *q) {
+				if (*p == 0 && *q == ',')
+					return q + 1;
+				right = middle - 1;
+				break;
+			}
+			if (*p > *q) {
+				left = middle + 1;
+				break;
+			}
+		}
+	}
+
+	return abbrev;
+}
+
+#define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
+
+char *lookup_country(user_t *up, char *buf) {
+	char *p = lookupAbbrev(up->country, countries, ARRAY_SIZE(countries));
+	strcpy(buf, p);
+	return buf;
+}
+
+char *lookup_state(user_t *up, char *buf) {
+	char *p = lookupAbbrev(up->state, states, ARRAY_SIZE(states));
+	strcpy(buf, p);
+	return buf;
+}
+
+/*   ,
+char *lookup_city(user_t *up, char *buf){
+	if (strcmp(up->state, "") == 0) {
+		strcpy(buf, "");
+
+	} else {
+		strcpy(buf, up->city);
+	}
+	return buf;	
+}
+*/	
 void draw_rx_screen(unsigned int bg_color)
 {
     static int dst;
@@ -261,6 +474,7 @@ void draw_rx_screen(unsigned int bg_color)
     user_t usr ;
     char firstname_buf[FIRSTNAME_BUFSIZE];
 	char country_buf[COUNTRY_BUFSIZE];
+	char state_buf[STATE_BUFSIZE];
 	
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
 		if( src==4000 ) {
@@ -382,38 +596,12 @@ void draw_rx_screen(unsigned int bg_color)
          gfx_select_font(gfx_font_small);
          gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
          y_index += GFX_FONT_SMALL_HEIGHT ;
-
-         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.state );
+         gfx_puts_pos(RX_POPUP_X_START, y_index, lookup_state(&usr, state_buf) );
          y_index += GFX_FONT_SMALL_HEIGHT ;
-		// stupid little test hack to reduce user.bin size 
-		if (strcmp(usr.country, "US") == 0) {
-			strcpy(country_buf, "United States");
-		} else if (strcmp(usr.country, "UK") == 0) {
-			strcpy(country_buf, "United Kingdom");
-		} else if (strcmp(usr.country, "CAN") == 0) {
-			strcpy(country_buf, "Canada");
-		} else if (strcmp(usr.country, "CN") == 0) {
-			strcpy(country_buf, "China");
-		} else if (strcmp(usr.country, "DEU") == 0) {
-			strcpy(country_buf, "Germany");	
-		} else if (strcmp(usr.country, "NDL") == 0) {
-			strcpy(country_buf, "Netherlands");	
-		} else if (strcmp(usr.country, "ESP") == 0) {
-			strcpy(country_buf, "Spain");
-		} else if (strcmp(usr.country, "ITA") == 0) {
-			strcpy(country_buf, "Italy");	
-		} else if (strcmp(usr.country, "BEL") == 0) {
-			strcpy(country_buf, "Belgium");	
-		} else if (strcmp(usr.country, "AUS") == 0) {
-			strcpy(country_buf, "Australia");	
-		} else if (strcmp(usr.country, "FRA") == 0) {
-			strcpy(country_buf, "France");			
-		} else {
-			strcpy(country_buf, usr.country);
-		}
-	
-		gfx_puts_pos(RX_POPUP_X_START, y_index, country_buf );
-        y_index += GFX_FONT_SMALL_HEIGHT ;
+		
+		 gfx_puts_pos(RX_POPUP_X_START, y_index, lookup_country(&usr, country_buf) );
+		//gfx_puts_pos(RX_POPUP_X_START, y_index, country_buf );
+         y_index += GFX_FONT_SMALL_HEIGHT ;
 	  }
 	  
 	}
@@ -434,6 +622,7 @@ void draw_ta_screen(unsigned int bg_color)
     
     dst = rst_dst ;
     src = rst_src ;
+	
     grp = rst_grp ;
     
     OS_EXIT_CRITICAL(primask);

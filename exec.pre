@@ -21,15 +21,9 @@ if [ -f ~/firmware-GPS.bin ]; then
 fi
 if [ ! -f ~/md380tools-vm/glv.mike ] || [ ! -f ~/md380tools-vm/glv.wolf ] ; then
   if [ ! -f ~/advanced.disable ]; then
-    cp ~/md380tools-vm/root/*.c ~/md380tools/applet/src
-    cp ~/md380tools-vm/root/*.h ~/md380tools/applet/src
-    if [ -f ~/md380tools-vm/root/symbols_s13.020 ]; then
-      cp ~/md380tools-vm/root/symbols_s13.020 ~/md380tools/applet/src
-    fi
-    if [ -f ~/md380tools-vm/root/Makefile ]; then
-      cp ~/md380tools-vm/root/Makefile ~/md380tools/applet/
-    fi
-    cp ~/md380tools-vm/root/displayEnhanced.c ~/md380tools/applet/src/display.c
+  	if [ -f ~/md380tools-vm/root/displayEnhanced.c ]; then
+		cp ~/md380tools-vm/root/displayEnhanced.c ~/md380tools/applet/src/display.c
+	fi
   else
     cp ~/md380tools-vm/root/display.c ~/md380tools/applet/src
   fi
@@ -50,7 +44,7 @@ if [ -f ~/volumebar.enable ]; then
 fi
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
-  echo -e "${YELLOW}Executing ~/exec.pre.local${NC}"
+  echo -e "${WHITE}Executing ~/exec.pre.local${NC}"
   chmod +x ~/exec.pre.local
   ~/exec.pre.local
 fi
