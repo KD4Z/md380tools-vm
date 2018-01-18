@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# commit 42b4af1  
+
 # This program takes a list of userdb files and merges them together.
 # Fields for each DMR ID found in earlier files take precedence.
 # In other words, as each file is processed, a field for a DMR ID is
@@ -36,6 +36,8 @@ from __future__ import print_function
 
 import sys
 import argparse
+
+version = "0.5.0"
 
 users = {}
 
@@ -255,16 +257,23 @@ stateAbbrevsByCountry = {
 		"Zuid-Holland":			"ZH",
 	},
 	"Belgium": {
+		"Antwerpen":			"VAN",
 		"Antwerp":			"VAN",
 		"East Flanders":		"VOV",
 		"Flemish Brabant":		"VBR",
 		"Hainaut":			"WHT",
+		"Henegouwen":			"WHT",
+		"Ile-de-France":		"IF",
+		"le-de-France":			"IF",
 		"Liege":			"WLG",
 		"Limburg":			"VLI",
 		"Luxembourg":			"WLX",
+		"Namen":			"WNA",
 		"Namur":			"WNA",
+		"Vlaams-Brabant":		"VBR",
 		"Walloon Brabant":		"WBR",
 		"West Flanders":		"VWV",
+		"West-Vlaanderen":		"VWV",
 	},
 }
 
@@ -2201,11 +2210,15 @@ def process_args():
 		action="append", choices=enable_options + disable_options)
 
 	parser.add_argument("--verbatim", nargs=1, dest="verbatim",
+		metavar="filename",
 		action="append", type=argparse.FileType("r"),
 		help="a filename to be merged without modification")
 
 	parser.add_argument("files", metavar="filename", nargs="*",
 		type=argparse.FileType("r"), help="a filename to be merged")
+
+	parser.add_argument("--version", help="output the current version",
+		action="store_true")
 
 	args = parser.parse_args()
 
@@ -2223,6 +2236,9 @@ def process_args():
 			verbatim += files
 	args.verbatim = verbatim
 
+	if args.version:
+		print(version)
+		sys.exit(0)
 
 	return args
 

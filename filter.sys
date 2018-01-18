@@ -1,7 +1,7 @@
 #!/bin/bash
 # filter.sys
 # KD4Z
-# Version:  3.03
+# Version:  4.10
 # script that executes system level search and replace operations to
 # reduce the usersCSV octet count by abbreviating known values
 # calls out to ~/filter.local if found in home directory
@@ -9,7 +9,7 @@
 # receives filenameas first argument
  
 
-echo -e "${WHITE}Applying final filters${NC}"
+#echo -e "${WHITE}Applying final filters${NC}"
 
 
 # add back some sanity here
@@ -18,14 +18,6 @@ sed -i -e 's/SILENT KEY/SK/g' $1
 sed -i -e 's/Communications/Comm/g' $1
 
 # other states / provinces until supported in merge_users
-
-
-sed -i -e 's/,le-de-France,/,IF,/g' $1
-sed -i -e 's/West-Vlaanderen/VWV/g' $1
-sed -i -e 's/Antwerpen/VAN/g' $1
-sed -i -e 's/Vlaams-Brabant/VBR/g' $1
-sed -i -e 's/Henegouwen/WHT/g' $1
-sed -i -e 's/Namen/WNA/g' $1
 sed -i -e 's/All Others/OA/g' $1
 
 
