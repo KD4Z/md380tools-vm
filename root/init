@@ -90,6 +90,10 @@ fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
 
+# for flashdb progress until merged upstream
+if [ -f ~/md380tools-vm/root/md380_tool.py ]; then
+  cp ~/md380tools-vm/root/md380_tool.py ~/md380tools/md380_tool.py
+fi
 if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bash_aliases ~
   cp ~/md380tools-vm/root/.bashrc ~
@@ -97,7 +101,7 @@ else
   chmod +x ~/md380tools-vm/updatecheck
   if [ -f ~/md380tools-vm/root/alias_version.zip ]; then
 	cd ~
-	unzip ~/md380tools-vm/root/alias_version.zip
+	unzip -o ~/md380tools-vm/root/alias_version.zip
   fi
   ~/md380tools-vm/updatecheck
 fi 
