@@ -822,7 +822,8 @@ void draw_adhoc_statusline()
 	long ch_rxfreq = 0;
 	long ch_txfreq = 0;
 	float ch_freqoff = 0;
-
+     
+	
 	strncpy(ch_rx, current_channel_info_E.rxFreq.text, 12);				// read RX frequency from codeplug
 	strncpy(ch_tx, current_channel_info_E.txFreq.text, 12);				// read TX frequency from codeplug
 
@@ -831,7 +832,11 @@ void draw_adhoc_statusline()
 
 	//strcat(ch_rx, '\0');
 	//strcat(ch_tx, '\0');
-
+	//strcat(freq_rx, '\0');
+	//strcat(freq_tx, '\0');
+	freq_rx[8] = '\0';
+	freq_tx[8] = '\0';
+	
 	strncpy(ch_tone_type, current_channel_info_E.EncTone.text, 1);
 	ch_tone_type[1] = '\0';
 
@@ -841,7 +846,7 @@ void draw_adhoc_statusline()
 	//sprintf(ch_txfreq, ch_tx);
 
 	ch_freqoff = ((ch_rxfreq - ch_txfreq) / 100000);
-
+	BOOL fIsSimplex = (ch_rxfreq == ch_txfreq);
 	user_t usr;									// reference user DB
 
 	//========================================================================================================================//
@@ -882,7 +887,8 @@ void draw_adhoc_statusline()
 
 //	BOOL fIsAnalog = current_channel_info_E.bIsAnalog;
 	BOOL fIsDigital = current_channel_info_E.bIsDigital;
-
+	BOOL fIsCTSvalid = (strlen(current_channel_info_E.EncTone.text) <= 6 );
+	
 	// the top statusline is build by the following strings:
 	// -----------------------------------------------------
 	//      |         DMR  |-R|
@@ -908,7 +914,7 @@ void draw_adhoc_statusline()
 
 		// build the top statusline -------------------------------------------------------------------
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
-		strcpy(top_status, "DMR  ");						// init DMR string
+		strcpy(top_status, "DMR ");						// init DMR string
 		} else {
 		strcpy(top_status, "DMR");						// init DMR string compact
 		}
@@ -916,9 +922,9 @@ void draw_adhoc_statusline()
 		strcat(top_status, ch_offset);						// DMR + repeaterstatus
 
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
-			strcat(top_status, " [CC");					// DMR [-R] [CCn]
+			strcat(top_status, " |CC");					// DMR [-R] [CCn]
 		} else {
-			strcat(top_status, "[");					// DMR [-R] [CCn] in compact mode
+			strcat(top_status, "");					// DMR [-R] [CCn] in compact mode
 		}
 
 		// build some spaces between [CC|TS|TG] and db-Status -----------------------------------------
@@ -948,9 +954,9 @@ void draw_adhoc_statusline()
 		if (global_addl_config.mode_stat != 0) { 
 			if (global_addl_config.mode_color == 1) { gfx_set_fg_color(0xffffff); gfx_set_bg_color(0xff4f32);}
 				if (global_addl_config.mode_stat != 3) {					// if MODE/CC compact display set in config
-					gfx_printf_pos2(x, top_y, 120, "%s%d]%s ", top_status, ch_cc, mic_gain_stat);
+					gfx_printf_pos2(x, top_y, 120, "%s(%d)%s ", top_status, ch_cc, mic_gain_stat);
 				} else {
-					gfx_printf_pos2(x, top_y, 120, "%s%d|%d|%s%s%d]%s%s   ", top_status, ch_cc, ch_ts, (ad_hoc_tg_channel ? "A":""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "" : "P"), tgNum, tg_fill, mic_gain_stat);
+					gfx_printf_pos2(x, top_y, 120, "%s%d|%d|%s%s(%d)%s%s   ", top_status, ch_cc, ch_ts, (ad_hoc_tg_channel ? "A":""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "" : "P"), tgNum, tg_fill, mic_gain_stat);
 				}
 			gfx_set_fg_color(0x000000);
 			gfx_set_bg_color(0xff8032);
@@ -968,7 +974,7 @@ void draw_adhoc_statusline()
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
 
-						if (strcmp(ch_rx, ch_tx) == 0) {
+						if (fIsSimplex) {
 							gfx_printf_pos2(x, y - 3, 120, "-- Simplex -- " );
 							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
@@ -981,7 +987,7 @@ void draw_adhoc_statusline()
 				if (global_addl_config.chan_stat != 4) {
 					gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 				} else {
-						if (strcmp(ch_rx, ch_tx) == 0) {
+						if (fIsSimplex) {
 							gfx_printf_pos2(x, y - 3, 120, "-- Simplex -- " );
 							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
@@ -999,7 +1005,7 @@ void draw_adhoc_statusline()
 					if (global_addl_config.chan_stat < 4) {
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
-						if (strcmp(ch_rx, ch_tx) == 0) {
+						if (fIsSimplex) {
 							gfx_printf_pos2(x, y - 3, 120, "-- Simplex -- " );
 							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
 						} else {
@@ -1014,6 +1020,7 @@ void draw_adhoc_statusline()
 	}	 				// analog channel active
 	//========================================================================================================================//
 	else {
+		strcpy(bot_status,"");
 		if ( *ch_tone_type == 'N') {
 			strcpy(fm_sql, "Off");
 			strcpy(bot_status, "TX:");					// init bottom string
@@ -1027,11 +1034,18 @@ void draw_adhoc_statusline()
 			strcat(bot_status, current_channel_info_E.EncTone.text);	// add DCS code
 			strcpy(tg_fill, "");
 		} else {
-			strcpy(fm_sql, "CTS");
-			strcpy(bot_status, fm_sql);					// init bottom string
-			strcat(bot_status, ":");
-			strcat(bot_status, current_channel_info_E.EncTone.text);	// add CTS tone freq
-			strcat(bot_status, "Hz");					// add CTS tone freq
+			
+			//if (strlen(current_channel_info_E.EncTone.text) > 5 ) {
+			if (! fIsCTSvalid ) {		
+				strcpy(fm_sql, "");			
+				strcpy(bot_status, fm_sql);
+			} else {	
+				strcpy(fm_sql, "CTS");
+				strcpy(bot_status, fm_sql);					// init bottom string
+				strcat(bot_status, ":");
+				strcat(bot_status, current_channel_info_E.EncTone.text);	// add CTS tone freq
+				strcat(bot_status, "Hz");					// add CTS tone freq
+			}
 			strcpy(tg_fill, "");
 		}
 
@@ -1044,24 +1058,28 @@ void draw_adhoc_statusline()
 
 		strcat(top_status, fm_bw_stat);						// |N or |W
 		strcat(top_status, ch_offset);						// |-R| or |=>| simplex
-
+		//strcpy(fm_sql, "C");
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
-			strcat(top_status, " [");					// space
+			strcat(top_status, "|   ");					// space
 			strcat(top_status, fm_sql);					// add the tone type to status
 		} else {	
-			strcat(top_status, "[");					// less space in compact mode
-			strcat(top_status, fm_sql);					// add the tone type to status
-			if (*ch_tone_type != 'N') {					// if MODE/CC compact display set in config
-				strcat(top_status, ":");
-				strcat(top_status, current_channel_info_E.EncTone.text);// add DCS/CTS tone to topstatus in compact mode
+			if (*ch_tone_type != 'N')  {	// if MODE/CC compact display set in config (and CTCSS not set to None)
+				if (fIsCTSvalid) {
+					strcat(top_status, "|");					// less space in compact mode
+					strcat(top_status, fm_sql);					// add the tone type to status
+					strcat(top_status, ":");
+					strcat(top_status, current_channel_info_E.EncTone.text);// add DCS/CTS tone to topstatus in compact mode
+				}
+				
+			} else {
+				strcat(top_status, "  ");
 			}
 		}
-
-		strcat(top_status, "]");						// Tone squelch status close bracket
+		//strcat(top_status, "]");						// Tone squelch status close bracket
 	
 		if (global_addl_config.mode_stat != 0) { 
 			if (global_addl_config.mode_color == 1) { gfx_set_fg_color(0xffffff); gfx_set_bg_color(0xff4f32);}
-			gfx_printf_pos2(x, top_y, 120, "%s%s%s    ", top_status, tg_fill, mic_gain_stat);
+			gfx_printf_pos2(x, top_y, 120, "%s%s%s ", top_status, tg_fill, mic_gain_stat);
 			gfx_set_fg_color(0x000000);
 			gfx_set_bg_color(0xff8032);
 		}
@@ -1076,16 +1094,28 @@ void draw_adhoc_statusline()
 						if (global_addl_config.chan_stat != 4) {
 							gfx_printf_pos2(x, y, 120, "%s:%s MHz     ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 						} else {
-							gfx_printf_pos2(x, y, 120, "RX:%s MHz     ", freq_rx );
-							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz     ", freq_tx );
+												
+							if (fIsSimplex) {
+								gfx_printf_pos2(x, y - 3, 120, "-- Simplex -- " );
+								gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
+							} else {
+								gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
+								gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
+							}
+							
 						}
 					}
 				} else {
 					if (global_addl_config.chan_stat != 4) {
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz     ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
 					} else {
-						gfx_printf_pos2(x, y, 120, "RX:%s MHz     ", freq_rx );
-						gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz     ", freq_tx );
+						if (fIsSimplex) {
+							gfx_printf_pos2(x, y - 3, 120, "-- Simplex -- " );
+							gfx_printf_pos2(x, y + 10, 120, "%s MHz   ", freq_tx );
+						} else {
+							gfx_printf_pos2(x, y, 120, "RX:%s MHz   ", freq_rx );
+							gfx_printf_pos2(x, y + 10, 120, "TX:%s MHz   ", freq_tx );
+						}
 					}
 				}
 			}
