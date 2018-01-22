@@ -2,6 +2,7 @@
  *  display.c
  * 
  * for high-level drawing functions.
+ * Customizations:  KD4Z, NO7K
  * 
  */
 
@@ -37,7 +38,7 @@
 //#include "amenu_channels.h"
 #include <stdlib.h>
 
-#define RX_POPUP_Y_START 22 // 24
+#define RX_POPUP_Y_START 18 // prev=22 // orig=24
 #define RX_POPUP_X_START 4  // 10
 #define FIRSTNAME_BUFSIZE 30
 #define COUNTRY_BUFSIZE 20
@@ -237,7 +238,7 @@ char *get_firstname(user_t *up, char *buf, int buflen) {
     return buf;
 }
 
-char *countries[] = {
+static const char *const countries[] = {
 	"AT,Austria",
 	"AU,Australia",
 	"BA,Bosnia and Hercegovi",
@@ -276,12 +277,12 @@ char *countries[] = {
 	"TH,Thailand",
 	"TR,Turkey",
 	"TW,Taiwan",
-	"UK,United Kingdom",
-	"US,United States",
+	"UK,UK",
+	"US,USA",
 	"ZA,South Africa",
 };
 
-char *states[] = {
+static const char *const states[] = {
 	"AB,Alberta",
 	"ACT,Austrailian Capital T.",
 	"AK,Alaska",
@@ -318,9 +319,8 @@ char *states[] = {
 	"JK,England",
 	"KS,Kansas",
 	"KY,Kentucky",
-	"LI,Limburg",
 	"LA,Louisiana",
-	"NI,Lower Saxony",
+	"LI,Limburg",
 	"MA,Massachusetts",
 	"MB,Manitoba",
 	"MD,Maryland",
@@ -331,13 +331,14 @@ char *states[] = {
 	"MS,Mississippi",
 	"MT,Montana",
 	"MV,Mecklenburg-Vorpommern",
-	"NB,New Brunswick",
 	"N-B,North Brabant",
+	"N-H,North Holland",
+	"NB,New Brunswick",
 	"NC,North Carolina",
 	"ND,North Dakota",
 	"NE,Nebraska",
 	"NH,New Hampshire",
-	"N-H,North Holland",
+	"NI,Lower Saxony",
 	"NJ,New Jersey",
 	"NL,Newfoundland",
 	"NM,New Mexico",
@@ -347,12 +348,12 @@ char *states[] = {
 	"NV,Nevada",
 	"NW,North Rhine-Westphalia",
 	"NY,New York",
+	"O-V,Oost-Vlaanderen",
 	"OA,All Others",
 	"OH,Ohio",
 	"OK,Oklahoma",
 	"ON,Ontario",
 	"OR,Oregon",
-	"O-V,Oost-Vlaanderen",
 	"OV,Overijssel",
 	"PA,Pennsylvania",
 	"PE,Prince Edward Is.",
@@ -373,8 +374,8 @@ char *states[] = {
 	"TH,Thuringia",
 	"TN,Tennessee",
 	"TX,Texas",
-	"UTR,Utrecht",
 	"UT,Utah",
+	"UTR,Utrecht",
 	"VA,Virginia",
 	"VAN,Antwerp",
 	"VB,Vlaams-Brabant",
@@ -384,11 +385,11 @@ char *states[] = {
 	"VOV,East Flanders",
 	"VT,Vermont",
 	"VWV,West Flanders",
-	"WAU,Western Australia",
 	"WA,Washington",
+	"WAU,Western Australia",
 	"WBR,Walloon Brabant",
-	"WI,Wisconsin",
 	"WHT,Hainaut",
+	"WI,Wisconsin",
 	"WLG,Leige",
 	"WLX,Luxembourg",
 	"WNA,Namur",
@@ -399,13 +400,13 @@ char *states[] = {
 	"ZH,South Holland",
 };
 
-char *lookupAbbrev(char *abbrev, char *abbrevs[], int length) {
+const char *lookupAbbrev(char *abbrev, const char *const abbrevs[], int length) {
 	int left = 0;
 	int right = length - 1;
 
 	while (left <= right) {
 		int middle = left + (right-left)/2;
-		char *p, *q;
+		const char *p, *q;
 		for (p=abbrev, q=abbrevs[middle]; *q != 0; p++, q++) {
 			if (*p < *q) {
 				if (*p == 0 && *q == ',')
@@ -426,28 +427,17 @@ char *lookupAbbrev(char *abbrev, char *abbrevs[], int length) {
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
 
 char *lookup_country(user_t *up, char *buf) {
-	char *p = lookupAbbrev(up->country, countries, ARRAY_SIZE(countries));
+	const char *p = lookupAbbrev(up->country, countries, ARRAY_SIZE(countries));
 	strcpy(buf, p);
 	return buf;
 }
 
 char *lookup_state(user_t *up, char *buf) {
-	char *p = lookupAbbrev(up->state, states, ARRAY_SIZE(states));
+	const char *p = lookupAbbrev(up->state, states, ARRAY_SIZE(states));
 	strcpy(buf, p);
 	return buf;
 }
-
-/*   ,
-char *lookup_city(user_t *up, char *buf){
-	if (strcmp(up->state, "") == 0) {
-		strcpy(buf, "");
-
-	} else {
-		strcpy(buf, up->city);
-	}
-	return buf;	
-}
-*/	
+	
 void draw_rx_screen(unsigned int bg_color)
 {
     static int dst;
@@ -488,7 +478,7 @@ void draw_rx_screen(unsigned int bg_color)
 		else {
             usr.callsign = "ID" ;
             usr.firstname = "not found" ;
-            usr.name = "in User DB." ;
+            usr.name = "in user.bin." ;
             usr.place = "Update with" ;
             usr.state = "glvusers," ;
             usr.country = "then flashdb";
@@ -513,10 +503,19 @@ void draw_rx_screen(unsigned int bg_color)
         gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ;
-
-    gfx_select_font(gfx_font_norm); // switch to large font
-	char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
-    gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, firstname );
+	
+	gfx_select_font(gfx_font_norm); // switch to large font
+	
+	if (usr.firstname != 0)  {  // have real nickname, display it as before
+		gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, usr.firstname );
+	} else {
+		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+		if (strcmp(usr.firstname, firstname) == 0) {
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s", usr.callsign);
+		} else { 
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, firstname );
+		}
+	}
     y_index += GFX_FONT_NORML_HEIGHT; 
 
     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
@@ -568,41 +567,43 @@ void draw_rx_screen(unsigned int bg_color)
 		gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: CPS mode");
 		y_index += GFX_FONT_SMALL_HEIGHT ;
         break;
-	
-    // not implemented. I don't want to waste space for this line in user.bin mode	
-	//case 1 :
-	//	gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: UserDB mode");
-    //    break;
 
 	case 2:
 		if ( talkerAlias.length > 0 ) {
             gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TalkerAlias");
 			y_index += GFX_FONT_SMALL_HEIGHT ;
-    //    } else {
-    //        gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA not rcvd!");
 	    }
         break;
-
-	// not implemented due to same reason above
-	//case 3:
-	//	gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TA/DB mode");
-    //    break;
 	}
 	switch( global_addl_config.userscsv ) {
 	case 1:
 	case 3:
 	
-	  if( src != 0 ) { 
-         gfx_select_font(gfx_font_small);
-         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
-         gfx_puts_pos(RX_POPUP_X_START, y_index, lookup_state(&usr, state_buf) );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
+		if( src != 0 ) { 
+	  
+			char *state = lookup_state(&usr, state_buf);
+			char *country = lookup_country(&usr, country_buf);
 		
-		 gfx_puts_pos(RX_POPUP_X_START, y_index, lookup_country(&usr, country_buf) );
-		//gfx_puts_pos(RX_POPUP_X_START, y_index, country_buf );
-         y_index += GFX_FONT_SMALL_HEIGHT ;
-	  }
+			if ( (strlen(state) + strlen(country)) > 14) {  // something in oem is blocking end of line, so we lose a few chars at end, go small
+				gfx_select_font(gfx_font_small);
+				gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );  // city
+				y_index += GFX_FONT_SMALL_HEIGHT ;
+				
+				gfx_puts_pos(RX_POPUP_X_START, y_index, state );
+				y_index += GFX_FONT_SMALL_HEIGHT ;
+				
+				gfx_puts_pos(RX_POPUP_X_START, y_index, country );		
+			} else {
+				// city in large, state + country in small
+				gfx_select_font(gfx_font_norm);
+				gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );  
+				y_index += GFX_FONT_SMALL_HEIGHT + GFX_FONT_SMALL_HEIGHT ;
+				gfx_select_font(gfx_font_small);
+				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s, %s", state, country );
+				
+			}
+          
+		}
 	  
 	}
 	
@@ -666,7 +667,7 @@ void draw_ta_screen(unsigned int bg_color)
     y_index += GFX_FONT_SMALL_HEIGHT ; // previous line was in small font
 
     y_index += GFX_FONT_SMALL_HEIGHT ;
-    y_index += GFX_FONT_SMALL_HEIGHT ;
+    y_index += GFX_FONT_SMALL_HEIGHT ;  // 12
     
     gfx_puts_pos(RX_POPUP_X_START, y_index, usr.country );
     y_index += GFX_FONT_SMALL_HEIGHT ;
