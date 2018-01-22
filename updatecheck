@@ -1,0 +1,64 @@
+#!/bin/bash
+# KD4Z
+# Version:  4.01
+# updatecheck
+# Update script for non-vm users
+#
+	
+currentfile=~/.bash_aliases
+updatefile=~/md380tools-vm/root/.bash_aliases
+updateverfile=~/.bash_aliases.version
+
+if [ -f $updateverfile ]; then
+  exit 1
+fi
+if [ $updateverfile -nt $currentfile ]; then
+	while true
+	do	
+		clear
+		echo ""
+		echo -e "${WHITE}  Toolkit Command Update Detected"
+		echo -e "${GREEN}"
+		echo -e "An updated file containing command aliases for the Toolkit is available."
+		echo ""
+		echo -e "The Toolkit uses command aliases for some of the options.  When executing"
+		echo -e "inside the Toolkit VM, this update is automatic.  Since you are running outside"
+		echo -e "the VM, you may have customized your aliases file.  Just so I don't blow your "
+		echo -e "possible custom aliases out, here are your choices..."
+		echo ""
+		echo -e " ${GREEN}The current alias file:${WHITE} $currentfile"
+		echo -e " ${GREEN}The new alias file    :${WHITE} $updatefile"
+		echo ""
+		echo -e "${WHITE}1${YELLOW}) Automatically apply update${GREEN}"
+		echo -e "       This will overwrite your current alias file."
+		echo ""
+		echo -e "${WHITE}2${YELLOW}) Ignore this update${GREEN}"
+		echo -e "       You can choose to ignore the new commands until the next Toolkit update"
+		echo -e "       or manually edit your alias file on your own."
+		echo -e "       NOTE:  If you choose this option, you may encounter command not found errors."
+		echo ""
+		echo -e "${WHITE}ENTER) ${YELLOW}Press Enter to skip this for now"
+		echo -e "${WHITE}"
+		echo ""
+		read -p 'Choose 1 then press Enter (recommended) ' userval
+		case $userval in
+		1)
+			echo -e "${YELLOW}Updating command aliases..."
+			cp $updatefile $currentfile
+			touch $currentfile
+			sleep 1
+			echo -e "${YELLOW}Done.  You will need to logout or reopen your terminal to finish installation."
+			echo -e "${NC}"
+			sleep 4
+			break;;
+		
+		2)
+			touch $currentfile
+			break;;
+		*)
+			break;;
+			
+		esac
+	done	
+	echo -e "${NC}"
+fi

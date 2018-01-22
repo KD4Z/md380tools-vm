@@ -11,7 +11,12 @@ echo -e ""
 echo -e "  ${ZCOM37}:  ${YELLOW}${ZCOM29}${NC} ~/filter.countries.enable"
 echo -e ""
 echo -e " ${WHITE}-- tweakfile list  --${NC}"
-echo -e ""
+echo -e -n "  ${BLUE}~/extra.data.disable${NC}  ${ZCOM43} ${ZCOM48}" 
+if [ -f ~/extra.data.disable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
 echo -e -n "  ${BLUE}~/filter.countries.enable${NC}  ${ZCOM42} ${ZCOM41} ${ZCOM38}"
 if [ -f ~/filter.countries.enable ]; then
  echo -e "${RED} *${NC}"
@@ -24,6 +29,20 @@ if [ -f ~/filter.us.states.enable ]; then
 else
  echo -e ""
 fi
+
+echo -e -n "  ${BLUE}~/volumebar.enable${NC}  ${ZCOM42} ${ZCOM49}"
+if [ -f ~/volumebar.enable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
+if [ -f ~/beep.disable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+
 #echo -e -n "  ${BLUE}~/filter.sys.disable${NC}        ${ZCOM43} all filters"
 #if [ -f ~/filter.sys.disable ]; then
 # echo -e "${RED} *${NC}"

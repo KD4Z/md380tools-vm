@@ -1,126 +1,169 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  3.16
-# script to add static DMR ids into the usersCSV after glv
-# requires a simple file that mimics the exact field layout of user.bin
-# must contain seven fields, separated by commas
-# (that means 6 commas per line)
-# leave field blank if no data is needed for a given field
+# Version:  4.1
+# Part of the user.db creation step.  Far more advanced than just
+# including dmr-marc data.
+# Ths script can merge in static DMR ids as part of the process.
 #
-# filename containing static user data is named: static.users
+# Optional static.users file requires a format that mimics the exact field layout of user.bin
+# must contain seven fields, separated by commas
+# (that means 6 commas per line!)
+# leave field blank if no data is needed for a given field
 #
 # Example:
 #  privateID1,call1,name1,city1,state1,nickname1,country1
 #  privateID2,call2,name2,,,nickname2,
 #  privateID3,call3,name3,,,,
 #
-# useage:
-#  This script is automatically called from exec.post
-#  no need to call this manually anymore. In fact, don't.
-# 
+# This file can be pulled in on-the-fly from an FTP server
+# defined in static.host file
+#
 . ~/md380tools-vm/strings
 
 FILESTATIC=~/static.users
-FILESEED=user.seed
-FILESEEDZIP=seeds.zip
-FILESEEDZIPNEW=newseeds.zip
-FILESEEDZIPOLD=oldseeds.zip
+FILENICK=user.nicknames
+FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
-TMPALL=~/userall.tmp
-TMPDEDUP=~/dedup.tmp
-TMPSORTED=~/sorted.tmp
+FINALDMRMARC=~/md380tools/db/stripped.csv
+USERDB=~/user.bin
+TMPALTERNATE=~/alternate_strippedCSV.tmp
+FINALALTERNATE=~/alternate_strippedCSV.final
+ALTERNATESEMADISABLE=~/extra.data.disable
+# With expressed permission from Wilfred Pontfoort
+ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
+MERGEERRORS=~/merge.errors
+ALTFILEDLERROR=~/alternate.download.error
 
-if [ -f $TMPALL ]; then
-	rm $TMPALL
+if [ -f $FILENICKZIP ]; then
+    if [ -f $FILENICK ]; then
+	  rm $FILENICK
+    fi
+    unzip $FILENICKZIP $FILENICK
+	if [ "$?" -ne 0 ]; then
+	  echo -e "${RED}An Error was returned from the unzip application. ($?)${NC}"
+	  sleep 1
+	fi
+	if [ ! -f $FILENICK ]; then
+	  echo -e "${RED}Unable to extract compressed file from $FILENICKZIP.${NC}"
+	  sleep 2
+	  echo -e "${GREEN}Continuing without nicknames.${NC}"
+	else
+		sed -i '/^[[:space:]]*$/d' $FILENICK
+		if [ -f ~/keep.seed.file ]; then
+			echo -e "${GREEN}Keeping seed file for next ${YELLOW}glv."
+			echo -e "${GREEN}To force an update next glv: rm ~/keep.seed.file${NC}"
+			cp $FILENICKZIP ~
+			sleep 2
+		fi
+	fi
 fi
-touch $TMPALL
+
+if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
+if [ ! -f $ALTERNATESEMADISABLE ]; then
+	OPTS="-quiet --no-verbose"
+	if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
+	echo -e "${WHITE}Downloading alternate data...${NC}"
+	if [ -f ~/keep.tmp ]; then
+		timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
+	else
+		timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE  2>$ALTFILEDLERROR
+	fi 
+	if [ ! -f $TMPALTERNATE ]; then 
+			echo -e " ${RED}Alternate data not downloaded.  See ${ALTFILEDLERROR} ${NC}"
+	fi
+	
+	if [ -f $TMPALTERNATE ]; then
+		sed -i '1d' $TMPALTERNATE
+		sed -i -e 's/\r//' $TMPALTERNATE
+		awk -F, '{print $1","$2","$3","$4","$5",,"$7}' $TMPALTERNATE >$FINALALTERNATE
+		#cat $TMPALTERNATE >$FINALALTERNATE
+	fi
+fi
 
 if [ -f $STATICFILEHOST ]; then
-  echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
-  timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
+	if [ -f $FILESTATIC ]; then rm $FILESTATIC ; fi
+    echo -e "${WHITE}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
+    timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
 fi
 
 if [ -f $FILESTATIC ]; then
-  echo -e "${YELLOW}Appending Static IDs from ${FILESTATIC}${NC}"
-  sed -i -e 's/\r//' $FILESTATIC
-  cat $FILESTATIC >>$TMPALL
+  echo -e "${WHITE} Using ${FILESTATIC}${NC}"
+  # strip Windoze artifacts
+  sed -i -e 's/\r//' $FILESTATIC  
 fi
 
-if [ -f ~/keep.seed.file ] && [ -f ~/seeds.zip ]; then
-    cp ~/md380tools-vm/seeds.zip ~/
+echo -e "${WHITE}Merging data...${NC}"
+if [ -f $FINALDMRMARC ]; then
+	FILELIST="$FINALDMRMARC"
 fi
-
-if [ -f $FILESEEDZIPNEW ]; then
-  rm $FILESEEDZIPNEW
+if [ -f $FINALALTERNATE ]; then 
+	FILELIST="$FILELIST $FINALALTERNATE"  
 fi
-
-if [ ! -f $FILESEEDZIP ]; then
-  timeout 120 wget --no-verbose --no-check-certificate --wait=3 https://raw.githubusercontent.com/KD4Z/md380tools-vm/master/seeds.zip -O $FILESEEDZIPNEW
-  if [ -f $FILESEEDZIPNEW ]; then
-	 mv $FILESEEDZIPNEW $FILESEEDZIP
-  fi
+if [ -f $FILESTATIC ]; then
+	FILELIST="$FILELIST $FILESTATIC"
 fi
-
-if [ ! -f $FILESEEDZIP ]; then
-  echo -e "${RED}Unable to download seed file for nickname and extra EU data.${NC}"
-  sleep 8
+if [ -f $FILENICK ]; then
+	FILELIST="$FILELIST $FILENICK"
 fi
-
-
-if [ -f $FILESEEDZIP ]; then
-    if [ -f $FILESEED ]; then
-	  rm $FILESEED
-    fi
-    unzip $FILESEEDZIP $FILESEED
-	if [ "$?" -ne 0 ]; then
-	  echo -e "${RED}Error - Unable to extract from ZIP file ${NC}"
-	  sleep 1
-	fi
-	if [ ! -f $FILESEED ]; then
-	  echo -e "${RED}Unable to extract compressed file from seed.zip.  The seed.zip did not download or is corrupt.${NC}"
-	  sleep 5
-	  echo -e "${GREEN}Continuing without nickname and extra EU data...${NC}"
-	fi
-    echo -e "\n" >>$FILESEED
-    sed -i '/^[[:space:]]*$/d' $FILESEED
-    sort -t, -k 1,1 -n $FILESEED >>$TMPALL
-
-    if [ -f ~/keep.seed.file ]; then
-		echo -e "${GREEN}Keeping seed file for next ${YELLOW}glv."
-		echo -e "${GREEN}To force an update next glv: rm ~/keep.seed.file${NC}"
-		cp $FILESEEDZIP ~
-		sleep 3
-	fi
-
+OPTS="-o AbbrevCountries -o AbbrevStates"
+if [ -f ~/keep.tmp ]; then
+ echo -e "Filelist=$FILELIST Options=$OPTS" 
 fi
- 
-cat ~/user.bin >>$TMPALL
+if [ -f $MERGEERRORS ]; then rm $MERGEERRORS ; fi
+echo -e -n "${RED}"
+# Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex merge routine.
+python ~/md380tools-vm/merge_users.py $FILELIST $OPTS >$USERDB 2>$MERGEERRORS
+echo -e "${WHITE}Contact Merge completed.${NC}"
 
-awk -F',' '!seen[$1]++' $TMPALL >$TMPDEDUP
-sort -t, -k 1,1 -n $TMPDEDUP >$TMPSORTED
-
-cat $TMPSORTED >~/user.bin
 countstatic=0
+countalter=0
+countseed=0
 if [ -f $FILESTATIC ] ; then
   countstatic=$(wc --lines $FILESTATIC | cut -d" " -f1)
 fi
-countseed=$(wc --lines $FILESEED | cut -d" " -f1)
-countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
-countall=$(wc --lines ~/user.bin | cut -d" " -f1)
-echo -e "${GREEN}Contact Import completed."
-echo -e "${GREEN}  Seed count     :  ${YELLOW}${countseed}"
-echo -e "${GREEN}  Static ID count:  ${YELLOW}${countstatic}"
-echo -e "${GREEN}  DMR-MARC count :  ${YELLOW}${countmarc}"
-if (( countmarc < 65200 )); then
-  echo -e "${RED} ** The Download from dmr-marc seems to have failed - run ${YELLOW}glvusers${RED} again"
+if [ -f $FILENICK ] ; then
+  countnick=$(wc --lines $FILENICK | cut -d" " -f1)
+fi
+if [ -f $FINALALTERNATE ] ; then
+  countalter=$(wc --lines $FINALALTERNATE | cut -d" " -f1)
+  sizealter=$(ls -l $FINALALTERNATE | cut -d" " -f5)
+fi
+countmarc=$(wc --lines $FINALDMRMARC | cut -d" " -f1)
+sizemarc=$(ls -l $FINALDMRMARC | cut -d" " -f5)
+countall=$(wc --lines $USERDB | cut -d" " -f1)
+sizemergeerrors=$(ls -l $MERGEERRORS | cut -d" " -f5)
+countmergeerrors=$(wc --lines $MERGEERRORS | cut -d" " -f1)
+if [ -f ~/keep.tmp ]; then
+  if (( sizemergeerrors > 10 )); then
+	echo -e "${RED} ${countmergeerrors} records were not merged due to line format issues."
+	echo -e " See the file ${MERGEERRORS} for details.${NC}"
+	sleep 6
+  fi
+fi
+echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}  records  ${GREEN}(${sizemarc}  bytes)"
+if [ -f $FILENICK ] ; then
+echo -e "${GREEN}  Nickname count   :  ${YELLOW}${countnick}  records"
+fi
+if [ -f $FINALALTERNATE ] ; then
+echo -e "${GREEN}  Alternate count  :  ${YELLOW}${countalter}  records  ${GREEN}(${sizealter}  bytes)"
+fi
+if [ -f $FILESTATIC ] ; then
+echo -e "${GREEN}  Static ID count  :  ${YELLOW}${countstatic}  records"
+fi
+if (( sizemergeerrors > 10 )); then
+echo -e "${GREEN}  Records skipped  :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
+fi
+if (( countmarc < 80000 )); then
+  echo -e "${RED} ** The Downloads for Contact information may have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"
   sleep 8
 fi
-echo -e "${GREEN}  Merged total   :  ${YELLOW}${countall}${NC}"
-if [ -f ~/keep.tmp ]; then
-    echo -e "${RED}Keeping temporary files around for debug.  rm ~/keep.tmp to disable this.${NC}"
-else
-    rm $TMPALL $TMPSORTED $TMPDEDUP $FILESEED
+echo -e "${GREEN}  Merged total     :  ${YELLOW}${countall}  records${NC}"
+
+if [ ! -f ~/keep.tmp ]; then
+    if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi	
+	if [ -f $FINALALTERNATE ]; then rm $FINALALTERNATE ; fi
+	if [ -f $FILENICK ]; then rm $FILENICK ; fi
 fi

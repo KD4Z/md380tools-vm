@@ -186,6 +186,22 @@ void draw_micbargraph()
     }
 }
 
+char *get_firstname(user_t *up, char *buf, int buflen) {
+    if (*up->firstname != 0)
+	return up->firstname;
+
+    char *p = buf;
+    char *q = up->name;
+    for (int i = 0; i < buflen-1 && *q != ' ' && *q != 0; i++)
+	*p++ = *q++;
+
+    *p = 0;
+
+    return buf;
+}
+
+#define FIRSTNAME_BUFSIZE 30
+
 #define RX_POPUP_Y_START 22 // 24
 #define RX_POPUP_X_START 4  // 10
 
@@ -213,6 +229,7 @@ void draw_rx_screen(unsigned int bg_color)
     gfx_select_font(gfx_font_small);
 
     user_t usr ;
+    char firstname_buf[FIRSTNAME_BUFSIZE];
 
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
 		if( src==4000 ) {
@@ -253,7 +270,8 @@ void draw_rx_screen(unsigned int bg_color)
     y_index += GFX_FONT_SMALL_HEIGHT ;
 
     gfx_select_font(gfx_font_norm); // switch to large font
-    gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, usr.firstname );
+    char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+    gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, firstname );
     y_index += GFX_FONT_NORML_HEIGHT; 
 
     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
@@ -370,6 +388,7 @@ void draw_ta_screen(unsigned int bg_color)
     gfx_select_font(gfx_font_small);
 
     user_t usr ;
+    char firstname_buf[FIRSTNAME_BUFSIZE];
     
     int y_index = RX_POPUP_Y_START;
     
@@ -395,7 +414,8 @@ void draw_ta_screen(unsigned int bg_color)
     {
 	gfx_puts_pos(RX_POPUP_X_START, y_index, "No userdb info");
     } else {
-        gfx_printf_pos(RX_POPUP_X_START, y_index, "%s %s", usr.callsign, usr.firstname );
+	char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+        gfx_printf_pos(RX_POPUP_X_START, y_index, "%s %s", usr.callsign, firstname );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ; // previous line was in small font
 

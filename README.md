@@ -1,12 +1,17 @@
-MD380tools VM for VirtualBox (aka KD4Z Toolkit)
+KD4Z Toolkit - MD380tools VM for VirtualBox,  VMWare or just BASH
 Warren Merkel, KD4Z
-
-Current Version: 3.14 (after glv is run)
-Image file updated:	 01/04/2017  Version 3.0
-Installation PDF updated: 01/28/2017
 
 From github project
 https://github.com/KD4Z/md380tools-vm
+
+Current Version: 4.00 (after glv is run)
+
+Image file updated:	 12/25/2017  Version 4.0
+
+Installation PDF updated: 01/28/2017
+
+Version 4 Release Notes:
+https://github.com/KD4Z/md380tools-vm/blob/master/KD4Z_Toolkit_Version_4.0_enhancement_notes.pdf
 
 Follow the installation directions in the PDF found here:
 
@@ -82,26 +87,38 @@ answered in the installation PDF.  If you are stuck, join the Facebook group men
 
 It's your choice.  You can use Oracle Virtual Box or VMware player to run this VM image.  Choose one, and select the correct image download below. 
 
-Get to the downloads:
+** Please update to the most recent version of Oracle VirtualBox before installing this image
 
 * For the VirtualBox Appliance image file, use these links
 
 Single file download:
-https://drive.google.com/file/d/0Bwoi2MrlPb3vVEt3Ym4tVHF3SDQ/view?usp=sharing
+
+#Mirror 1:
+
+[Single Download 1.2 Gigs] (https://drive.google.com/file/d/1YkPIsmj_vsoYK9ALIaKGDNRVGZ70lvrI/view?usp=sharing)
 
 or 
 
-Mirror 1:
-https://www.dropbox.com/sh/ap0g1o9g48wyide/AAA1dXOHPWOMD3vbzXO-iBaIa/tyt_kd4z_3.0.ova
+#Mirror 2:
+
+[Single Download 1.2 Gigs] TBA 
+
 	
-Use one of the above links, or download all 4 links below.  Don't do both!
+Use one of the above links, or download all 4 links below.  **Don't do both!
 	
 Parts - Use these links if you have trouble downloading the large file above.
 	
-[Part 1] - https://drive.google.com/file/d/0Bwoi2MrlPb3vY2hkb0lVZ3Z4R3c
-[Part 2] - https://drive.google.com/file/d/0Bwoi2MrlPb3vMDlCMmY2V0FWY28
-[Part 3] - https://drive.google.com/file/d/0Bwoi2MrlPb3vTFZfRGZ4X3NJakU
-[Part 4] - https://drive.google.com/file/d/0Bwoi2MrlPb3vSHkwdHV1dGVaZjA
+[Part 1] (https://drive.google.com/file/d/1aPXwDEMSZufvzvma_q9uIF6AUV2i9crB/view?usp=sharing)
+
+[Part 2] (https://drive.google.com/file/d/16mPYbtyIrK49IlBqwmh7kqSf8y_D3aGY/view?usp=sharing)
+
+[Part 3] (https://drive.google.com/file/d/1C8P00s_QeP_GEr8_h80kxG8VEOFBU1aM/view?usp=sharing)
+
+[Part 4] (https://drive.google.com/file/d/1IvE_a_KtVgHf75UdY6qX4MBGCLfHb7Gg/view?usp=sharing)
+
+[Part 5] (https://drive.google.com/file/d/11MhNJLfSrIkdpzov1irY3gQwJyC9Hlp5/view?usp=sharing)
+
+[Part 6] (https://drive.google.com/file/d/1Emr5QxVP0FBNi2LfRJaw3PELCtSJxUuR/view?usp=sharing)
 
 For the part files, download each one.  You will need to use the 7-zip program to extract them
 back into the actual OVA Appliance file. 
@@ -111,6 +128,10 @@ Get 7-Zip here:  http://www.7-zip.org/download.html
 Install 7-Zip, and then Right-Click on the first part file, find the 7-Zip menu, and
 choose the extract option.  You will end up with a single, large ".OVA" file.  This file is imported
 into the Virtual Box software.
+
+
+# THE VMWare Images are still for the version 3.0
+# 4.0 version is not ready yet.. work in progress
 
 * If you decide to use VMware instead of VirtualBox, use the following links, as this image has
 been pre-converted for easier import into VMWare.
@@ -124,8 +145,11 @@ https://drive.google.com/open?id=0BwED_-BHnZjSWklsNjY3VHBqMVE
 Parts - Use these links if you have trouble downloading the large file above.
 
 [Part 1] - https://drive.google.com/file/d/0BwED_-BHnZjSdERwY1BHc1Y3ekk
+
 [Part 2] - https://drive.google.com/open?id=0BwED_-BHnZjSYnZEeXJHcjh5R3c
+
 [Part 3] - https://drive.google.com/open?id=0BwED_-BHnZjSb3NzSE41azhzN3M
+
 [Part 4] - https://drive.google.com/open?id=0BwED_-BHnZjSNmlOMTJvT3l4VWM
 
 
