@@ -99,9 +99,12 @@ if [ -f /etc/motd.save ]; then
   cp ~/md380tools-vm/root/.bashrc ~
 else
   chmod +x ~/md380tools-vm/updatecheck
+  if [ -f .bash_aliases.version ] ; then
+	rm .bash_aliases.version
+  fi
   if [ -f ~/md380tools-vm/root/alias_version.zip ]; then
 	cd ~
-	unzip ~/md380tools-vm/root/alias_version.zip
+	unzip -o ~/md380tools-vm/root/alias_version.zip
   fi
   ~/md380tools-vm/updatecheck
 fi 
