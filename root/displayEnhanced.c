@@ -502,9 +502,9 @@ void draw_rx_screen(unsigned int bg_color)
 
 
     if( grp ) {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->TG %d %s CC:%d", src, dst, ( ts2==1 ? "TS2" : "TS1"),cc );        
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-TG %d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );        
     } else {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s CC:%d", src, dst, ( ts2==1 ? "TS2" : "TS1"),cc );
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-%d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ;
 	
@@ -516,9 +516,14 @@ void draw_rx_screen(unsigned int bg_color)
 		gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, usr.firstname );
 	} else {
 		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
-		if (strcmp(usr.firstname, firstname) != 0 || (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) ) {
-			// do this if nickname is different than firstname or fullname is going to be in small font
+		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
+			// do this if nickname is different than firstname 
 			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, firstname );
+			//gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%d %d", strlen(usr.firstname), strlen(firstname) );
+		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {
+			// or fullname is going to be in small font
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, firstname );
+			
 		} else { 
 			// do this if fullname will be in large font, no need to display firstname
 			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s", usr.callsign);
