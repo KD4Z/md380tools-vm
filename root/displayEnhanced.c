@@ -440,10 +440,12 @@ char *lookup_state(user_t *up, char *buf) {
 	
 void draw_rx_screen(unsigned int bg_color)
 {
+	#define FULLNAME_MAX_LARGEFONT_CHARS 16
+	
     static int dst;
     int src;
     int grp;
-    int nameLen;
+   
     //char *timeSlot[3];
 	int primask = OS_ENTER_CRITICAL(); // for form sake
    
@@ -488,39 +490,45 @@ void draw_rx_screen(unsigned int bg_color)
     gfx_select_font(gfx_font_small);
 #if defined(FW_D13_020) || defined(FW_S13_020)
     channel_info_t *ci = &current_channel_info ;
-   // int ts1 = ( ci->cc_slot_flags >> 2 ) & 0x1 ;
     int ts2 = ( ci->cc_slot_flags >> 3 ) & 0x1 ;
+	int cc = ( ci->cc_slot_flags >> 4 ) & 0xf ;
+  
 #else
    // int ts1 = 1;
     int ts2 = 0;
+	int cc = 0;
 #endif	
     int y_index = RX_POPUP_Y_START;
 
 
     if( grp ) {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->TG %d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );        
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->TG %d %s CC:%d", src, dst, ( ts2==1 ? "TS2" : "TS1"),cc );        
     } else {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s", src, dst, ( ts2==1 ? "TS2" : "TS1")  );
+        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d->%d %s CC:%d", src, dst, ( ts2==1 ? "TS2" : "TS1"),cc );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ;
 	
 	gfx_select_font(gfx_font_norm); // switch to large font
 	
-	if (usr.firstname != 0)  {  // have real nickname, display it as before
-		gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, usr.firstname );
+	int nameLen = strlen(usr.name);
+	
+	if (strlen(usr.firstname) > 0)  {  // have real nickname, display it as before
+		gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, usr.firstname );
 	} else {
 		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
-		if (strcmp(usr.firstname, firstname) == 0) {
-			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s", usr.callsign);
+		if (strcmp(usr.firstname, firstname) != 0 || (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) ) {
+			// do this if nickname is different than firstname or fullname is going to be in small font
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, firstname );
 		} else { 
-			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", usr.callsign, firstname );
+			// do this if fullname will be in large font, no need to display firstname
+			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s", usr.callsign);
 		}
 	}
     y_index += GFX_FONT_NORML_HEIGHT; 
 
     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
       // TA or TA/DB mode
-      if ( talkerAlias.length > 16 ) {  
+      if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
 	    gfx_select_font(gfx_font_small);
 		gfx_printf_pos2(RX_POPUP_X_START, y_index,10, "%s", talkerAlias.text );
 	    y_index += GFX_FONT_SMALL_HEIGHT;
@@ -538,8 +546,8 @@ void draw_rx_screen(unsigned int bg_color)
     } 
 	else {
       // user.bin or codeplug or talkerAlias length=0
-      nameLen = strlen(usr.name);
-      if (nameLen > 16) {  // print in smaller font
+      y_index++;
+      if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  // print in smaller font
         gfx_select_font(gfx_font_small);
         gfx_puts_pos(RX_POPUP_X_START, y_index, usr.name );
         y_index += GFX_FONT_SMALL_HEIGHT ; // previous line was in small font
@@ -552,7 +560,7 @@ void draw_rx_screen(unsigned int bg_color)
 	
 	y_index+=3;
 	if ( global_addl_config.userscsv > 1 ) {
-      gfx_set_fg_color(0x00FF00);
+      gfx_set_fg_color(0x005500);
 	} else {
       gfx_set_fg_color(0x0000FF);
 	}
@@ -594,11 +602,12 @@ void draw_rx_screen(unsigned int bg_color)
 				
 				gfx_puts_pos(RX_POPUP_X_START, y_index, country );		
 			} else {
-				// city in large, state + country in small
+				// city in large, state + country in small enough
 				gfx_select_font(gfx_font_norm);
 				gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );  
-				y_index += GFX_FONT_SMALL_HEIGHT + GFX_FONT_SMALL_HEIGHT ;
-				gfx_select_font(gfx_font_small);
+				//y_index += GFX_FONT_SMALL_HEIGHT + GFX_FONT_SMALL_HEIGHT ;
+				y_index += GFX_FONT_NORML_HEIGHT;
+				//gfx_select_font(gfx_font_small);
 				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s, %s", state, country );
 				
 			}
