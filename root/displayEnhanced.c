@@ -441,6 +441,8 @@ char *lookup_state(user_t *up, char *buf) {
 void draw_rx_screen(unsigned int bg_color)
 {
 	#define FULLNAME_MAX_LARGEFONT_CHARS 16
+	#define CITY_MAX_LARGEFONT_CHARS 14
+	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 14
 	
     static int dst;
     int src;
@@ -593,28 +595,28 @@ void draw_rx_screen(unsigned int bg_color)
 	case 3:
 	
 		if( src != 0 ) { 
-	  
-			char *state = lookup_state(&usr, state_buf);
-			char *country = lookup_country(&usr, country_buf);
-		
-			if ( (strlen(state) + strlen(country)) > 14) {  // something in oem is blocking end of line, so we lose a few chars at end, go small
+			// city
+			if ( strlen(usr.place) > CITY_MAX_LARGEFONT_CHARS) { 
 				gfx_select_font(gfx_font_small);
-				gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );  // city
+				gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );  
 				y_index += GFX_FONT_SMALL_HEIGHT ;
-				
-				gfx_puts_pos(RX_POPUP_X_START, y_index, state );
-				y_index += GFX_FONT_SMALL_HEIGHT ;
-				
-				gfx_puts_pos(RX_POPUP_X_START, y_index, country );		
 			} else {
-				// city in large, state + country in small enough
 				gfx_select_font(gfx_font_norm);
 				gfx_puts_pos(RX_POPUP_X_START, y_index, usr.place );  
-				//y_index += GFX_FONT_SMALL_HEIGHT + GFX_FONT_SMALL_HEIGHT ;
 				y_index += GFX_FONT_NORML_HEIGHT;
-				//gfx_select_font(gfx_font_small);
-				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s,%s", state, country );
-				
+			}
+			// state/province and country
+			// something in oem firmware is blocking end of line, so we lose a few chars at end and bottom of screen
+			char *state = lookup_state(&usr, state_buf);
+			char *country = lookup_country(&usr, country_buf);
+			if ( (strlen(state) + strlen(country)) > STATECOUNTRY_MAX_LARGEFONT_CHARS) {  
+				gfx_select_font(gfx_font_small);
+				gfx_puts_pos(RX_POPUP_X_START, y_index, state );
+				y_index += GFX_FONT_SMALL_HEIGHT ;
+				gfx_puts_pos(RX_POPUP_X_START, y_index, country );		
+			} else {
+				gfx_select_font(gfx_font_norm);
+				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", state, country );			
 			}
           
 		}
