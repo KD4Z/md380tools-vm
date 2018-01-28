@@ -613,7 +613,7 @@ void draw_rx_screen(unsigned int bg_color)
 				//y_index += GFX_FONT_SMALL_HEIGHT + GFX_FONT_SMALL_HEIGHT ;
 				y_index += GFX_FONT_NORML_HEIGHT;
 				//gfx_select_font(gfx_font_small);
-				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s, %s", state, country );
+				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s,%s", state, country );
 				
 			}
           
