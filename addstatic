@@ -94,11 +94,11 @@ if [ -f $FILESTATIC ]; then
 fi
 
 echo -e "${WHITE}Merging data...${NC}"
-if [ -f $FINALDMRMARC ]; then
-	FILELIST="$FINALDMRMARC"
-fi
 if [ -f $FINALALTERNATE ]; then 
-	FILELIST="$FILELIST $FINALALTERNATE"  
+	FILELIST="$FINALALTERNATE"  
+fi
+if [ -f $FINALDMRMARC ]; then
+	FILELIST="$FILELIST $FINALDMRMARC"
 fi
 if [ -f $FILESTATIC ]; then
 	FILELIST="$FILELIST $FILESTATIC"
@@ -106,7 +106,7 @@ fi
 if [ -f $FILENICK ]; then
 	FILELIST="$FILELIST $FILENICK"
 fi
-OPTS="-o AbbrevCountries -o AbbrevStates"
+OPTS="-o AbbrevCountries -o AbbrevStates -o UpperCaseStates -o UpperCaseCountries"
 if [ -f ~/keep.tmp ]; then
  echo -e "Filelist=$FILELIST Options=$OPTS" 
 fi
