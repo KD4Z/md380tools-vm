@@ -37,27 +37,26 @@ from __future__ import print_function
 import sys
 import argparse
 
-version = "0.5.0"
+version = "0.5.2"
 
 users = {}
 
 options = {
+	"FixRomanNumerals":	True,
+	"FixStateCountries":	True,
 	"MiscChanges":		True,
+	"RemoveCallFromNick":	True,
 	"RemoveDupSurnames":	True,
 	"RemoveMatchingNick":	True,
 	"RemoveRepeats":	True,
 	"TitleCase":		True,
-	"RemoveCallFromNick":	True,
-	"FixRomanNumerals":	True,
-	"FixStateCountries":	True,
+	"Header":		True,
 
 	"AbbrevCountries":	False,
 	"AbbrevDirections":	False,
 	"AbbrevStates":		False,
 	"CheckTitleCase":	False,
 	"RemoveNames":		False,
-	"UpperCaseStates":	False,
-	"UpperCaseCountries":	False,
 }
 
 countryAbbrevs = {
@@ -2060,7 +2059,7 @@ def checkTitleCase():
 						break
 
 				if not allUpper:
-					break
+					continue
 
 				if word in titleCaseDict:
 					continue
@@ -2076,6 +2075,18 @@ def massage_users():
 	stateAbbrevs = {}
 	for _, abbrevStates in stateAbbrevsByCountry.iteritems():
 		stateAbbrevs.update(abbrevStates)
+
+	stateAbbrevsInverse = {}
+	stateAbbrevsUpper = {}
+	for state, abbrev in stateAbbrevs.iteritems():
+		stateAbbrevsInverse[abbrev] = state
+		stateAbbrevsUpper[abbrev.upper()] = abbrev
+
+	countryAbbrevsInverse = {}
+	countryAbbrevsUpper = {}
+	for country, abbrev in countryAbbrevs.iteritems():
+		countryAbbrevsInverse[abbrev] = country
+		countryAbbrevsUpper[abbrev.upper()] = abbrev
 
 	for dmr_id, user in users.iteritems():
 		# remove blanks from within callsigns
@@ -2099,6 +2110,9 @@ def massage_users():
 			first = user["name"].split(" ", 2)[0]
 			if first == user["nick"]:
 				user["nick"] = ""
+		else:
+			if user["nick"] == "":
+				user["nick"] = user["name"].split(" ", 2)[0]
 
 		if options["RemoveNames"]:
 			user["name"] = ""
@@ -2107,22 +2121,32 @@ def massage_users():
 		if options["FixStateCountries"]:
 			user = fixStateCountries(user)
 
+		abbrev = countryAbbrevsUpper.get(user["country"].upper(), "")
+		if abbrev != "":
+			user["country"] = abbrev
+
+		abbrev = stateAbbrevsUpper.get(user["state"].upper(), "")
+		if abbrev != "":
+			user["state"] = abbrev
+
 		if options["AbbrevCountries"]:
 			abbrev = countryAbbrevs.get(user["country"], "")
 			if abbrev != "":
 				user["country"] = abbrev
+		else:
+			country = countryAbbrevsInverse.get(user["country"], "")
+			if country != "":
+				user["country"] = country
 
-		if options["UpperCaseCountries"]:
-			user["country"] = user["country"].upper()
-			
 		if options["AbbrevStates"]:
 			abbrev = stateAbbrevs.get(user["state"], "")
 			if abbrev != "":
 				user["state"] = abbrev
+		else:
+			state = stateAbbrevsInverse.get(user["state"], "")
+			if state != "":
+				user["state"] = state
 
-		if options["UpperCaseStates"]:
-			user["state"] = user["state"].upper()
-			
 		if options["AbbrevDirections"]:
 			user["city"] = abbrevDirections(user["city"])
 			user["state"] = abbrevDirections(user["state"])
@@ -2131,9 +2155,8 @@ def massage_users():
 			user["nick"] = removeSubstr(user["nick"], user["call"])
 
 		if options["MiscChanges"]:
-			field = user["city"]
-			if field.endswith(" (B,"):
-				user["city"] = field[:-len(" (B")]
+			if user["city"].endswith(" (B,"):
+				user["city"] = user["city"][:-len(" (B")]
 
 		if options["FixRomanNumerals"]:
 			user["name"] = fixRomanNumerals(user["name"])
@@ -2258,11 +2281,22 @@ def read_user_files(files):
 			i += 1
 
 def output_users():
+	byteCount = 0
+	lines = [""]
 	for i, u in sorted([(int(i), u) for i, u in users.iteritems()]):
 		line = "{0},{1},{2},{3},{4},{5},{6}".format(
 			u["id"], u["call"], u["name"], u["city"], u["state"],
 			u["nick"], u["country"])
 
+		byteCount += len(line) + 1
+		lines.append(line)
+
+	lines[0] = str(byteCount)
+
+	if not options["Header"]:
+		lines = lines[1:]
+
+	for line in lines:
 		print(line)
 
 def main():

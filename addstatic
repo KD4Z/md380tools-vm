@@ -106,7 +106,7 @@ fi
 if [ -f $FILENICK ]; then
 	FILELIST="$FILELIST $FILENICK"
 fi
-OPTS="-o AbbrevCountries -o AbbrevStates -o UpperCaseStates -o UpperCaseCountries"
+OPTS="-o AbbrevCountries -o AbbrevStates -o NoHeader"
 if [ -f ~/keep.tmp ]; then
  echo -e "Filelist=$FILELIST Options=$OPTS" 
 fi
