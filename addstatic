@@ -153,7 +153,7 @@ fi
 if (( sizemergeerrors > 10 )); then
 echo -e "${GREEN}  Records skipped  :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
 fi
-if (( countmarc < 83000 )); then
+if (( countall < 83000 )); then
   echo -e "${RED} ** The Downloads for Contact information may have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"
