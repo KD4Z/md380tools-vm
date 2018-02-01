@@ -410,11 +410,13 @@ void draw_tx_screen_layout()
 	if ( dst > 0 ) {
 		dc.font = LCD_OPT_FONT_8x8;
 		LCD_Printf( &dc, "TG: %d \r",dst);
+
+	} else {
+		dc.font = LCD_OPT_FONT_12x24;
+		LCD_Printf( &dc, "     PTT\r");
+		LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
+		LCD_Printf( &dc, "   SECONDS\r");
 	}
-	dc.font = LCD_OPT_FONT_12x24;
-	LCD_Printf( &dc, "     PTT\r");
-	LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
-	LCD_Printf( &dc, "   SECONDS\r");
 
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
 	
