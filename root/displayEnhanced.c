@@ -69,175 +69,6 @@ const gfx_bitmap bmp_eye = {12, 12, 6, 4, eye_pix, &eye_pal, 0};
 #define D_ICON_EYE_Y 1
 #endif
 
-void draw_eye_opt()
-{
-#if defined(FW_D13_020) || defined(FW_S13_020)
-    // draw promiscous mode eye symbol 
-    if( global_addl_config.promtg == 1 ) {
-        gfx_drawbmp((char *) &bmp_eye, D_ICON_EYE_X, D_ICON_EYE_Y);
-    }
-#endif
-}
-
-// Takes a positive(!) integer amplitude and computes 200*log10(amp),
-// centi Bel, approximtely. If the given parameter is 0 or less, this
-// function returns -1.  tnx to sellibitze
-
-int intCentibel(long ampli)
-{
-    if( ampli <= 0 )
-        return -1; // invalid
-    int log_2 = 0;
-    while (ampli >= 32 * 8) {
-        ampli >>= 1 + 3;
-        log_2 += 1 + 3;
-    }
-    while (ampli >= 32) {
-        ampli >>= 1;
-        log_2 += 1;
-    }
-    // 1 <= ampli < 32
-    static const short fine[] = {
-        -1, 0, 60, 95, 120, 140, 156, 169,
-        181, 191, 200, 208, 216, 223, 229, 235,
-        243, 249, 253, 258, 262, 266, 270, 274,
-        278, 281, 285, 288, 291, 294, 297, 300
-    };
-    return (log_2 * 301 + 2) / 5 + fine[ampli];
-}
-
-//#d efine RX_POPUP_Y_START 24
-//#d efine RX_POPUP_X_START 10
-
-void draw_txt(char* testStr, int x, int y, char font){
-	char c=0;
-	int maxLen=16;
-	uint16_t fg_color = 0, bg_color = 0;
-#if defined(FW_D13_020) || defined(FW_S13_020)
-	Menu_GetColours(SEL_FLAG_NONE, &fg_color, &bg_color);
-#endif
-	while( ((c=*testStr)!=0)  && maxLen>0)
-	{ x = LCD_DrawCharAt( c, x, y, fg_color, bg_color, font);
-		//++i; // character index and limiting counter
-	    ++testStr; 
-		// (in rare cases, some of the leading text may be OVERWRITTEN below)
-		maxLen--;
-	}		 
-}
-
-int fDoOnce = 0;
-
-void draw_micbargraph()
-{
-    if( gui_opmode2 == OPM2_MENU ) {
-        // case for pressing the PTT during 'Manual Dial' in 'Contacts'
-        return ;
-    }
-    
-    static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
-    static int fullscale_offset = 0;
-    static uint32_t lastframe = 0;
-    static int red = 0;
-    static int green = 0;
-
-    int relative_peak_cb;
-    int centibel_val;
-
-    if( fullscale_offset == 0 ) { // init int_centibel()
-        fullscale_offset = intCentibel(3000); // maybe wav max max_level
-    }
-    
-    int is_tx = 0 ;
-    int is_rx = 0 ;
-
-    is_tx = gui_opmode1 == SCR_MODE_RX_VOICE && max_level > 10 ;
-    is_rx = gui_opmode1 == SCR_MODE_RX_TERMINATOR ;
-
-#if defined(FW_D13_020) || defined(FW_S13_020)
-    {
-//        uint8_t *rs = (void*)0x2001e5f0 ;
-        uint8_t s = radio_status_1.m1 ;
-        
-        is_tx = s & 1 ;
-        is_rx = s & 2 ;
-    }
-#endif    
-
-    if( is_tx && max_level < 4500 ) { 
-        if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
-            lastframe = ambe_encode_frame_cnt;
-            rx_active = 1;
-
-            relative_peak_cb = intCentibel(max_level) - fullscale_offset;
-            centibel_val = relative_peak_cb;
-
-
-            if( lastframe % 5 == 1 ) { // reduce drawing
-                if( centibel_val < -280 ) { // limit 160 pixel bargraph 10 150 -> 140 pixel for bargraph
-                    centibel_val = -280;
-                } else if( centibel_val > 0 ) {
-                    centibel_val = 0;
-                }
-                centibel_val += 280; // shift to positive
-                centibel_val /= 2; // scale
-
-                gfx_set_fg_color(0x999999);
-                gfx_set_bg_color(0xff000000);
-                gfx_blockfill(9, 54, 151, 66);
-
-                // paint legend
-                gfx_set_fg_color(0x0000ff);
-                gfx_blockfill((-30 + 280) / 2 + 10, 67, 150, 70);
-                gfx_set_fg_color(0x00ff00);
-                gfx_blockfill((-130 + 280) / 2 + 10, 67, (-30 + 280) / 2 - 1 + 10, 70);
-                gfx_set_fg_color(0x555555);
-                gfx_blockfill(10, 67, (-130 + 280) / 2 - 1 + 10, 70);
-
-                // set color
-                if( relative_peak_cb > -3 || red > 0 ) {
-                    if( red > 0 ) red--;
-                    if( relative_peak_cb > -3 ) red = 30;
-                    gfx_set_fg_color(0x0000ff);
-                } else if( relative_peak_cb > -130 || green > 0 ) {
-                    if( green > 0 ) green--;
-                    if( relative_peak_cb > -130 ) green = 30;
-                    gfx_set_fg_color(0x00ff00);
-                } else {
-                    gfx_set_fg_color(0x555555);
-                }
-                gfx_set_bg_color(0xff000000);
-                gfx_blockfill(10, 55, centibel_val, 65);
-                gfx_set_fg_color(0xff8032);
-                gfx_set_bg_color(0xff000000);
-            }
-        }
-    }
-
-    if( is_rx && rx_active == 1 ) { // clear screen area
-        gfx_set_fg_color(0xff8032);
-        gfx_set_bg_color(0xff000000);
-        gfx_blockfill(9, 54, 151, 70);
-        rx_active = 0;
-        red = 0;
-        green = 0;
-    }
-}
-
-char *get_firstname(user_t *up, char *buf, int buflen) {
-// Thanks to Dale Farnsworth dale@farnsworth.org for providing this little ditty.
-    if (*up->firstname != 0)
-	return up->firstname;
-
-    char *p = buf;
-    char *q = up->name;
-    for (int i = 0; i < buflen-1 && *q != ' ' && *q != 0; i++)
-	*p++ = *q++;
-
-    *p = 0;
-
-    return buf;
-}
-
 static const char *const countries[] = {
 	"AT,Austria",
 	"AU,Australia",
@@ -424,6 +255,78 @@ const char *lookupAbbrev(char *abbrev, const char *const abbrevs[], int length) 
 	return abbrev;
 }
 
+
+void draw_eye_opt()
+{
+#if defined(FW_D13_020) || defined(FW_S13_020)
+    // draw promiscous mode eye symbol 
+    if( global_addl_config.promtg == 1 ) {
+        gfx_drawbmp((char *) &bmp_eye, D_ICON_EYE_X, D_ICON_EYE_Y);
+    }
+#endif
+}
+
+// Takes a positive(!) integer amplitude and computes 200*log10(amp),
+// centi Bel, approximtely. If the given parameter is 0 or less, this
+// function returns -1.  tnx to sellibitze
+
+int intCentibel(long ampli)
+{
+    if( ampli <= 0 )
+        return -1; // invalid
+    int log_2 = 0;
+    while (ampli >= 32 * 8) {
+        ampli >>= 1 + 3;
+        log_2 += 1 + 3;
+    }
+    while (ampli >= 32) {
+        ampli >>= 1;
+        log_2 += 1;
+    }
+    // 1 <= ampli < 32
+    static const short fine[] = {
+        -1, 0, 60, 95, 120, 140, 156, 169,
+        181, 191, 200, 208, 216, 223, 229, 235,
+        243, 249, 253, 258, 262, 266, 270, 274,
+        278, 281, 285, 288, 291, 294, 297, 300
+    };
+    return (log_2 * 301 + 2) / 5 + fine[ampli];
+}
+
+//#d efine RX_POPUP_Y_START 24
+//#d efine RX_POPUP_X_START 10
+
+void draw_txt(char* testStr, int x, int y, char font){
+	char c=0;
+	int maxLen=16;
+	uint16_t fg_color = 0, bg_color = 0;
+#if defined(FW_D13_020) || defined(FW_S13_020)
+	Menu_GetColours(SEL_FLAG_NONE, &fg_color, &bg_color);
+#endif
+	while( ((c=*testStr)!=0)  && maxLen>0)
+	{ x = LCD_DrawCharAt( c, x, y, fg_color, bg_color, font);
+		//++i; // character index and limiting counter
+	    ++testStr; 
+		// (in rare cases, some of the leading text may be OVERWRITTEN below)
+		maxLen--;
+	}		 
+}
+
+char *get_firstname(user_t *up, char *buf, int buflen) {
+// Thanks to Dale Farnsworth dale@farnsworth.org for providing this little ditty.
+    if (*up->firstname != 0)
+	return up->firstname;
+
+    char *p = buf;
+    char *q = up->name;
+    for (int i = 0; i < buflen-1 && *q != ' ' && *q != 0; i++)
+	*p++ = *q++;
+
+    *p = 0;
+
+    return buf;
+}
+
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
 
 char *lookup_country(user_t *up, char *buf) {
@@ -437,7 +340,294 @@ char *lookup_state(user_t *up, char *buf) {
 	strcpy(buf, p);
 	return buf;
 }
+
+#define __PTT_LASTHEARD
+
+#if defined(__PTT_LASTHEARD)
+static int lh_painted = 0;
+static uint32_t stopwatch_cnt = 0;
+
+void draw_tx_screen_layout() 
+{
+	lcd_context_t dc;
+	int sel_flags = SEL_FLAG_NONE;
+	int src;
+	int dst;
+	user_t usr;
+    src = rst_src;
+	dst = rst_dst ;
+    char firstname_buf[FIRSTNAME_BUFSIZE];
+    char *firstname;
+	char state_buf[STATE_BUFSIZE];
+	int ptt_milliseconds = 0;
+	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
+	dc.x = 15;
+	dc.y = 20;
+	// font options
+	//dc.font = LCD_OPT_FONT_6x12;
+	//dc.font = LCD_OPT_FONT_8x8;
+	//dc.font = LCD_OPT_FONT_8x16;
+	//dc.font = LCD_OPT_FONT_12x24;
+
+	// fill the screen with the background color
+	if (lh_painted == 0) {
+		LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
+		lh_painted = 1;
+	}
+	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
+
+	if ( dst > 0 ) {
+		dc.font = LCD_OPT_FONT_8x8;
+		LCD_Printf( &dc, "TG: %d \r",dst);
+
+	} else {
+		dc.font = LCD_OPT_FONT_12x24;
+		LCD_Printf( &dc, "     PTT\r");
+		LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
+		LCD_Printf( &dc, "   SECONDS\r");
+	}
+
+ 	if( usr_find_by_dmrid(&usr, src) > 0 ) {
 	
+			firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+			dc.font = LCD_OPT_FONT_12x24;
+			LCD_Printf( &dc, " %s %d\r", usr.callsign, ptt_milliseconds/1000); 
+			dc.y =  dc.y - 2;
+			LCD_Printf( &dc, " %s\r", firstname); 
+			dc.font = LCD_OPT_FONT_8x16;
+			LCD_Printf( &dc, " %s\r", usr.place); 
+			LCD_Printf( &dc, " %s\r", lookup_state(&usr, state_buf));
+			LCD_Printf( &dc, " %s\r", lookup_country(&usr, state_buf));
+	}
+
+}
+void draw_micbargraph()
+{
+	//
+	// New bargraph routine extended with Last Heard information de KD4Z
+	//
+ 
+    if( gui_opmode2 == OPM2_MENU ) {
+        // case for pressing the PTT during 'Manual Dial' in 'Contacts'
+        return ;
+    }
+ 
+    static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
+	static int fullscale_offset = 0;
+    static uint32_t lastframe = 0;
+    static int red = 0;
+    static int green = 0;
+	int relative_peak_cb;
+    int centibel_val;
+
+    if( fullscale_offset == 0 ) { // init int_centibel()
+        fullscale_offset = intCentibel(3000); // maybe wav max max_level
+    }
+
+    int is_tx = 0 ;
+    int is_rx = 0 ;
+
+    is_tx = gui_opmode1 == SCR_MODE_RX_VOICE && max_level > 10 ;
+    is_rx = gui_opmode1 == SCR_MODE_RX_TERMINATOR ;
+
+#if defined(FW_D13_020) || defined(FW_S13_020)
+    {
+        uint8_t s = radio_status_1.m1 ;
+        is_tx = s & 1 ;
+        is_rx = s & 2 ;
+    }
+#endif    
+	//if( is_tx && tx_active == 0 ) {
+	//	tx_active = 1;
+	//	//gfx_blockfill(0, 0, 159, 127);  // clear whole block area of screen
+	//}
+	
+    if( is_tx && max_level < 4500 ) { 
+		if (stopwatch_cnt==0)
+			StartStopwatch(&stopwatch_cnt);
+		
+	
+        if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
+            lastframe = ambe_encode_frame_cnt;
+            rx_active = 1;
+
+            relative_peak_cb = intCentibel(max_level) - fullscale_offset;
+            centibel_val = relative_peak_cb;
+
+            if( lastframe % 5 == 1 ) { // reduce drawing
+ 
+				if( centibel_val < -240 ) { // limit 120 pixel bargraph 5 125 -> 120 pixel for virtical bargraph
+                    centibel_val = -240;
+                } else if( centibel_val > 0 ) {
+                    centibel_val = 0;
+                }
+                centibel_val += 240; // shift to positive
+                centibel_val /= 2; // scale
+				
+				 
+				draw_tx_screen_layout();
+				lh_painted = 1;
+				
+                gfx_set_bg_color(0xff000000);		// light grey
+				//if( centibel_val > 0 ) {
+					gfx_set_fg_color(0x999999);			//gfx_set_fg_color(0x00FF00)  high green  0x0000FF Red   BBGGRR
+					gfx_blockfill(8, 15, 14, 127);      // clear area of bar before repainting again
+				//}
+	            // paint legend
+  
+ 				// 3-7 legend 8-13 bar  
+ 				gfx_set_fg_color(0x0000ff);  // red
+                gfx_blockfill(3, 15, 7, 30);                           // 135,67,150,70
+                gfx_set_fg_color(0x00ff00);  // green
+                gfx_blockfill(3, 31, 7, 70);     // 85,67,134,70
+                gfx_set_fg_color(0x555555);  // grey
+                gfx_blockfill(3, 71, 7,127);						// 10,67,84,70
+				
+                // set color
+                if( relative_peak_cb > -3 || red > 0 ) {
+                    if( red > 0 ) red--;
+                    if( relative_peak_cb > -3 ) red = 30;
+                    gfx_set_fg_color(0x0000ff);
+                } else if( relative_peak_cb > -130 || green > 0 ) {
+                    if( green > 0 ) green--;
+                    if( relative_peak_cb > -130 ) green = 30;
+                    gfx_set_fg_color(0x00ff00);
+                } else {
+                    gfx_set_fg_color(0x555555);
+                }
+               	// paint the VU bar	
+				if (centibel_val > 126)
+					centibel_val = 126;
+				
+                gfx_blockfill(8, (139 - centibel_val), 13, 120);			// left margin vertical
+	  			
+            }
+        }
+    }
+
+    if( is_rx && rx_active == 1 ) { // clear screen area
+        //gfx_set_fg_color(0xff8032);
+        //gfx_set_bg_color(0xff000000);
+        //gfx_blockfill(3, 15, 159, 127);
+        rx_active = 0;
+        red = 0;
+        green = 0;
+		lh_painted = 0;
+		stopwatch_cnt = 0;
+		//draw_rx_screen(0x888888);
+		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
+		channel_num = 0;
+	}  // end of clear screen block
+	
+}
+
+
+#else
+void draw_micbargraph()
+{
+	//
+	// original mic bargraph routine
+	//
+    if( gui_opmode2 == OPM2_MENU ) {
+        // case for pressing the PTT during 'Manual Dial' in 'Contacts'
+        return ;
+    }
+    
+    static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
+    static int fullscale_offset = 0;
+    static uint32_t lastframe = 0;
+    static int red = 0;
+    static int green = 0;
+
+    int relative_peak_cb;
+    int centibel_val;
+
+    if( fullscale_offset == 0 ) { // init int_centibel()
+        fullscale_offset = intCentibel(3000); // maybe wav max max_level
+    }
+    
+    int is_tx = 0 ;
+    int is_rx = 0 ;
+
+    is_tx = gui_opmode1 == SCR_MODE_RX_VOICE && max_level > 10 ;
+    is_rx = gui_opmode1 == SCR_MODE_RX_TERMINATOR ;
+
+#if defined(FW_D13_020) || defined(FW_S13_020)
+    {
+        uint8_t s = radio_status_1.m1 ;
+        is_tx = s & 1 ;
+        is_rx = s & 2 ;
+		channel_info_t *ci = &current_channel_info ; 
+    }
+#endif    
+
+    if( is_tx && max_level < 4500 ) { 
+        if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
+            lastframe = ambe_encode_frame_cnt;
+            rx_active = 1;
+
+            relative_peak_cb = intCentibel(max_level) - fullscale_offset;
+            centibel_val = relative_peak_cb;
+
+
+            if( lastframe % 5 == 1 ) { // reduce drawing
+                if( centibel_val < -280 ) { // limit 160 pixel bargraph 10 150 -> 140 pixel for bargraph
+                    centibel_val = -280;
+                } else if( centibel_val > 0 ) {
+                    centibel_val = 0;
+                }
+                centibel_val += 280; // shift to positive
+                centibel_val /= 2; // scale
+
+                gfx_set_fg_color(0x999999);
+                gfx_set_bg_color(0xff000000);
+                gfx_blockfill(9, 54, 151, 66);
+
+                // paint legend
+                gfx_set_fg_color(0x0000ff);
+                gfx_blockfill((-30 + 280) / 2 + 10, 67, 150, 70);
+                gfx_set_fg_color(0x00ff00);
+                gfx_blockfill((-130 + 280) / 2 + 10, 67, (-30 + 280) / 2 - 1 + 10, 70);
+                gfx_set_fg_color(0x555555);
+                gfx_blockfill(10, 67, (-130 + 280) / 2 - 1 + 10, 70);
+
+                // set color
+                if( relative_peak_cb > -3 || red > 0 ) {
+                    if( red > 0 ) red--;
+                    if( relative_peak_cb > -3 ) red = 30;
+                    gfx_set_fg_color(0x0000ff);
+                } else if( relative_peak_cb > -130 || green > 0 ) {
+                    if( green > 0 ) green--;
+                    if( relative_peak_cb > -130 ) green = 30;
+                    gfx_set_fg_color(0x00ff00);
+                } else {
+                    gfx_set_fg_color(0x555555);
+                }
+                gfx_set_bg_color(0xff000000);
+                gfx_blockfill(10, 55, centibel_val, 65);
+                gfx_set_fg_color(0xff8032);
+                gfx_set_bg_color(0xff000000);
+            }
+        }
+    }
+
+    if( is_rx && rx_active == 1 ) { // clear screen area
+        gfx_set_fg_color(0xff8032);
+        gfx_set_bg_color(0xff000000);
+        gfx_blockfill(9, 54, 151, 70);
+        rx_active = 0;
+        red = 0;
+        green = 0;
+    }
+}
+
+
+#endif 
+
+
+
+
+
 void draw_rx_screen(unsigned int bg_color)
 {
 	#define FULLNAME_MAX_LARGEFONT_CHARS 16
@@ -835,7 +1025,7 @@ void draw_adhoc_statusline()
 	char fm_sql[3];									// CTS oder DCS
 	char tg_fill[7];								// talkgroup space filler
 
-	char ch_tone_type[1];								// N=none D=DCS 0-9=CTS
+	char ch_tone_type[2];								// N=none D=DCS 0-9=CTS
 	long ch_rxfreq = 0;
 	long ch_txfreq = 0;
 	float ch_freqoff = 0;

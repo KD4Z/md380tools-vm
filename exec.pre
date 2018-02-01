@@ -42,6 +42,11 @@ if [ -f ~/volumebar.enable ]; then
   # need correct address for the md-390 as this isn't really needed until corrected
   sed -i -e 's/patcher.nopout((0x0801FED2/# patcher.nopout((0x0801FED2/g' ~/md380tools/patches/s13.020/patch.py
 fi
+sed -i -e 's/#if(1)/#if(0)/g' ~/md380tools/applet/src/irq_handlers.c
+if [ -f ~/pttlastheard.disable ]; then
+  sed -i -e 's:#define __PTT_LASTHEARD::g' ~/md380tools/applet/src/display.c
+fi
+
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${WHITE}Executing ~/exec.pre.local${NC}"

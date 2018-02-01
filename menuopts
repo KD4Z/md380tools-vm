@@ -16,7 +16,7 @@ else
   cntcolor=${GREEN}
 fi
  
-vers="4.10"
+vers="4.20"
  
 
 echo -e " ${WHITE}${ZPROJ} (v${vers})${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc} / ${userbinsize}${NC} bytes)"
