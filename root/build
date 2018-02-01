@@ -11,6 +11,10 @@ cd ~/md380tools-vm
 cd ~/md380tools
 
 make dist
+if [ ! -f db/stripped.csv ]; then
+ echo -e "${RED}The dmr-marc file stripped.csv should be here but I can not find it!${GREEN}"
+fi
+ 
 cat db/stripped.csv >user.bin
 cp user.bin ~/user.bin
 
@@ -29,5 +33,8 @@ cp ~/user.bin ~/screenshots
 cd ~/md380tools-vm 
 ~/md380tools-vm/exec.post
 
+echo -e " {$WHITE} Process complete"
+echo -e " Run ${YELLOW}  menu   ${WHITE}to return to the main menu screen ${NC}"
+
 cd ~
-~/md380tools-vm/menuopts
+

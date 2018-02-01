@@ -231,8 +231,6 @@ static const char *const states[] = {
 	"ZH,South Holland",
 };
 
-#define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
-
 int abbrevs_sorted(const char *const a[], int size) {
 	for (int i = 1; i < size; i++)
 		if (strcmp(a[i-1], a[i]) >= 0)
@@ -253,9 +251,8 @@ const char *lookupAbbrev(char *abbrev, const char *const abbrevs[], int length) 
 			order_checked = 1;
 		}
 		if (!sorted)
-			return "unsorted abbreviations";
+			return "unsorted";
 	}
-
 
 	while (left <= right) {
 		int middle = left + (right-left)/2;
@@ -349,6 +346,8 @@ char *get_firstname(user_t *up, char *buf, int buflen) {
     return buf;
 }
 
+#define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
+
 char *lookup_country(user_t *up, char *buf) {
 	const char *p = lookupAbbrev(up->country, countries, ARRAY_SIZE(countries));
 	strcpy(buf, p);
@@ -363,12 +362,18 @@ char *lookup_state(user_t *up, char *buf) {
 
 #define __PTT_LASTHEARD
 
+#if defined(FW_D13_020) || defined(FW_S13_020)
+// PTT Last Heard not supported in OLD Vocoder firmware
+#undef __PTT_LASTHEARD
+#endif
+
 #if defined(__PTT_LASTHEARD)
 static int lh_painted = 0;
 static uint32_t stopwatch_cnt = 0;
 
 void draw_tx_screen_layout() 
 {
+#if defined(FW_D13_020) || defined(FW_S13_020)
 	lcd_context_t dc;
 	int sel_flags = SEL_FLAG_NONE;
 	int src;
@@ -380,7 +385,9 @@ void draw_tx_screen_layout()
     char *firstname;
 	char state_buf[STATE_BUFSIZE];
 	int ptt_milliseconds = 0;
+
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
+ 
 	dc.x = 15;
 	dc.y = 20;
 	// font options
@@ -391,7 +398,9 @@ void draw_tx_screen_layout()
 
 	// fill the screen with the background color
 	if (lh_painted == 0) {
+	
 		LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
+
 		lh_painted = 1;
 	}
 	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
@@ -419,7 +428,7 @@ void draw_tx_screen_layout()
 			LCD_Printf( &dc, " %s\r", lookup_state(&usr, state_buf));
 			LCD_Printf( &dc, " %s\r", lookup_country(&usr, state_buf));
 	}
-
+#endif
 }
 void draw_micbargraph()
 {
@@ -536,7 +545,9 @@ void draw_micbargraph()
 		stopwatch_cnt = 0;
 		//draw_rx_screen(0x888888);
 		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
+#if defined(FW_D13_020) || defined(FW_S13_020)
 		channel_num = 0;
+#endif		
 	}  // end of clear screen block
 	
 }
