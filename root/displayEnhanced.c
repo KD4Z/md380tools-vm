@@ -231,6 +231,8 @@ static const char *const states[] = {
 	"ZH,South Holland",
 };
 
+#define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
+
 int abbrevs_sorted(const char *const a[], int size) {
 	for (int i = 1; i < size; i++)
 		if (strcmp(a[i-1], a[i]) >= 0)
