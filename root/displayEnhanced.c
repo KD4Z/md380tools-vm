@@ -231,9 +231,31 @@ static const char *const states[] = {
 	"ZH,South Holland",
 };
 
+#define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
+
+int abbrevs_sorted(const char *const a[], int size) {
+	for (int i = 1; i < size; i++)
+		if (strcmp(a[i-1], a[i]) >= 0)
+			return 0;
+	return 1;
+}
+
 const char *lookupAbbrev(char *abbrev, const char *const abbrevs[], int length) {
 	int left = 0;
 	int right = length - 1;
+	static int sorted;
+	static int order_checked;
+
+	if (!sorted) {
+		if (!order_checked) {
+			sorted = abbrevs_sorted(countries, ARRAY_SIZE(countries));
+			sorted &= abbrevs_sorted(states, ARRAY_SIZE(states));
+			order_checked = 1;
+		}
+		if (!sorted)
+			return "unsorted abbreviations";
+	}
+
 
 	while (left <= right) {
 		int middle = left + (right-left)/2;
@@ -326,8 +348,6 @@ char *get_firstname(user_t *up, char *buf, int buflen) {
 
     return buf;
 }
-
-#define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
 
 char *lookup_country(user_t *up, char *buf) {
 	const char *p = lookupAbbrev(up->country, countries, ARRAY_SIZE(countries));
