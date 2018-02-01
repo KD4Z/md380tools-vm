@@ -33,8 +33,8 @@ cp ~/user.bin ~/screenshots
 cd ~/md380tools-vm 
 ~/md380tools-vm/exec.post
 
-echo -e " {$WHITE} Process complete"
-echo -e " Run ${YELLOW}  menu   ${WHITE}to return to the main menu screen ${NC}"
+
+echo -e "Run ${YELLOW}  menu   ${WHITE}to return to the main menu screen ${NC}"
 
 cd ~
 
