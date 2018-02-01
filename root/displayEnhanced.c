@@ -362,11 +362,10 @@ char *lookup_state(user_t *up, char *buf) {
 	return buf;
 }
 
-#define __PTT_LASTHEARD
+
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
-// PTT Last Heard not supported in OLD Vocoder firmware
-#undef __PTT_LASTHEARD
+#define __PTT_LASTHEARD
 #endif
 
 #if defined(__PTT_LASTHEARD)
@@ -406,17 +405,16 @@ void draw_tx_screen_layout()
 		lh_painted = 1;
 	}
 	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
-
+	
+    
 	if ( dst > 0 ) {
 		dc.font = LCD_OPT_FONT_8x8;
 		LCD_Printf( &dc, "TG: %d \r",dst);
-
-	} else {
-		dc.font = LCD_OPT_FONT_12x24;
-		LCD_Printf( &dc, "     PTT\r");
-		LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
-		LCD_Printf( &dc, "   SECONDS\r");
 	}
+	dc.font = LCD_OPT_FONT_12x24;
+	LCD_Printf( &dc, "     PTT\r");
+	LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
+	LCD_Printf( &dc, "   SECONDS\r");
 
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
 	
