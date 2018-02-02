@@ -93,11 +93,11 @@ if [ -f $FILESTATIC ]; then
 fi
 
 echo -e "${WHITE}Merging data...${NC}"
-if [ -f $FINALALTERNATE ]; then 
-	FILELIST="$FINALALTERNATE"  
-fi
 if [ -f $FINALDMRMARC ]; then
-	FILELIST="$FILELIST $FINALDMRMARC"
+	FILELIST="$FINALDMRMARC"
+fi
+if [ -f $FINALALTERNATE ]; then 
+	FILELIST="$FILELIST $FINALALTERNATE"  
 fi
 if [ -f $FILESTATIC ]; then
 	FILELIST="$FILELIST $FILESTATIC"
