@@ -38,7 +38,7 @@
 //#include "amenu_channels.h"
 #include <stdlib.h>
 
-#define RX_POPUP_Y_START 18 // prev=22 // orig=24
+#define RX_POPUP_Y_START 17 // prev=22 // orig=24
 #define RX_POPUP_X_START 4  // 10
 #define FIRSTNAME_BUFSIZE 30
 #define COUNTRY_BUFSIZE 20
@@ -406,18 +406,15 @@ void draw_tx_screen_layout()
 	}
 	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
 	
-    
 	if ( dst > 0 ) {
 		dc.font = LCD_OPT_FONT_8x8;
 		LCD_Printf( &dc, "TG: %d \r",dst);
-
 	} else {
 		dc.font = LCD_OPT_FONT_12x24;
 		LCD_Printf( &dc, "     PTT\r");
 		LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
 		LCD_Printf( &dc, "   SECONDS\r");
 	}
-
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
 	
 			firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
@@ -732,7 +729,7 @@ void draw_rx_screen(unsigned int bg_color)
         gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-%d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ;
-	
+	y_index--;
 	gfx_select_font(gfx_font_norm); // switch to large font
 	
 	int nameLen = strlen(usr.name);
