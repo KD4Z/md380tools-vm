@@ -460,10 +460,11 @@ void draw_tx_screen_layout()
 		LCD_Printf( &dc, " TG: %d \r",dst);
 	} else {
 		dc.font = LCD_OPT_FONT_12x24;
-		LCD_Printf( &dc, "     PTT\r");
-		LCD_Printf( &dc, "     %d\r",secs_display);
+		LCD_Printf( &dc, "    PTT\r");
+		LCD_Printf( &dc, "    %d\r",secs_display);
 #if defined(__PTT_LASTHEARD_DOWN)
-		LCD_Printf( &dc, " SECS REMAIN\r");	
+		LCD_Printf( &dc, " SECS UNTIL\r");	
+		LCD_Printf( &dc, "  TIMEOUT\r");	
 #else
 		LCD_Printf( &dc, "   SECONDS\r");
 #endif
