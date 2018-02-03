@@ -108,6 +108,7 @@ export ZCOM49="Volume Control Bargraph"
 export ZCOM50="Beep Tones"
 export ZCOM51="searchstring"
 export ZCOM52="PTT Last Heard"
+export ZCOM53="PTT Count Up"
 
 
 

@@ -46,6 +46,9 @@ sed -i -e 's/#if(1)/#if(0)/g' ~/md380tools/applet/src/irq_handlers.c
 if [ -f ~/pttlastheard.disable ]; then
   sed -i -e 's:#define __PTT_LASTHEARD::g' ~/md380tools/applet/src/display.c
 fi
+if [ -f ~/pttcountup.enable ]; then
+  sed -i -e 's:#define __PTT_LASTHEARD_DOWN::g' ~/md380tools/applet/src/display.c
+fi
 
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then

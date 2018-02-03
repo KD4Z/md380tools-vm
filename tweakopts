@@ -29,7 +29,15 @@ if [ -f ~/pttlastheard.disable ]; then
  echo -e "${RED} *${NC}"
 else
  echo -e ""
+ echo -e -n "  ${BLUE}~/pttcountup.enable${NC}  ${ZCOM42} ${ZCOM53}"
+if [ -f ~/pttcountup.enable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
 fi
+ 
+fi
+
 echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
 if [ -f ~/beep.disable ]; then
  echo -e "${RED} *${NC}"

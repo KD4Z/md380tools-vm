@@ -366,6 +366,7 @@ char *lookup_state(user_t *up, char *buf) {
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
 #define __PTT_LASTHEARD
+#define __PTT_LASTHEARD_DOWN
 #endif
 
 #if defined(__PTT_LASTHEARD)
@@ -386,7 +387,13 @@ void draw_tx_screen_layout()
     char *firstname;
 	char state_buf[STATE_BUFSIZE];
 	int ptt_milliseconds = 0;
-
+	int ch_to = 0;
+	int secs_display = 0;
+	
+	channel_info_t *ci = &current_channel_info;
+  	ch_to = ci->unk8==0 ? 999 : ci->unk8 * 15;
+	
+	
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
  
 	dc.x = 15;
@@ -399,12 +406,17 @@ void draw_tx_screen_layout()
 
 	// fill the screen with the background color
 	if (lh_painted == 0) {
-	
 		LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
-
 		lh_painted = 1;
 	}
 	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
+
+
+#if defined(__PTT_LASTHEARD_DOWN)
+		secs_display = ch_to - (ptt_milliseconds/1000);
+#else
+		secs_display = ptt_milliseconds/1000;
+#endif
 	
 	if ( dst > 0 ) {
 		dc.font = LCD_OPT_FONT_8x8;
@@ -412,14 +424,18 @@ void draw_tx_screen_layout()
 	} else {
 		dc.font = LCD_OPT_FONT_12x24;
 		LCD_Printf( &dc, "     PTT\r");
-		LCD_Printf( &dc, "     %d\r",ptt_milliseconds/1000);
+		LCD_Printf( &dc, "     %d\r",secs_display);
+#if defined(__PTT_LASTHEARD_DOWN)
+		LCD_Printf( &dc, "  SECS LEFT\r");	
+#else
 		LCD_Printf( &dc, "   SECONDS\r");
+#endif
 	}
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
 	
 			firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
 			dc.font = LCD_OPT_FONT_12x24;
-			LCD_Printf( &dc, " %s %d\r", usr.callsign, ptt_milliseconds/1000); 
+			LCD_Printf( &dc, " %s %d\r", usr.callsign,secs_display); 
 			dc.y =  dc.y - 2;
 			LCD_Printf( &dc, " %s\r", firstname); 
 			dc.font = LCD_OPT_FONT_8x16;
@@ -1041,13 +1057,13 @@ void draw_adhoc_statusline()
 	char freq_rx[10];
 	char freq_tx[10];
 
-	char ch_mode[3];								// DMR / FM / FM-N / FM-W
-	char ch_wide[2];								// DMR / FM / FM-N / FM-W
-	char ch_rpt[4];									// [-R] / [+R] repeater shift
+	//char ch_mode[3];								// DMR / FM / FM-N / FM-W
+	//char ch_wide[2];								// DMR / FM / FM-N / FM-W
+	//char ch_rpt[4];									// [-R] / [+R] repeater shift
 	char dmr_cc[2];									// [CC1] color code
-	char dmr_compact[5];								// [1|2| ... CC/TS prefix
+	//char dmr_compact[5];								// [1|2| ... CC/TS prefix
 	char ch_offset[4];								// repeater offset
-	char ch_tmp[10];								// temp
+	//char ch_tmp[10];								// temp
 	char ch_cc[1];									// temp CC
 
 	char fm_bw_stat[2];								// |N or |W
@@ -1058,7 +1074,7 @@ void draw_adhoc_statusline()
 	char ch_tone_type[2];								// N=none D=DCS 0-9=CTS
 	long ch_rxfreq = 0;
 	long ch_txfreq = 0;
-	float ch_freqoff = 0;
+	//float ch_freqoff = 0;
      
 	
 	strncpy(ch_rx, current_channel_info_E.rxFreq.text, 12);				// read RX frequency from codeplug
@@ -1082,7 +1098,7 @@ void draw_adhoc_statusline()
 	//sprintf(ch_rxfreq, ch_rx);
 	//sprintf(ch_txfreq, ch_tx);
 
-	ch_freqoff = ((ch_rxfreq - ch_txfreq) / 100000);
+	//ch_freqoff = ((ch_rxfreq - ch_txfreq) / 100000);
 	BOOL fIsSimplex = (ch_rxfreq == ch_txfreq);
 	user_t usr;									// reference user DB
 
@@ -1147,7 +1163,7 @@ void draw_adhoc_statusline()
 		int ch_ts = current_channel_info_E.Slot;				// current timeslot
 		int tgNum = (ad_hoc_tg_channel ? ad_hoc_talkgroup : (((int)contact.id_h<<16) | ((int)contact.id_m<<8) | (int)contact.id_l));	// current talkgroup
 		int callType = (ad_hoc_tg_channel ? ad_hoc_call_type : contact.type);	// current calltype
-		sprintf(dmr_cc, (char*)ch_cc);  // or sprintf(dmr_cc, "%s", ch_cc);
+		sprintf(dmr_cc, "%s", ch_cc);  // or sprintf(dmr_cc, (char*)ch_cc);
 
 		// build the top statusline -------------------------------------------------------------------
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
