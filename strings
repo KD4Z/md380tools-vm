@@ -75,7 +75,7 @@ export ZMESS61="Display this screen again"
 export ZMESS71="Display typical command recipes"
 export ZCOM11="Downloads and builds everything."
 export ZCOM12="Downloads and builds User DB only."
-export ZCOM51="searchstring"
+
 export ZWRITE1="Write firmware to radios without GPS."
 export ZWRITE2="Write firmware to radios with GPS."
 export ZWRITE3="Write User DB (Contacts) to radio"
@@ -106,8 +106,8 @@ export ZCOM47="Clear Codeplug Password"
 export ZCOM48="Extra Contact Data"
 export ZCOM49="Volume Control Bargraph"
 export ZCOM50="Beep Tones"
-export ZCOM51="PTT Last Heard"
-
+export ZCOM51="searchstring"
+export ZCOM52="PTT Last Heard"
 
 
 

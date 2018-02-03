@@ -24,7 +24,7 @@ if [ -f ~/volumebar.enable ]; then
 else
  echo -e ""
 fi
-echo -e -n "  ${BLUE}~/pttlastheard.disable${NC}  ${ZCOM43} ${ZCOM51}"
+echo -e -n "  ${BLUE}~/pttlastheard.disable${NC}  ${ZCOM43} ${ZCOM52}"
 if [ -f ~/pttlastheard.disable ]; then
  echo -e "${RED} *${NC}"
 else
