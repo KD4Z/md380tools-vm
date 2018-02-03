@@ -433,7 +433,7 @@ void draw_tx_screen_layout()
 		
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
  
-	dc.x = 15;
+	dc.x = 17;
 	dc.y = 20;
 	// font options
 	//dc.font = LCD_OPT_FONT_6x12;
@@ -457,13 +457,13 @@ void draw_tx_screen_layout()
 	
 	if ( dst > 0 ) {
 		dc.font = LCD_OPT_FONT_8x8;
-		LCD_Printf( &dc, "TG: %d \r",dst);
+		LCD_Printf( &dc, " TG: %d \r",dst);
 	} else {
 		dc.font = LCD_OPT_FONT_12x24;
 		LCD_Printf( &dc, "     PTT\r");
 		LCD_Printf( &dc, "     %d\r",secs_display);
 #if defined(__PTT_LASTHEARD_DOWN)
-		LCD_Printf( &dc, "SECS REMAIN\r");	
+		LCD_Printf( &dc, " SECS REMAIN\r");	
 #else
 		LCD_Printf( &dc, "   SECONDS\r");
 #endif
@@ -472,13 +472,13 @@ void draw_tx_screen_layout()
 	
 			firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
 			dc.font = LCD_OPT_FONT_12x24;
-			LCD_Printf( &dc, " %s %d\r", usr.callsign,secs_display); 
+			LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display); 
 			dc.y =  dc.y - 2;
 			LCD_Printf( &dc, " %s\r", firstname); 
 			dc.font = LCD_OPT_FONT_8x16;
-			LCD_Printf( &dc, " %s\r", usr.place); 
-			LCD_Printf( &dc, " %s\r", lookup_state(&usr, state_buf));
-			LCD_Printf( &dc, " %s\r", lookup_country(&usr, state_buf));
+			LCD_Printf( &dc, "%s\r", usr.place); 
+			LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
+			LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
 	}
 #endif
 }
@@ -549,20 +549,20 @@ void draw_micbargraph()
 				draw_tx_screen_layout();
 				lh_painted = 1;
 				
-                gfx_set_bg_color(0xff000000);		// light grey
+                gfx_set_bg_color(0x000000);  //black		// light grey = 0xff000000
 				//if( centibel_val > 0 ) {
-					gfx_set_fg_color(0x999999);			//gfx_set_fg_color(0x00FF00)  high green  0x0000FF Red   BBGGRR
-					gfx_blockfill(8, 15, 14, 127);      // clear area of bar before repainting again
+				gfx_set_fg_color(0x000000);			//gfx_set_fg_color(0x00FF00)  high green  0x0000FF Red   BBGGRR
+				gfx_blockfill(7, 15, 14, 127);      // clear area of bar before repainting again
 				//}
 	            // paint legend
   
- 				// 3-7 legend 8-13 bar  
+ 				// 3-6 legend 7-14 bar  
  				gfx_set_fg_color(0x0000ff);  // red
-                gfx_blockfill(3, 15, 7, 30);                           // 135,67,150,70
+                gfx_blockfill(3, 15, 6, 30);                           // 135,67,150,70
                 gfx_set_fg_color(0x00ff00);  // green
-                gfx_blockfill(3, 31, 7, 70);     // 85,67,134,70
+                gfx_blockfill(3, 31, 6, 70);     // 85,67,134,70
                 gfx_set_fg_color(0x555555);  // grey
-                gfx_blockfill(3, 71, 7,127);						// 10,67,84,70
+                gfx_blockfill(3, 71, 6,127);						// 10,67,84,70
 				
                 // set color
                 if( relative_peak_cb > -3 || red > 0 ) {
@@ -580,7 +580,7 @@ void draw_micbargraph()
 				if (centibel_val > 126)
 					centibel_val = 126;
 				
-                gfx_blockfill(8, (139 - centibel_val), 13, 120);			// left margin vertical
+                gfx_blockfill(7, (139 - centibel_val), 14, 120);			// left margin vertical
 	  			
             }
         }
