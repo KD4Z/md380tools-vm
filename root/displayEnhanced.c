@@ -70,46 +70,80 @@ const gfx_bitmap bmp_eye = {12, 12, 6, 4, eye_pix, &eye_pal, 0};
 #endif
 
 static const char *const countries[] = {
+	"AD,Andorra",
+	"AR,Argentina",
 	"AT,Austria",
 	"AU,Australia",
 	"BA,Bosnia and Hercegovi",
+	"BB,Barbados",
 	"BE,Belgium",
+	"BG,Bulgaria",
 	"BR,Brazil",
+	"BZ,Belize",
 	"CA,Canada",
 	"CH,Switzerland",
 	"CL,Chile",
 	"CN,China",
+	"CO,Columbia",
+	"CR,Costa Rica"
+	"CY,Cyprus",
 	"CZ,Czech Republic",
 	"DE,Germany",
 	"DK,Denmark",
+	"DM,Dominica",
 	"DO,Dominican Republic",
+	"EC,Ecuador",
+	"EE,Estonia",
 	"ES,Spain",
 	"FI,Finland",
 	"FR,France",
 	"GR,Greece",
+	"GT,Guatemala",
 	"HK,Hong Kong",
+	"HR,Croatia",
+	"HT,Haiti",
 	"HU,Hungary",
+	"ID,Indonesia",
 	"IE,Ireland",
+	"IL,Israel",
+	"IN,India",
 	"IT,Italy",
 	"JP,Japan",
-	"LU,Luxembourg",
+	"KR,Korea",
+	"KW,Kuwait",
+	"LI,Liechtenstein",
+	"LU,Luxemburg",
+	"LV,Latvia",
+	"ME,Montenegro",
 	"MK,Macedonia",
+	"MT,Malta",
+	"MX,Mexico",
 	"MY,Malaysia",
 	"NL,Netherlands",
 	"NO,Norway",
 	"NZ,New Zealand",
+	"PA,Pananma",
 	"PH,Philippines",
 	"PL,Poland",
 	"PT,Portugal",
+	"QA,Qatar",
+	"RE,Reunion",
+	"RO,Romainia",
+	"RS,Serbia",
 	"RU,Russia",
 	"SE,Sweden",
+	"SG,Singapore",
 	"SI,Slovenia",
 	"SK,Slovakia",
 	"TH,Thailand",
 	"TR,Turkey",
+	"TT,Trinidad and Tobago",
 	"TW,Taiwan",
+	"UA,Ukraine",
 	"UK,UK",
 	"US,USA",
+	"UY,Uruguay",
+	"VE,Venezuela",
 	"ZA,South Africa",
 };
 
@@ -147,7 +181,6 @@ static const char *const states[] = {
 	"IF,Ile-de-France",
 	"IL,Illinois",
 	"IN,Indiana",
-	"JK,England",
 	"KS,Kansas",
 	"KY,Kentucky",
 	"LA,Louisiana",
@@ -234,10 +267,15 @@ static const char *const states[] = {
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
 
 int abbrevs_sorted(const char *const a[], int size) {
+	int hasSortIssue = 1;
 	for (int i = 1; i < size; i++)
-		if (strcmp(a[i-1], a[i]) >= 0)
-			return 0;
-	return 1;
+		if (strcmp(a[i-1], a[i]) >= 0) {
+			hasSortIssue = 0;
+			//printf("Sort problem, these need to be swapped: %s and %s \n",a[i-1],a[i]);
+			return hasSortIssue;
+			
+		}
+	return hasSortIssue;
 }
 
 const char *lookupAbbrev(char *abbrev, const char *const abbrevs[], int length) {
@@ -392,8 +430,7 @@ void draw_tx_screen_layout()
 	
 	channel_info_t *ci = &current_channel_info;
   	ch_to = ci->unk8==0 ? 999 : ci->unk8 * 15;
-	
-	
+		
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
  
 	dc.x = 15;
@@ -426,7 +463,7 @@ void draw_tx_screen_layout()
 		LCD_Printf( &dc, "     PTT\r");
 		LCD_Printf( &dc, "     %d\r",secs_display);
 #if defined(__PTT_LASTHEARD_DOWN)
-		LCD_Printf( &dc, "  SECS LEFT\r");	
+		LCD_Printf( &dc, "SECS REMAIN\r");	
 #else
 		LCD_Printf( &dc, "   SECONDS\r");
 #endif
@@ -738,12 +775,13 @@ void draw_rx_screen(unsigned int bg_color)
 #endif	
     int y_index = RX_POPUP_Y_START;
 
-
+	if (global_addl_config.mode_color == 1) { gfx_set_fg_color(0xffffff); gfx_set_bg_color(0xff4f32);}
     if( grp ) {
         gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-TG %d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );        
     } else {
         gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-%d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );
     }
+	gfx_set_fg_color(0x000000); gfx_set_bg_color(bg_color);
     y_index += GFX_FONT_SMALL_HEIGHT ;
 	y_index--;
 	gfx_select_font(gfx_font_norm); // switch to large font
@@ -1207,9 +1245,9 @@ void draw_adhoc_statusline()
 		if (global_addl_config.mode_stat != 0) { 
 			if (global_addl_config.mode_color == 1) { gfx_set_fg_color(0xffffff); gfx_set_bg_color(0xff4f32);}
 				if (global_addl_config.mode_stat != 3) {					// if MODE/CC compact display set in config
-					gfx_printf_pos2(x, top_y, 120, "%s(%d)%s ", top_status, ch_cc, mic_gain_stat);
+					gfx_printf_pos2(x, top_y, 120, "%s%d%s ", top_status, ch_cc, mic_gain_stat);
 				} else {
-					gfx_printf_pos2(x, top_y, 120, "%s%d|%d|%s%s(%d)%s%s   ", top_status, ch_cc, ch_ts, (ad_hoc_tg_channel ? "A":""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "" : "P"), tgNum, tg_fill, mic_gain_stat);
+					gfx_printf_pos2(x, top_y, 120, "%s%d|%d|%s%s%d%s%s   ", top_status, ch_cc, ch_ts, (ad_hoc_tg_channel ? "A":""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "" : "P"), tgNum, tg_fill, mic_gain_stat);
 				}
 			gfx_set_fg_color(0x000000);
 			gfx_set_bg_color(0xff8032);
