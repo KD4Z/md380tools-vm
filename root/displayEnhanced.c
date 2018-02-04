@@ -1140,6 +1140,9 @@ void draw_adhoc_statusline()
 	//ch_freqoff = ((ch_rxfreq - ch_txfreq) / 100000);
 	BOOL fIsSimplex = (ch_rxfreq == ch_txfreq);
 	user_t usr;									// reference user DB
+	
+    channel_info_t *ci = &current_channel_info ;
+    BOOL fIsWideBandwidth = ( ci->mode >> 3 ) & 0x1 ;
 
 	//========================================================================================================================//
 	// First build general mode independent status info 				// RPT shift and Mic gain
@@ -1346,7 +1349,8 @@ void draw_adhoc_statusline()
 		} else {
 			strcpy(top_status, "FM");					// init FM string
 		}
-		if (global_addl_config.fm_bw == 0) { strcpy(fm_bw_stat, "|N"); } else { strcpy(fm_bw_stat, "|W"); }
+				
+		if (fIsWideBandwidth) { strcpy(fm_bw_stat, "|W"); } else { strcpy(fm_bw_stat, "|N"); }
 
 		strcat(top_status, fm_bw_stat);						// |N or |W
 		strcat(top_status, ch_offset);						// |-R| or |=>| simplex
