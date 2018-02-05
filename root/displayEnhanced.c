@@ -588,18 +588,15 @@ void draw_micbargraph()
     }
 
     if( is_rx && rx_active == 1 ) { // clear screen area
-        //gfx_set_fg_color(0xff8032);
-        //gfx_set_bg_color(0xff000000);
-        //gfx_blockfill(3, 15, 159, 127);
         rx_active = 0;
         red = 0;
         green = 0;
 		lh_painted = 0;
 		stopwatch_cnt = 0;
-		//draw_rx_screen(0x888888);
 		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
 #if defined(FW_D13_020) || defined(FW_S13_020)
 		channel_num = 0;
+		CheckTalkgroupAfterChannelSwitch();  // fix adhoc tg blown out by oem firmware on repaint
 #endif		
 	}  // end of clear screen block
 	
