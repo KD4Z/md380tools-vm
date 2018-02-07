@@ -232,6 +232,8 @@ stateAbbrevsByCountry = {
 		"Lower Saxony":			"NI",
 		"Mecklenburg-Vorpommern":	"MV",
 		"North Rhine-Westphalia":	"NW",
+		"Nordrhein-Westfalen":	"NW",
+		"Rheinland-Pfalz":	"RP",
 		"Rhineland-Palatinate":		"RP",
 		"Saarland":			"SL",
 		"Saxony-Anhalt":		"ST",

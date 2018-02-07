@@ -49,6 +49,7 @@ fi
 if [ -f ~/pttcountup.enable ]; then
   sed -i -e 's:#define __PTT_LASTHEARD_DOWN::g' ~/md380tools/applet/src/display.c
 fi
+sed -i -e 's:countdown = 130:countdown = 175:g' ~/md380tools/applet/src/irq_handlers.c
 
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then

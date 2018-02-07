@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.1
+# Version:  4.21
 # Part of the user.db creation step.  Far more advanced than just
 # including dmr-marc data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -75,9 +75,7 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
-		sed -i -e 's/\r//' $TMPALTERNATE
-		awk -F, '{print $1","$2","$3","$4","$5",,"$7}' $TMPALTERNATE >$FINALALTERNATE
-		#cat $TMPALTERNATE >$FINALALTERNATE
+		sed -i -e 's/\r//' $FINALALTERNATE
 	fi
 fi
 
@@ -111,8 +109,10 @@ if [ -f ~/keep.tmp ]; then
 fi
 if [ -f $MERGEERRORS ]; then rm $MERGEERRORS ; fi
 echo -e -n "${RED}"
-# Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex merge routine.
+
+python ~/md380tools-vm/merge_users.py $TMPALTERNATE -o AbbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
 python ~/md380tools-vm/merge_users.py $FILELIST $OPTS >$USERDB 2>$MERGEERRORS
+
 echo -e "${WHITE}Contact Merge completed.${NC}"
 
 countstatic=0

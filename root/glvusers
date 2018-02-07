@@ -96,6 +96,8 @@ cat db/stripped.csv >> user.bin
 cp user.bin ~/user.bin
 cd ~/md380tools-vm
 ~/md380tools-vm/exec.post
+
+echo -e "${WHITE}Run ${YELLOW}  menu   ${WHITE}to return to the main menu screen ${NC}"
+
 cd ~
-~/md380tools-vm/menuopts
 
