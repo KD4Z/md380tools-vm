@@ -195,11 +195,11 @@ static const char *const states[] = {
 	"MS,Mississippi",
 	"MT,Montana",
 	"MV,Mecklenburg-Vorpommern",
-	"N-B,North Brabant",
-	"N-H,North Holland",
+	"N-B,N. Brabant",
+	"N-H,N. Holland",
 	"NB,New Brunswick",
-	"NC,North Carolina",
-	"ND,North Dakota",
+	"NC,N. Carolina",
+	"ND,N. Dakota",
 	"NE,Nebraska",
 	"NH,New Hampshire",
 	"NI,Lower Saxony",
@@ -210,10 +210,10 @@ static const char *const states[] = {
 	"NSW,New South Wales",
 	"NT,Northern Territory",
 	"NV,Nevada",
-	"NW,North Rhine-Westphalia",
+	"NW,N. Rhine-Westphalia",
 	"NY,New York",
 	"O-V,Oost-Vlaanderen",
-	"OA,All Others",
+	"OA,",
 	"OH,Ohio",
 	"OK,Oklahoma",
 	"ON,Ontario",
@@ -226,9 +226,9 @@ static const char *const states[] = {
 	"QLD,Queensland",
 	"RI,Rhode Island",
 	"RP,Rhineland-Palatinate",
-	"SA,South Australia",
-	"SC,South Carolina",
-	"SD,South Dakota",
+	"SA,S. Australia",
+	"SC,S. Carolina",
+	"SD,S. Dakota",
 	"SH,Schleswig-Holstein",
 	"SK,Saskatchewan",
 	"SL,Saarland",
@@ -246,9 +246,9 @@ static const char *const states[] = {
 	"VBR,Flemish Brabant",
 	"VIC,Victoria",
 	"VLI,Limburg",
-	"VOV,East Flanders",
+	"VOV,E. Flanders",
 	"VT,Vermont",
-	"VWV,West Flanders",
+	"VWV,W. Flanders",
 	"WA,Washington",
 	"WAU,Western Australia",
 	"WBR,Walloon Brabant",
@@ -257,11 +257,11 @@ static const char *const states[] = {
 	"WLG,Leige",
 	"WLX,Luxembourg",
 	"WNA,Namur",
-	"WV,West Virginia",
+	"WV,W. Virginia",
 	"WY,Wyoming",
 	"YT,Yukon",
 	"ZE,Zeeland",
-	"ZH,South Holland",
+	"ZH,S. Holland",
 };
 
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
@@ -463,10 +463,10 @@ void draw_tx_screen_layout()
 		LCD_Printf( &dc, "    PTT\r");
 		LCD_Printf( &dc, "    %d\r",secs_display);
 #if defined(__PTT_LASTHEARD_DOWN)
-		LCD_Printf( &dc, " SECS UNTIL\r");	
-		LCD_Printf( &dc, "  TIMEOUT\r");	
+		LCD_Printf( &dc, " Secs Until\r");	
+		LCD_Printf( &dc, "  Timeout\r");	
 #else
-		LCD_Printf( &dc, "   SECONDS\r");
+		LCD_Printf( &dc, "   Seconds\r");
 #endif
 	}
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
@@ -767,7 +767,6 @@ void draw_rx_screen(unsigned int bg_color)
 	int cc = ( ci->cc_slot_flags >> 4 ) & 0xf ;
   
 #else
-   // int ts1 = 1;
     int ts2 = 0;
 	int cc = 0;
 #endif	
@@ -793,7 +792,7 @@ void draw_rx_screen(unsigned int bg_color)
 		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
 			// do this if nickname is different than firstname 
 			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, firstname );
-			//gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%d %d", strlen(usr.firstname), strlen(firstname) );
+
 		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {
 			// or fullname is going to be in small font
 			gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s-%s", usr.callsign, firstname );
