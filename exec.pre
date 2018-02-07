@@ -32,9 +32,10 @@ if [ -f ./rotatebins ]; then
   ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
-if [ -f ~/beep.disable ]; then
-  sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
-fi
+# not needed as "booooo" tone removed upstream in PR #830
+#if [ -f ~/beep.disable ]; then
+#  sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
+#fi
 sed -i -e 's/# Add ID/\nfile.close()\nsys.exit(0)\n# Add ID/g' ~/md380tools/db/get_special_IDs.py
 sed -i -e 's/getattr(device, "manufacturer")/#/g' ~/md380tools/md380_tool.py
 if [ -f ~/volumebar.enable ]; then

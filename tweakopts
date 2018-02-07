@@ -37,13 +37,13 @@ else
 fi
  
 fi
-
-echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
-if [ -f ~/beep.disable ]; then
- echo -e "${RED} *${NC}"
-else
- echo -e ""
-fi
+# not needed as "booooo" tone removed upstream in PR #830
+#echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
+#if [ -f ~/beep.disable ]; then
+# echo -e "${RED} *${NC}"
+#else
+# echo -e ""
+#fi
 
 
 echo -e -n "  ${BLUE}~/lang.nl${NC}     ${ZCOM42} Dutch text"
