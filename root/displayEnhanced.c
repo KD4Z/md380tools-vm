@@ -537,12 +537,14 @@ void who_dat(int mode){
      }
      
      StartStopwatch(&popup_timer);
+     while(popup_time < 3000) {
           popup_time = ReadStopwatch_ms(&popup_timer);
           
           draw_tx_screen_layout(0);
           
           delay_time = 0;
           StartStopwatch(&delay_timer);
+          while(delay_time < 500)
                delay_time = ReadStopwatch_ms(&delay_timer);
           
      }
