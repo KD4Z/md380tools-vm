@@ -493,11 +493,13 @@ void draw_tx_screen_layout(int showtimer) {
      }
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
           
-          dc.font = LCD_OPT_FONT_12x24;
-          if (showtimer == 1)
-               LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);
+      
           
-          else {
+          firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+          dc.font = LCD_OPT_FONT_12x24;
+          if (showtimer == 1) {
+               LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);  
+          } else {
                dc.x = 8;
                LCD_Printf( &dc, "%s\r", usr.callsign); 
           }
@@ -506,12 +508,10 @@ void draw_tx_screen_layout(int showtimer) {
           dc.font = LCD_OPT_FONT_8x16;
           
           if (showtimer == 1) {
-               firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
                LCD_Printf( &dc, "%s\r", firstname); 
+          } else {
+               LCD_Printf( &dc, "%s\r", usr.name);
           }
-          else
-               LCD_Printf( &dc, "%s\r", usr.name); 
-          
           LCD_Printf( &dc, "%s\r", usr.place); 
           LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
           LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
@@ -537,14 +537,12 @@ void who_dat(int mode){
      }
      
      StartStopwatch(&popup_timer);
-     while(popup_time < 1800) {
           popup_time = ReadStopwatch_ms(&popup_timer);
           
           draw_tx_screen_layout(0);
           
           delay_time = 0;
           StartStopwatch(&delay_timer);
-          while(delay_time < 30)
                delay_time = ReadStopwatch_ms(&delay_timer);
           
      }
@@ -1420,7 +1418,7 @@ void draw_adhoc_statusline()
 		} else {	
 			if (*ch_tone_type != 'N')  {	// if MODE/CC compact display set in config (and CTCSS not set to None)
 				if (fIsCTSvalid) {
-					strcat(top_status, "|");					// less space in compact mode
+					strcat(top_status, "[");					// less space in compact mode
 					strcat(top_status, fm_sql);					// add the tone type to status
 					strcat(top_status, ":");
 					strcat(top_status, current_channel_info_E.EncTone.text);// add DCS/CTS tone to topstatus in compact mode
