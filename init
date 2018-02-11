@@ -1,6 +1,6 @@
 #!/bin/bash
 # KD4Z
-# Version:  3.19
+# Version:  4.30
 # called after git pull, and before everything else, use to setup script exec mode
 if [ -d ~/save ] && [ ! -d ~/archive ]; then
   mv ~/save ~/archive
@@ -89,6 +89,12 @@ if [ -f ~/md380tools-vm/stats ]; then
 fi
 cp ~/md380tools-vm/menuopts ~
 chmod +x ~/menuopts
+
+if [ -f ~/md380tools-vm/root/exec.patch ]; then
+  chmod +x ~/md380tools-vm/root/exec.patch
+  ~/md380tools-vm/root/exec.patch
+  rm ~/md380tools-vm/root/exec.patch
+fi
 
 # for flashdb progress until merged upstream
 if [ -f ~/md380tools-vm/root/md380_tool.py ]; then

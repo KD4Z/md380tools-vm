@@ -30,6 +30,7 @@
 #include "irq_handlers.h"  // boot_flags, BOOT_FLAG_DREW_STATUSLINE
 #include "lcd_driver.h"
 #include "codeplug.h"
+#include "beep.h"
 #if defined(FW_D13_020) || defined(FW_S13_020)
   #include "amenu_set_tg.h"
 #else
@@ -410,107 +411,175 @@ char *lookup_state(user_t *up, char *buf) {
 #if defined(__PTT_LASTHEARD)
 static int lh_painted = 0;
 static uint32_t stopwatch_cnt = 0;
+static int tot_beep_done = 0;
 
-void draw_tx_screen_layout() 
-{
+void oem_repaint_screen () {
+     channel_num = 0;
+     CheckTalkgroupAfterChannelSwitch();
+ }
+
+void draw_tx_screen_layout(int showtimer) {
 #if defined(FW_D13_020) || defined(FW_S13_020)
-	lcd_context_t dc;
+	
 	int sel_flags = SEL_FLAG_NONE;
 	int src;
 	int dst;
-	user_t usr;
-    src = rst_src;
-	dst = rst_dst ;
-    char firstname_buf[FIRSTNAME_BUFSIZE];
-    char *firstname;
+	char firstname_buf[FIRSTNAME_BUFSIZE];
+     char *firstname;
 	char state_buf[STATE_BUFSIZE];
 	int ptt_milliseconds = 0;
 	int ch_to = 0;
 	int secs_display = 0;
-	
+     int fg_color;
+     
+     
+     lcd_context_t dc;
+     user_t usr;
+     
+     src = rst_src;
+	dst = rst_dst ;	
 	channel_info_t *ci = &current_channel_info;
+     
   	ch_to = ci->unk8==0 ? 999 : ci->unk8 * 15;
 		
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
- 
-	dc.x = 17;
+ 	dc.x = 17;
 	dc.y = 20;
+     fg_color = dc.fg_color;
+     
 	// font options
 	//dc.font = LCD_OPT_FONT_6x12;
 	//dc.font = LCD_OPT_FONT_8x8;
 	//dc.font = LCD_OPT_FONT_8x16;
 	//dc.font = LCD_OPT_FONT_12x24;
-
-	// fill the screen with the background color
-	if (lh_painted == 0) {
-		LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
-		lh_painted = 1;
-	}
 	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
-
-
+	if (lh_painted == 0 ) {
+          LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
+          lh_painted = 1;
+	}  
+     if ((showtimer == 1) && (ptt_milliseconds % 1000 == 0 ))
+          lh_painted = 0;
+     
+     if ( dst > 0 ) {
+          dc.font = LCD_OPT_FONT_8x8;
+          dc.fg_color = 0xffff;
+          LCD_Printf( &dc, "LH: TG %d \r",dst);
+     }
+     dc.fg_color = fg_color;
+     
+     if (showtimer == 1){    
+          
 #if defined(__PTT_LASTHEARD_DOWN)
 		secs_display = ch_to - (ptt_milliseconds/1000);
+          if ( tot_beep_done == 0 && ( secs_display < 11) ) {
+                    bp_send_beep(BEEP_TEST_3);
+                    tot_beep_done++;
+          } else if ( tot_beep_done == 1 && ( secs_display < 6) ) {
+                    bp_send_beep(BEEP_TEST_2);
+                    tot_beep_done++;
+          }
+
 #else
 		secs_display = ptt_milliseconds/1000;
 #endif
-	
-	if ( dst > 0 ) {
-		dc.font = LCD_OPT_FONT_8x8;
-		LCD_Printf( &dc, " TG: %d \r",dst);
-	} else {
-		dc.font = LCD_OPT_FONT_12x24;
-		LCD_Printf( &dc, "    PTT\r");
-		LCD_Printf( &dc, "    %d\r",secs_display);
+          dc.font = LCD_OPT_FONT_12x24;
+          LCD_DrawString( &dc, "    PTT\r");
+          LCD_Printf( &dc, "    %d\r",secs_display);
 #if defined(__PTT_LASTHEARD_DOWN)
-		LCD_Printf( &dc, " Secs Until\r");	
-		LCD_Printf( &dc, "  Timeout\r");	
+          LCD_DrawString( &dc, " Secs until\r  Timeout\r");
 #else
-		LCD_Printf( &dc, "   Seconds\r");
-#endif
-	}
+          LCD_DrawString( &dc, "   Seconds\r");
+#endif       
+     }
  	if( usr_find_by_dmrid(&usr, src) > 0 ) {
-	
-			firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
-			dc.font = LCD_OPT_FONT_12x24;
-			LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display); 
-			dc.y =  dc.y - 2;
-			LCD_Printf( &dc, " %s\r", firstname); 
-			dc.font = LCD_OPT_FONT_8x16;
-			LCD_Printf( &dc, "%s\r", usr.place); 
-			LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
-			LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
-	}
+          
+          dc.font = LCD_OPT_FONT_12x24;
+          if (showtimer == 1)
+               LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);
+          
+          else {
+               dc.x = 8;
+               LCD_Printf( &dc, "%s\r", usr.callsign); 
+          }
+          
+          dc.y =  dc.y - 2;
+          dc.font = LCD_OPT_FONT_8x16;
+          
+          if (showtimer == 1) {
+               firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+               LCD_Printf( &dc, "%s\r", firstname); 
+          }
+          else
+               LCD_Printf( &dc, "%s\r", usr.name); 
+          
+          LCD_Printf( &dc, "%s\r", usr.place); 
+          LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
+          LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
+	} else {
+          dc.font = LCD_OPT_FONT_8x16;
+          dc.y += 12;
+          LCD_DrawString( &dc, " No\r Last Heard\r Info yet!");
+     }
 #endif
 }
+
+void who_dat(int mode){
+#if defined(FW_D13_020) || defined(FW_S13_020)
+     lh_painted = 0;
+     uint32_t popup_timer;
+     uint32_t delay_timer;
+     int popup_time = 0;
+     int delay_time;
+     printf("who_dat()\n");  
+     if ( IS_PTT_PRESSED || IS_GREEN_LED_ON || gui_opmode2 == OPM2_MENU ){
+          printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
+          return;
+     }
+     
+     StartStopwatch(&popup_timer);
+     while(popup_time < 1800) {
+          popup_time = ReadStopwatch_ms(&popup_timer);
+          
+          draw_tx_screen_layout(0);
+          
+          delay_time = 0;
+          StartStopwatch(&delay_timer);
+          while(delay_time < 30)
+               delay_time = ReadStopwatch_ms(&delay_timer);
+          
+     }
+     oem_repaint_screen();
+#endif
+}
+
 void draw_micbargraph()
 {
 	//
 	// New bargraph routine extended with Last Heard information de KD4Z
 	//
  
-    if( gui_opmode2 == OPM2_MENU ) {
+    if( gui_opmode2 == OPM2_MENU || Menu_IsVisible()  ) {
         // case for pressing the PTT during 'Manual Dial' in 'Contacts'
         return ;
     }
  
-    static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
-	static int fullscale_offset = 0;
-    static uint32_t lastframe = 0;
-    static int red = 0;
-    static int green = 0;
+     static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
+     static int fullscale_offset = 0;
+     static uint32_t lastframe = 0;
+     static int red = 0;
+     static int green = 0;
 	int relative_peak_cb;
-    int centibel_val;
+     int centibel_val;
 
-    if( fullscale_offset == 0 ) { // init int_centibel()
+     if( fullscale_offset == 0 ) { // init int_centibel()
         fullscale_offset = intCentibel(3000); // maybe wav max max_level
-    }
+     }
 
-    int is_tx = 0 ;
-    int is_rx = 0 ;
+     int is_tx = 0 ;
+     int is_rx = 0 ;
 
-    is_tx = gui_opmode1 == SCR_MODE_RX_VOICE && max_level > 10 ;
-    is_rx = gui_opmode1 == SCR_MODE_RX_TERMINATOR ;
+     is_tx = gui_opmode1 == SCR_MODE_RX_VOICE && max_level > 10 ;
+     is_rx = gui_opmode1 == SCR_MODE_RX_TERMINATOR ;
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
     {
@@ -519,11 +588,7 @@ void draw_micbargraph()
         is_rx = s & 2 ;
     }
 #endif    
-	//if( is_tx && tx_active == 0 ) {
-	//	tx_active = 1;
-	//	//gfx_blockfill(0, 0, 159, 127);  // clear whole block area of screen
-	//}
-	
+
     if( is_tx && max_level < 4500 ) { 
 		if (stopwatch_cnt==0)
 			StartStopwatch(&stopwatch_cnt);
@@ -547,10 +612,10 @@ void draw_micbargraph()
                 centibel_val /= 2; // scale
 				
 				 
-				draw_tx_screen_layout();
+				draw_tx_screen_layout(1);
 				lh_painted = 1;
 				
-                gfx_set_bg_color(0x000000);  //black		// light grey = 0xff000000
+                    gfx_set_bg_color(0x000000);  //black		// light grey = 0xff000000
 				//if( centibel_val > 0 ) {
 				gfx_set_fg_color(0x000000);			//gfx_set_fg_color(0x00FF00)  high green  0x0000FF Red   BBGGRR
 				gfx_blockfill(7, 15, 14, 127);      // clear area of bar before repainting again
@@ -587,18 +652,18 @@ void draw_micbargraph()
         }
     }
 
-    if( is_rx && rx_active == 1 ) { // clear screen area
-        rx_active = 0;
-        red = 0;
-        green = 0;
-		lh_painted = 0;
+     if( is_rx && rx_active == 1 ) {
+          rx_active = 0;
+          red = 0;
+          green = 0;
+          lh_painted = 0;
 		stopwatch_cnt = 0;
-		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
+          tot_beep_done = 0;
 #if defined(FW_D13_020) || defined(FW_S13_020)
-		channel_num = 0;
-		CheckTalkgroupAfterChannelSwitch();  // fix adhoc tg blown out by oem firmware on repaint
+		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
+		oem_repaint_screen();
 #endif		
-	}  // end of clear screen block
+	}
 	
 }
 
@@ -1099,7 +1164,7 @@ void draw_adhoc_statusline()
 	//char dmr_compact[5];								// [1|2| ... CC/TS prefix
 	char ch_offset[4];								// repeater offset
 	//char ch_tmp[10];								// temp
-	char ch_cc[1];									// temp CC
+	//char ch_cc[1];									// temp CC
 
 	char fm_bw_stat[2];								// |N or |W
 	char mic_gain_stat[3];								// off, 3dB, 6dB
@@ -1325,8 +1390,6 @@ void draw_adhoc_statusline()
 			strcat(bot_status, current_channel_info_E.EncTone.text);	// add DCS code
 			strcpy(tg_fill, "");
 		} else {
-			
-			//if (strlen(current_channel_info_E.EncTone.text) > 5 ) {
 			if (! fIsCTSvalid ) {		
 				strcpy(fm_sql, "");			
 				strcpy(bot_status, fm_sql);
@@ -1362,7 +1425,6 @@ void draw_adhoc_statusline()
 					strcat(top_status, ":");
 					strcat(top_status, current_channel_info_E.EncTone.text);// add DCS/CTS tone to topstatus in compact mode
 				}
-				
 			} else {
 				strcat(top_status, "  ");
 			}
