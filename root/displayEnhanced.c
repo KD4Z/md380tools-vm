@@ -419,19 +419,23 @@ void oem_repaint_screen () {
  }
 
 void draw_tx_screen_layout(int showtimer) {
+printf("draw_tx_screen_layout(%d)\n ",showtimer);
+        
 #if defined(FW_D13_020) || defined(FW_S13_020)
 	
 	int sel_flags = SEL_FLAG_NONE;
 	int src;
 	int dst;
-	char firstname_buf[FIRSTNAME_BUFSIZE];
-     char *firstname;
+	//char firstname_buf[FIRSTNAME_BUFSIZE];
+     //char *firstname;
 	char state_buf[STATE_BUFSIZE];
 	int ptt_milliseconds = 0;
 	int ch_to = 0;
 	int secs_display = 0;
      int fg_color;
-     
+     int have_lh_info = 1;
+    
+ 
      
      lcd_context_t dc;
      user_t usr;
@@ -441,7 +445,14 @@ void draw_tx_screen_layout(int showtimer) {
 	channel_info_t *ci = &current_channel_info;
      
   	ch_to = ci->unk8==0 ? 999 : ci->unk8 * 15;
-		
+	
+	
+     have_lh_info = usr_find_by_dmrid(&usr, src);
+
+     
+     printf("haveinfo: %d\n",have_lh_info);
+     
+     
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
  	dc.x = 17;
 	dc.y = 20;
@@ -452,12 +463,12 @@ void draw_tx_screen_layout(int showtimer) {
 	//dc.font = LCD_OPT_FONT_8x8;
 	//dc.font = LCD_OPT_FONT_8x16;
 	//dc.font = LCD_OPT_FONT_12x24;
-	ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);
-	if (lh_painted == 0 ) {
+
+	if (lh_painted != 1 ) {
           LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
           lh_painted = 1;
 	}  
-     if ((showtimer == 1) && (ptt_milliseconds % 1000 == 0 ))
+     if ((showtimer == 1) && (ptt_milliseconds/1000 % 3 == 0 ))
           lh_painted = 0;
      
      if ( dst > 0 ) {
@@ -467,8 +478,8 @@ void draw_tx_screen_layout(int showtimer) {
      }
      dc.fg_color = fg_color;
      
-     if (showtimer == 1){    
-          
+     if (showtimer == 1){     
+          ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);     
 #if defined(__PTT_LASTHEARD_DOWN)
 		secs_display = ch_to - (ptt_milliseconds/1000);
           if ( tot_beep_done == 0 && ( secs_display < 11) ) {
@@ -478,48 +489,52 @@ void draw_tx_screen_layout(int showtimer) {
                     bp_send_beep(BEEP_TEST_2);
                     tot_beep_done++;
           }
-
 #else
 		secs_display = ptt_milliseconds/1000;
 #endif
-          dc.font = LCD_OPT_FONT_12x24;
-          LCD_DrawString( &dc, "    PTT\r");
-          LCD_Printf( &dc, "    %d\r",secs_display);
-#if defined(__PTT_LASTHEARD_DOWN)
-          LCD_DrawString( &dc, " Secs until\r  Timeout\r");
-#else
-          LCD_DrawString( &dc, "   Seconds\r");
-#endif       
      }
- 	if( usr_find_by_dmrid(&usr, src) > 0 ) {
-          
-      
-          
-          firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+     
+     if ( have_lh_info >0 ) {
+ 
           dc.font = LCD_OPT_FONT_12x24;
           if (showtimer == 1) {
                LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);  
           } else {
-               dc.x = 8;
+               dc.x = 5;
                LCD_Printf( &dc, "%s\r", usr.callsign); 
           }
-          
           dc.y =  dc.y - 2;
           dc.font = LCD_OPT_FONT_8x16;
-          
-          if (showtimer == 1) {
-               LCD_Printf( &dc, "%s\r", firstname); 
-          } else {
-               LCD_Printf( &dc, "%s\r", usr.name);
-          }
+// TODO: revisit this with font changes included          
+//          if (showtimer == 1) {
+//             firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+//             LCD_Printf( &dc, "%s\r", firstname); 
+//          } else {
+          LCD_Printf( &dc, "%s\r", usr.name);
+//          }
           LCD_Printf( &dc, "%s\r", usr.place); 
           LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
           LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
-	} else {
-          dc.font = LCD_OPT_FONT_8x16;
-          dc.y += 12;
-          LCD_DrawString( &dc, " No\r Last Heard\r Info yet!");
+          
+     } else {
+          
+          if (showtimer == 1){
+               dc.font = LCD_OPT_FONT_12x24;
+               LCD_DrawString( &dc, "    PTT\r");
+               LCD_Printf( &dc, "    %d\r",secs_display);
+#if defined(__PTT_LASTHEARD_DOWN)
+               LCD_DrawString( &dc, " Secs until\r  Timeout\r");
+#else
+               LCD_DrawString( &dc, "   Seconds\r");
+#endif       
+          
+          } else {
+               dc.font = LCD_OPT_FONT_8x16;
+               dc.y += 12;
+               LCD_DrawString( &dc, " No\r Last Heard\r Info yet!!");
+          }
      }
+    
 #endif
 }
 
@@ -1126,7 +1141,7 @@ void draw_alt_statusline()
 					} else  {
 						firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
 						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%s %s>%d %c", usr.callsign, firstname, rst_dst, mode);
-					}
+					 }
 			}
 		}
     }
