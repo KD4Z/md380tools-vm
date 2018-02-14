@@ -31,6 +31,7 @@
 #include "lcd_driver.h"
 #include "codeplug.h"
 #include "beep.h"
+#include "keyb.h"
 #if defined(FW_D13_020) || defined(FW_S13_020)
   #include "amenu_set_tg.h"
 #else
@@ -483,11 +484,13 @@ printf("draw_tx_screen_layout(%d)\n ",showtimer);
 #if defined(__PTT_LASTHEARD_DOWN)
 		secs_display = ch_to - (ptt_milliseconds/1000);
           if ( tot_beep_done == 0 && ( secs_display < 11) ) {
-                    bp_send_beep(BEEP_TEST_3);
+                    bp_send_beep(BEEP_TEST_1);
                     tot_beep_done++;
+                    reset_backlight();
           } else if ( tot_beep_done == 1 && ( secs_display < 6) ) {
-                    bp_send_beep(BEEP_TEST_2);
+                    bp_send_beep(BEEP_TEST_1);
                     tot_beep_done++;
+                    reset_backlight();
           }
 #else
 		secs_display = ptt_milliseconds/1000;

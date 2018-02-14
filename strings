@@ -109,6 +109,15 @@ export ZCOM50="Beep Tones"
 export ZCOM51="searchstring"
 export ZCOM52="PTT Last Heard"
 export ZCOM53="PTT Count Up"
+export ZCOM54="Force Blank Codeplug to Radio"
+export ZCOM55="Create screenshot in 'screenshot' folder.  Must be named .bmp"
+export ZCOM56="Read codeplug out of radio into binary file."
+export ZCOM57="Write codeplug to radio from RDT,DFU or BIN file."
+export ZCOM58="Safely Shutdown or Reboot the Virtual Machine"
+export ZCOM59="VM information menu"
+export ZCOM60="Recover Locked Radio"
+export ZCOM61="Utility"
+
 
 
 
@@ -429,23 +438,22 @@ export ZMESS61="Prikazi osnovni zaslon"
 export ZMESS71="Prikazi pomoc"
 export ZCOM11="Prenesi programsko opremo in bazo uporabnikov."
 export ZCOM12="Prenesi samo bazo uporabnikov."
-export ZCOM51="iskani_niz"
 export ZWRITE1="Zapisi programsko opremo v postajo (brez GPS)."
 export ZWRITE2="Zapisi programsko opremo v postajo (z GPS)."
 export ZWRITE3="Zapisi bazo uporabnikov v postajo"
 export ZWRITE4="V bazi uporabnikov poisci iskani niz"
 export ZCOM13="Shrani"
 export ZCOM14="Obnovi"
-export ZCOM15="pripravi različico"
-export ZCOM19="ime_različice"
+export ZCOM15="shrani razlicico"
+export ZCOM19="ime_razlicice"
 export ZCOM20="ali"
 export ZCOM21="brez imena različice za predhodno pripravo"
 export ZCOM22="Meni dodatkov"
 export ZCOM23="Nazaj na glavni"
-export ZCOM34="Omogočeno"
-export ZCOM35="Onemogočeno"
-export ZCOM32="Nastavitve se upoštevajo glede na obstoj datoteke v domačem imeniku."
-export ZCOM33="Upoštevajo se pri naslednjem zagonu ${YELLOW}glv${NC}.  ${RED}*${NC} prikazuje obstoj datoteke dodatkov."
+export ZCOM34="Omogoceno"
+export ZCOM35="Onemogoceno"
+export ZCOM32="Nastavitve se upostevajo glede na obstoj datoteke v domacem imeniku."
+export ZCOM33="Upostevajo se pri naslednjem zagonu ${YELLOW}glv${NC}.  ${RED}*${NC} prikazuje obstoj datoteke dodatkov."
 export ZCOM37="Primer"
 export ZCOM38="okrajšava"
 export ZCOM39="Dodaj"
@@ -455,16 +463,21 @@ export ZCOM42="Omogoči"
 export ZCOM43="Onemogoči"
 export ZCOM44="nadimki"
 export ZCOM45="Obnovi zadnjo stabilno različico"
-export ZCOM46="Obnovi prejšnjo pripravo oštevilčeno: X"
+export ZCOM46="Obnovi starejso shranjeno razlicico oštevilceno: X"
 export ZCOM47="Odstrani Codeplug geslo"
-fi
+export ZCOM48="Dodatne informacije o kontaktu"
+export ZCOM49="Indikator glasnosti"
+export ZCOM50="Pisk tonov"
+export ZCOM51="iskalni_niz"
+export ZCOM52="PTT nazadnje slisani"
+export ZCOM53="PTT Count Up"
 # End of Slovenian translation area
 
 
 
 # Want your language supported?
 # Copy export strings from above and translate them
-# Contact KD4Z
+# Contact KD4Z or create your own fork, then commit and submit a PR
 
 # no need to change this line.  It is computed from the lines above
 export ZCOM16="${ZCOM13} / ${ZCOM14} ${ZCOM15}"
