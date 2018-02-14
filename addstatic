@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.1
+# Version:  4.21
 # Part of the user.db creation step.  Far more advanced than just
 # including dmr-marc data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -76,8 +76,7 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
-		awk -F, '{print $1","$2","$3","$4","$5",,"$7}' $TMPALTERNATE >$FINALALTERNATE
-		#cat $TMPALTERNATE >$FINALALTERNATE
+		python ~/md380tools-vm/merge_users.py $TMPALTERNATE -o AbbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
 	fi
 fi
 
@@ -89,7 +88,6 @@ fi
 
 if [ -f $FILESTATIC ]; then
   echo -e "${WHITE} Using ${FILESTATIC}${NC}"
-  # strip Windoze artifacts
   sed -i -e 's/\r//' $FILESTATIC  
 fi
 
@@ -106,14 +104,17 @@ fi
 if [ -f $FILENICK ]; then
 	FILELIST="$FILELIST $FILENICK"
 fi
-OPTS="-o AbbrevCountries -o AbbrevStates"
+OPTS="-o AbbrevCountries -o AbbrevStates -o NoHeader"
 if [ -f ~/keep.tmp ]; then
  echo -e "Filelist=$FILELIST Options=$OPTS" 
 fi
 if [ -f $MERGEERRORS ]; then rm $MERGEERRORS ; fi
 echo -e -n "${RED}"
-# Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex merge routine.
+
+# Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex merge routine in python.
+
 python ~/md380tools-vm/merge_users.py $FILELIST $OPTS >$USERDB 2>$MERGEERRORS
+
 echo -e "${WHITE}Contact Merge completed.${NC}"
 
 countstatic=0
@@ -154,7 +155,7 @@ fi
 if (( sizemergeerrors > 10 )); then
 echo -e "${GREEN}  Records skipped  :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
 fi
-if (( countmarc < 80000 )); then
+if (( countall < 83000 )); then
   echo -e "${RED} ** The Downloads for Contact information may have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"

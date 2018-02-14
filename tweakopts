@@ -1,30 +1,18 @@
 #!/bin/bash 
 . ~/md380tools-vm/strings
 clear
-echo -e "                  ${WHITE}KD4Z - md380tools-vm - Tweaks ${NC}"
+echo -e "                  ${WHITE}KD4Z - md380tools - Tweaks ${NC}"
 echo -e ""
 echo -e " ${ZCOM32}"
 echo -e " ${ZCOM33}"
 echo -e ""
 echo -e "  ${ZCOM39} ${ZCOM36}: ${ZCOM30}${NC}    ${ZCOM40} ${ZCOM36}:  ${NC}${ZCOM31}${NC}"
 echo -e ""
-echo -e "  ${ZCOM37}:  ${YELLOW}${ZCOM29}${NC} ~/filter.countries.enable"
+echo -e "  ${ZCOM37}:  ${YELLOW}${ZCOM29}${NC} ~/volumebar.enable"
 echo -e ""
 echo -e " ${WHITE}-- tweakfile list  --${NC}"
 echo -e -n "  ${BLUE}~/extra.data.disable${NC}  ${ZCOM43} ${ZCOM48}" 
 if [ -f ~/extra.data.disable ]; then
- echo -e "${RED} *${NC}"
-else
- echo -e ""
-fi
-echo -e -n "  ${BLUE}~/filter.countries.enable${NC}  ${ZCOM42} ${ZCOM41} ${ZCOM38}"
-if [ -f ~/filter.countries.enable ]; then
- echo -e "${RED} *${NC}"
-else
- echo -e ""
-fi
-echo -e -n "  ${BLUE}~/filter.us.states.enable${NC}  ${ZCOM42} US State ${ZCOM38}"
-if [ -f ~/filter.us.states.enable ]; then
  echo -e "${RED} *${NC}"
 else
  echo -e ""
@@ -36,25 +24,28 @@ if [ -f ~/volumebar.enable ]; then
 else
  echo -e ""
 fi
-echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
-if [ -f ~/beep.disable ]; then
+echo -e -n "  ${BLUE}~/pttlastheard.disable${NC}  ${ZCOM43} ${ZCOM52}"
+if [ -f ~/pttlastheard.disable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+ echo -e -n "  ${BLUE}~/pttcountup.enable${NC}  ${ZCOM42} ${ZCOM53}"
+if [ -f ~/pttcountup.enable ]; then
  echo -e "${RED} *${NC}"
 else
  echo -e ""
 fi
+ 
+fi
+# not needed as "booooo" tone removed upstream in PR #830
+#echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
+#if [ -f ~/beep.disable ]; then
+# echo -e "${RED} *${NC}"
+#else
+# echo -e ""
+#fi
 
-#echo -e -n "  ${BLUE}~/filter.sys.disable${NC}        ${ZCOM43} all filters"
-#if [ -f ~/filter.sys.disable ]; then
-# echo -e "${RED} *${NC}"
-#else
-# echo -e ""
-#fi
-#echo -e -n "  ${BLUE}~/fill.nickname.disable${NC}     ${ZCOM43} ${ZCOM44}"
-#if [ -f ~/fill.nickname.disable ]; then
-# echo -e "${RED} *${NC}"
-#else
-# echo -e ""
-#fi
+
 echo -e -n "  ${BLUE}~/lang.nl${NC}     ${ZCOM42} Dutch text"
 if [ -f ~/lang.nl ]; then
  echo -e "${RED} *${NC}"

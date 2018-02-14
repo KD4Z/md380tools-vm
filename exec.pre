@@ -32,9 +32,10 @@ if [ -f ./rotatebins ]; then
   ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
-if [ -f ~/beep.disable ]; then
-  sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
-fi
+# not needed as "booooo" tone removed upstream in PR #830
+#if [ -f ~/beep.disable ]; then
+#  sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
+#fi
 sed -i -e 's/# Add ID/\nfile.close()\nsys.exit(0)\n# Add ID/g' ~/md380tools/db/get_special_IDs.py
 sed -i -e 's/getattr(device, "manufacturer")/#/g' ~/md380tools/md380_tool.py
 if [ -f ~/volumebar.enable ]; then
@@ -42,6 +43,15 @@ if [ -f ~/volumebar.enable ]; then
   # need correct address for the md-390 as this isn't really needed until corrected
   sed -i -e 's/patcher.nopout((0x0801FED2/# patcher.nopout((0x0801FED2/g' ~/md380tools/patches/s13.020/patch.py
 fi
+sed -i -e 's/#if(1)/#if(0)/g' ~/md380tools/applet/src/irq_handlers.c
+if [ -f ~/pttlastheard.disable ]; then
+  sed -i -e 's:#define __PTT_LASTHEARD::g' ~/md380tools/applet/src/display.c
+fi
+if [ -f ~/pttcountup.enable ]; then
+  sed -i -e 's:#define __PTT_LASTHEARD_DOWN::g' ~/md380tools/applet/src/display.c
+fi
+sed -i -e 's:countdown = 130:countdown = 175:g' ~/md380tools/applet/src/irq_handlers.c
+
 # local hook if desired for extra pre build processing
 if [ -f ~/exec.pre.local ]; then
   echo -e "${WHITE}Executing ~/exec.pre.local${NC}"
