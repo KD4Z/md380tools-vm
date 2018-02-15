@@ -471,11 +471,14 @@ export ZCOM50="Pisk tonov"
 export ZCOM51="iskalni_niz"
 export ZCOM52="PTT nazadnje slisani"
 export ZCOM53="PTT Count Up"
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 09079da2e316b6a0a4374abf014d42b979443ea1
+export ZCOM54="Zapisi prazen codeplug v postajo"
+export ZCOM55="Ustvari posnetek zaslona v mapi 'screenshot'. Poimenovanje mora biti s koncnico .bmp"
+export ZCOM56="Preberi codeplug iz postaje v binarno datoteko."
+export ZCOM57="Zapisi codeplug v postajo iz RDT,DFU ali BIN datoteke."
+export ZCOM58="Varno ugasni ali ponovno zazeni VM"
+export ZCOM59="Informacije o VM"
+export ZCOM60="Obnovi zaklenjeno postajo"
+export ZCOM61="Orodja"
 fi
 # End of Slovenian translation area
 
