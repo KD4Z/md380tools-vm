@@ -24,26 +24,32 @@ if [ -f ~/volumebar.enable ]; then
 else
  echo -e ""
 fi
+
 echo -e -n "  ${BLUE}~/pttlastheard.disable${NC}  ${ZCOM43} ${ZCOM52}"
 if [ -f ~/pttlastheard.disable ]; then
- echo -e "${RED} *${NC}"
+	echo -e "${RED} *${NC}"
 else
- echo -e ""
- echo -e -n "  ${BLUE}~/pttcountup.enable${NC}  ${ZCOM42} ${ZCOM53}"
-if [ -f ~/pttcountup.enable ]; then
- echo -e "${RED} *${NC}"
+	echo -e ""
+	echo -e -n "  ${BLUE}~/pttcountup.enable${NC}  ${ZCOM42} ${ZCOM53}"
+	if [ -f ~/pttcountup.enable ]; then
+		echo -e "${RED} *${NC}"
+	else
+		echo -e ""
+	fi
+fi
+
+echo -e -n "  ${BLUE}~/legacyrxscreen.enable${NC}  ${ZCOM42} ${ZCOM62}"
+if [ -f ~/legacyrxscreen.enable ]; then
+	echo -e "${RED} *${NC}"
 else
- echo -e ""
+	echo -e ""
+	echo -e -n "  ${BLUE}~/blackfontrxscreen.enable${NC}  ${ZCOM42} ${ZCOM63}"
+	if [ -f ~/blackfontrxscreen.enable ]; then
+		echo -e "${RED} *${NC}"
+	else
+		echo -e ""
+	fi
 fi
- 
-fi
-# not needed as "booooo" tone removed upstream in PR #830
-#echo -e -n "  ${BLUE}~/beep.disable${NC}  ${ZCOM43} ${ZCOM50}"
-#if [ -f ~/beep.disable ]; then
-# echo -e "${RED} *${NC}"
-#else
-# echo -e ""
-#fi
 
 
 echo -e -n "  ${BLUE}~/lang.nl${NC}     ${ZCOM42} Dutch text"

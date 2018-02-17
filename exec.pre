@@ -50,6 +50,12 @@ fi
 if [ -f ~/pttcountup.enable ]; then
   sed -i -e 's:#define __PTT_LASTHEARD_DOWN:#undef __PTT_LASTHEARD_DOWN:g' ~/md380tools/applet/src/display.c
 fi
+if [ -f ~/legacyrxscreen.enable ]; then
+  sed -i -e 's:#define __RX_SCREEN_OPTION:#undef __RX_SCREEN_OPTION:g' ~/md380tools/applet/src/display.c
+fi
+if [ -f ~/blackfontrxscreen.enable ]; then
+  sed -i -e 's:#define __RX_SCREEN_OPTION_WHITE:#undef __RX_SCREEN_OPTION_WHITE:g' ~/md380tools/applet/src/display.c
+fi
 sed -i -e 's:countdown = 130:countdown = 175:g' ~/md380tools/applet/src/irq_handlers.c
 
 # local hook if desired for extra pre build processing

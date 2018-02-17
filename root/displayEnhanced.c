@@ -1,5 +1,5 @@
 /*
- *  display.c
+ *  displayEnhanced.c
  * 
  * for high-level drawing functions.
  * Customizations:  KD4Z, NO7K
@@ -70,6 +70,25 @@ const gfx_bitmap bmp_eye = {12, 12, 6, 4, eye_pix, &eye_pal, 0};
 #define D_ICON_EYE_X 20
 #define D_ICON_EYE_Y 1
 #endif
+
+#define LCD_OPT_FONT_8x16  (LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT)
+#define VU_BAR_TOP_Y 16
+#define VU_LEGEND_X 0
+#define VU_LEGEND_WIDTH 3
+#define VU_BAR_X VU_LEGEND_X+VU_LEGEND_WIDTH + 1
+#define VU_BAR_WIDTH 7
+#define VU_TEXT_X VU_BAR_X+VU_BAR_WIDTH + 1
+#define TO_BAR_WIDTH 3
+#define TO_BAR_X LCD_SCREEN_WIDTH - 1 - TO_BAR_WIDTH
+
+
+#if defined(FW_D13_020) || defined(FW_S13_020)
+#define __PTT_LASTHEARD
+#define __PTT_LASTHEARD_DOWN
+#define __RX_SCREEN_OPTION
+#define __RX_SCREEN_OPTION_WHITE
+#endif
+
 
 static const char *const countries[] = {
 	"AD,Andorra",
@@ -401,18 +420,14 @@ char *lookup_state(user_t *up, char *buf) {
 	strcpy(buf, p);
 	return buf;
 }
+ 
 
-
-
-#if defined(FW_D13_020) || defined(FW_S13_020)
-#define __PTT_LASTHEARD
-#define __PTT_LASTHEARD_DOWN
-#endif
 
 #if defined(__PTT_LASTHEARD)
 static int lh_painted = 0;
 static uint32_t stopwatch_cnt = 0;
 static int tot_beep_done = 0;
+static int previous_sec = -1;
 
 void oem_repaint_screen () {
      channel_num = 0;
@@ -420,7 +435,6 @@ void oem_repaint_screen () {
  }
 
 void draw_tx_screen_layout(int showtimer) {
-printf("draw_tx_screen_layout(%d)\n ",showtimer);
         
 #if defined(FW_D13_020) || defined(FW_S13_020)
 	
@@ -430,14 +444,11 @@ printf("draw_tx_screen_layout(%d)\n ",showtimer);
 	//char firstname_buf[FIRSTNAME_BUFSIZE];
      //char *firstname;
 	char state_buf[STATE_BUFSIZE];
-	int ptt_milliseconds = 0;
+     int ptt_seconds=0;
 	int ch_to = 0;
 	int secs_display = 0;
-     int fg_color;
+     int to_barvalue=0;
      int have_lh_info = 1;
-    
- 
-     
      lcd_context_t dc;
      user_t usr;
      
@@ -446,43 +457,31 @@ printf("draw_tx_screen_layout(%d)\n ",showtimer);
 	channel_info_t *ci = &current_channel_info;
      
   	ch_to = ci->unk8==0 ? 999 : ci->unk8 * 15;
-	
-	
      have_lh_info = usr_find_by_dmrid(&usr, src);
-
-     
-     printf("haveinfo: %d\n",have_lh_info);
-     
+     LCD_InitContext( &dc );
+     dc.x2 = dc.x2 - TO_BAR_WIDTH - 1;
      
 	Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
- 	dc.x = 17;
-	dc.y = 20;
-     fg_color = dc.fg_color;
-     
-	// font options
-	//dc.font = LCD_OPT_FONT_6x12;
-	//dc.font = LCD_OPT_FONT_8x8;
-	//dc.font = LCD_OPT_FONT_8x16;
-	//dc.font = LCD_OPT_FONT_12x24;
-
-	if (lh_painted != 1 ) {
-          LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
+ 	dc.x = 0;
+	dc.y = 17;
+     if (lh_painted != 1 ) {
+          LCD_FillRect( 0, 15, dc.x2, LCD_SCREEN_HEIGHT-1, dc.bg_color );
           lh_painted = 1;
-	}  
-     if ((showtimer == 1) && (ptt_milliseconds/1000 % 3 == 0 ))
-          lh_painted = 0;
-     
+	} 
      if ( dst > 0 ) {
-          dc.font = LCD_OPT_FONT_8x8;
-          dc.fg_color = 0xffff;
+          dc.x = VU_TEXT_X;
+          dc.font = LCD_OPT_FONT_8x8; 
+          dc.fg_color = LCD_COLOR_WHITE;
+          dc.bg_color = LCD_COLOR_BLUE;
           LCD_Printf( &dc, "LH: TG %d \r",dst);
      }
-     dc.fg_color = fg_color;
-     
+
+     Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
      if (showtimer == 1){     
-          ptt_milliseconds = ReadStopwatch_ms(&stopwatch_cnt);     
+          ptt_seconds = ReadStopwatch_ms(&stopwatch_cnt)/1000;
+  
 #if defined(__PTT_LASTHEARD_DOWN)
-		secs_display = ch_to - (ptt_milliseconds/1000);
+		secs_display = ch_to - ptt_seconds;
           if ( tot_beep_done == 0 && ( secs_display < 11) ) {
                     bp_send_beep(BEEP_TEST_1);
                     tot_beep_done++;
@@ -493,48 +492,69 @@ printf("draw_tx_screen_layout(%d)\n ",showtimer);
                     reset_backlight();
           }
 #else
-		secs_display = ptt_milliseconds/1000;
+		secs_display = ptt_seconds;
 #endif
+          to_barvalue =  ptt_seconds * 127 / ch_to;
+          if (to_barvalue > 127) {
+               to_barvalue = 127;
+          }
+          if (to_barvalue < VU_BAR_TOP_Y){
+               to_barvalue = VU_BAR_TOP_Y;
+          }
+          if ( previous_sec != secs_display) {
+               gfx_set_bg_color(0x000000);  
+               gfx_set_fg_color(0x000000);		
+               gfx_blockfill(TO_BAR_X, VU_BAR_TOP_Y, TO_BAR_X + TO_BAR_WIDTH, to_barvalue);
+               gfx_set_fg_color(0x0000ff);  // red
+               gfx_blockfill(TO_BAR_X, to_barvalue+1, TO_BAR_X + TO_BAR_WIDTH, 127);
+          }
      }
-     
      if ( have_lh_info >0 ) {
  
           dc.font = LCD_OPT_FONT_12x24;
           if (showtimer == 1) {
-               LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);  
+                
+               LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);   
           } else {
                dc.x = 5;
-               LCD_Printf( &dc, "%s\r", usr.callsign); 
+               LCD_Printf( &dc, "%s\r", usr.callsign);
+               dc.x = 8;               
           }
-          dc.y =  dc.y - 2;
+
+          dc.y =  dc.y - 1;
           dc.font = LCD_OPT_FONT_8x16;
-// TODO: revisit this with font changes included          
-//          if (showtimer == 1) {
-//             firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
-//             LCD_Printf( &dc, "%s\r", firstname); 
-//          } else {
           LCD_Printf( &dc, "%s\r", usr.name);
-//          }
           LCD_Printf( &dc, "%s\r", usr.place); 
           LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
           LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
+          LCD_DrawString( &dc, "\r");
           
      } else {
-          
+          //printf("no lh else  previous_sec=%d  secs_display=%d\n",previous_sec,secs_display);
           if (showtimer == 1){
-               dc.font = LCD_OPT_FONT_12x24;
-               LCD_DrawString( &dc, "    PTT\r");
-               LCD_Printf( &dc, "    %d\r",secs_display);
-#if defined(__PTT_LASTHEARD_DOWN)
-               LCD_DrawString( &dc, " Secs until\r  Timeout\r");
-#else
-               LCD_DrawString( &dc, "   Seconds\r");
-#endif       
-          
+               if ( previous_sec != secs_display) {
+                    dc.font = LCD_OPT_FONT_12x24;
+                    dc.x = VU_TEXT_X;
+                    LCD_DrawString( &dc, "    PTT\r");
+                    LCD_Printf( &dc, "    %d\r",secs_display);
+     #if defined(__PTT_LASTHEARD_DOWN)
+                    LCD_DrawString( &dc, " Secs until\r  Timeout\r");
+                    LCD_DrawString( &dc, "\r");
+     #else
+                    LCD_DrawString( &dc, "  Seconds\r");
+     #endif  
+               }
+                   
           } else {
+               
                dc.font = LCD_OPT_FONT_8x16;
                dc.y += 12;
                LCD_DrawString( &dc, " No\r Last Heard\r Info yet!!");
+          }
+          if (showtimer == 1){
+               if ( previous_sec != secs_display) {
+                    previous_sec = secs_display;
+               }
           }
      }
     
@@ -548,9 +568,9 @@ void who_dat(int mode){
      uint32_t delay_timer;
      int popup_time = 0;
      int delay_time;
-     printf("who_dat()\n");  
+  
      if ( IS_PTT_PRESSED || IS_GREEN_LED_ON || gui_opmode2 == OPM2_MENU ){
-          printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
+//          printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
           return;
      }
      
@@ -589,6 +609,8 @@ void draw_micbargraph()
 	int relative_peak_cb;
      int centibel_val;
 
+
+
      if( fullscale_offset == 0 ) { // init int_centibel()
         fullscale_offset = intCentibel(3000); // maybe wav max max_level
      }
@@ -621,32 +643,29 @@ void draw_micbargraph()
 
             if( lastframe % 5 == 1 ) { // reduce drawing
  
-				if( centibel_val < -240 ) { // limit 120 pixel bargraph 5 125 -> 120 pixel for virtical bargraph
-                    centibel_val = -240;
+			if( centibel_val < -220 ) { // limit 110 pixel bargraph 15 125 -> 110 pixel for vertical bargraph
+                    centibel_val = -220;
                 } else if( centibel_val > 0 ) {
                     centibel_val = 0;
                 }
-                centibel_val += 240; // shift to positive
-                centibel_val /= 2; // scale
+               centibel_val += 220; // shift to positive
+               centibel_val /= 2; // scale
 				
-				 
-				draw_tx_screen_layout(1);
-				lh_painted = 1;
+               previous_sec=0;
+			draw_tx_screen_layout(1);
+			lh_painted = 1;
 				
-                    gfx_set_bg_color(0x000000);  //black		// light grey = 0xff000000
-				//if( centibel_val > 0 ) {
-				gfx_set_fg_color(0x000000);			//gfx_set_fg_color(0x00FF00)  high green  0x0000FF Red   BBGGRR
-				gfx_blockfill(7, 15, 14, 127);      // clear area of bar before repainting again
-				//}
-	            // paint legend
-  
- 				// 3-6 legend 7-14 bar  
- 				gfx_set_fg_color(0x0000ff);  // red
-                gfx_blockfill(3, 15, 6, 30);                           // 135,67,150,70
-                gfx_set_fg_color(0x00ff00);  // green
-                gfx_blockfill(3, 31, 6, 70);     // 85,67,134,70
-                gfx_set_fg_color(0x555555);  // grey
-                gfx_blockfill(3, 71, 6,127);						// 10,67,84,70
+               gfx_set_bg_color(0x000000);  
+			gfx_set_fg_color(0x000000);		
+			gfx_blockfill(VU_BAR_X, VU_BAR_TOP_Y, VU_BAR_X + VU_BAR_WIDTH, 127);
+               	          
+               // paint legend
+ 			gfx_set_fg_color(0x0000ff);  // red
+               gfx_blockfill(VU_LEGEND_X, VU_BAR_TOP_Y, VU_LEGEND_X + VU_LEGEND_WIDTH, 40);                           // 135,67,150,70
+               gfx_set_fg_color(0x00ff00);  // green
+               gfx_blockfill(VU_LEGEND_X, 41, VU_LEGEND_X + VU_LEGEND_WIDTH, 90);     // 85,67,134,70
+               gfx_set_fg_color(0x555555);  // grey
+               gfx_blockfill(VU_LEGEND_X, 91, VU_LEGEND_X + VU_LEGEND_WIDTH,127);						// 10,67,84,70
 				
                 // set color
                 if( relative_peak_cb > -3 || red > 0 ) {
@@ -661,11 +680,10 @@ void draw_micbargraph()
                     gfx_set_fg_color(0x555555);
                 }
                	// paint the VU bar	
-				if (centibel_val > 126)
-					centibel_val = 126;
+				if (centibel_val > 125)
+					centibel_val = 125;
 				
-                gfx_blockfill(7, (139 - centibel_val), 14, 120);			// left margin vertical
-	  			
+                gfx_blockfill(VU_BAR_X, (127 - centibel_val), VU_BAR_X + VU_BAR_WIDTH, 124);	  			
             }
         }
     }
@@ -677,6 +695,7 @@ void draw_micbargraph()
           lh_painted = 0;
 		stopwatch_cnt = 0;
           tot_beep_done = 0;
+          previous_sec=1;
 #if defined(FW_D13_020) || defined(FW_S13_020)
 		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
 		oem_repaint_screen();
@@ -790,9 +809,231 @@ void draw_micbargraph()
 
 
 
-
+#if defined(__RX_SCREEN_OPTION)
 
 void draw_rx_screen(unsigned int bg_color)
+{
+	#define FULLNAME_MAX_LARGEFONT_CHARS 18
+	#define CITY_MAX_LARGEFONT_CHARS 18
+	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 21
+	
+     static int dst;
+     int src;
+     int grp;
+     int primask = OS_ENTER_CRITICAL(); // for form sake
+   
+     dst = rst_dst ;
+     src = rst_src ;
+     grp = rst_grp ;
+
+     OS_EXIT_CRITICAL(primask);
+   
+     //int sel_flags = SEL_FLAG_NONE;
+     lcd_context_t dc;
+     user_t usr;
+     int displayLines;
+     
+     LCD_InitContext( &dc ); 
+ 
+	
+    // clear screen
+    //gfx_set_fg_color(bg_color);
+    //gfx_blockfill(0, 16, MAX_X, MAX_Y); 
+     
+    // gfx_set_bg_color(bg_color);
+    // gfx_set_fg_color(0x000000);
+    // gfx_select_font(gfx_font_small);
+
+     char firstname_buf[FIRSTNAME_BUFSIZE];
+	char country_buf[COUNTRY_BUFSIZE];
+	char state_buf[STATE_BUFSIZE];
+	
+    if( usr_find_by_dmrid(&usr,src) == 0 ) {
+		if( src==4000 ) {
+			usr.callsign = "Message" ;
+            usr.firstname = "from" ;
+            usr.name = "Server" ;
+            usr.place = "" ;
+            usr.state = "" ;
+            usr.country = "";
+		}
+		else {
+            usr.callsign = "ID" ;
+            usr.firstname = "not found" ;
+            usr.name = "in user.bin." ;
+            usr.place = "Update with" ;
+            usr.state = "glvusers," ;
+            usr.country = "then flashdb";
+		}
+    }
+	
+    
+#if defined(FW_D13_020) || defined(FW_S13_020)
+     channel_info_t *ci = &current_channel_info ;
+     int ts2 = ( ci->cc_slot_flags >> 3 ) & 0x1 ;
+	int cc = ( ci->cc_slot_flags >> 4 ) & 0xf ;
+  
+#else
+     int ts2 = 0;
+	int cc = 0;
+#endif	
+	// font options (width x height)
+	//dc.font = LCD_OPT_FONT_6x12;     // base font
+	//dc.font = LCD_OPT_FONT_8x8;      // base font looks bold
+     // these are combinations of base fonts with LCD_OPT_DOUBLE_WIDTH|LCD_OPT_DOUBLE_HEIGHT
+	//dc.font = LCD_OPT_FONT_8x16;     // double height 8x8
+     //dc.font = LCD_OPT_FONT_16x16;    // double height and width of 8x8
+     //dc.font = LCD_OPT_FONT_12x12;    // double width 6x12
+	//dc.font = LCD_OPT_FONT_12x24;    // double height and width of 6x24
+
+     //Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
+     dc.bg_color = LCD_COLOR_MD380_BKGND_BLUE;
+     LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
+
+ 	dc.x = 0;
+	dc.y = 15;
+     
+     char *state = lookup_state(&usr, state_buf);
+	char *country = lookup_country(&usr, country_buf);
+     // 2220298 long 4 line
+     // 2620071 
+     displayLines = (strlen(state) + strlen(country)) > STATECOUNTRY_MAX_LARGEFONT_CHARS ? 5 : 4 ;
+ 
+     dc.font = LCD_OPT_FONT_6x12;
+     dc.fg_color = LCD_COLOR_WHITE;
+     dc.bg_color = LCD_COLOR_BLUE;
+     if( grp ) {
+          LCD_Printf( &dc, "\t%d-TG %d %s CC%d\r", src, dst, ( ts2==1 ? "T2" : "T1"),cc );  
+     } else {
+          LCD_Printf( &dc, "\t%d-%d %s CC%d\r", src, dst, ( ts2==1 ? "T2" : "T1"),cc ); 
+     }
+ 
+     dc.bg_color = LCD_COLOR_MD380_BKGND_BLUE;
+#if defined(__RX_SCREEN_OPTION_WHITE)
+     dc.fg_color = LCD_COLOR_WHITE;
+#else
+     dc.fg_color = LCD_COLOR_BLACK;
+#endif
+     dc.x = 3;
+     dc.y +=3;
+ 	dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
+	int nameLen = strlen(usr.name);
+	int smallFontFudge=0;
+	if (strlen(usr.firstname) > 0)  {  // have real nickname, display it as before
+		LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, usr.firstname );
+	} else {
+		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
+			// do this if nickname is different than firstname 
+			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
+
+		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
+			// or fullname is going to be in small font
+               dc.y-=4;
+               dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
+               dc.y-=1;
+               smallFontFudge=2;
+			
+		} else { 
+			// do this if fullname will be in large font, no need to display firstname
+			LCD_Printf( &dc, "\t%s\r", usr.callsign);
+		}
+	} 
+     // dc.font = LCD_OPT_FONT_6x12;
+     // LCD_Printf( &dc, "%s 6x12\n", usr.callsign);
+     // dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+     // LCD_Printf( &dc, "%s 6x12 dh\n", usr.callsign);
+     // dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
+     // LCD_Printf( &dc, "%s 8x8 dh\n", usr.callsign);
+     // dc.font = LCD_OPT_FONT_8x8;
+     // LCD_Printf( &dc, "%s 8x8\n", usr.callsign);
+     
+     if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
+          // TA or TA/DB mode
+          if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
+               dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+               dc.y-=4;
+               LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
+               dc.y--;
+          }
+          else {
+               dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
+               if (talkerAlias.length < 1) {
+                    LCD_Printf( &dc, "\tDMRID: %d\r", src );
+               } else {
+                    LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
+               }
+          }
+     } 
+	else {
+          // user.bin or codeplug or talkerAlias length=0
+          if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
+               dc.y-=4;
+               dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+               LCD_Printf( &dc, "\t%s\r", usr.name );
+               dc.y--;
+          }
+          else {  
+               dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
+               LCD_Printf( &dc, "\t%s\r", usr.name );
+          }
+	}
+     dc.y+=2;
+     LCD_HorzLine(0, dc.y, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? LCD_COLOR_GREEN : LCD_COLOR_RED );
+	dc.y+=4;
+     dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
+     
+	switch( global_addl_config.userscsv ) {
+	case 0:
+		LCD_Printf( &dc, "%s\r", "Userinfo: CPS mode");
+		//y_index += GFX_FONT_SMALL_HEIGHT ;
+          break;
+
+	case 2:
+		if ( talkerAlias.length > 0 ) {
+               LCD_Printf( &dc, "%s\r", "Userinfo: TalkerAlias");
+		}
+          break;
+	}
+	switch( global_addl_config.userscsv ) {
+	case 1:
+	case 3:
+	
+		if( src != 0 ) { 
+			// city
+			if ( strlen(usr.place) > CITY_MAX_LARGEFONT_CHARS) { 
+				dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+				LCD_Printf( &dc, "%s\r", usr.place );  
+			} else {
+				LCD_Printf( &dc, "%s\r", usr.place );  
+			}
+               dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;  // 21 chars on line 4 max
+			// state/province and country
+			// something in oem firmware is blocking end of line, so we lose a few chars at end and bottom of screen
+
+			if ( displayLines == 5) {  
+				dc.font = LCD_OPT_FONT_8x8;
+                    dc.y+=3;
+				LCD_Printf( &dc, "%s\r", state );
+                    dc.y+=2;
+				LCD_Printf( &dc, "%s\r", country );		
+			} else {
+				gfx_select_font(gfx_font_norm);
+                    dc.y = dc.y + 3 - smallFontFudge;
+				LCD_Printf( &dc,  "%s %s\r", state, country );			
+			}
+          
+		}
+	  
+	}
+	 
+    //gfx_select_font(gfx_font_norm);
+    //gfx_set_fg_color(0xff8032);
+    //gfx_set_bg_color(0xff0000);
+}
+#else
+ void draw_rx_screen(unsigned int bg_color)
 {
 	#define FULLNAME_MAX_LARGEFONT_CHARS 16
 	#define CITY_MAX_LARGEFONT_CHARS 14
@@ -980,8 +1221,8 @@ void draw_rx_screen(unsigned int bg_color)
     gfx_select_font(gfx_font_norm);
     gfx_set_fg_color(0xff8032);
     gfx_set_bg_color(0xff0000);
-}
-
+}    
+#endif
 
 void draw_ta_screen(unsigned int bg_color)
 {

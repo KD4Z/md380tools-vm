@@ -117,9 +117,8 @@ export ZCOM58="Safely Shutdown or Reboot the Virtual Machine"
 export ZCOM59="VM information menu"
 export ZCOM60="Recover Locked Radio"
 export ZCOM61="Utility"
-
-
-
+export ZCOM62="Legacy RX Screen"
+export ZCOM63="Black Font in RX Screen"
 
 #### SECTION 3 ########################################################################
 
