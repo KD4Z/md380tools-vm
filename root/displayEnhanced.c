@@ -815,7 +815,7 @@ void draw_rx_screen(unsigned int bg_color)
 {
 	#define FULLNAME_MAX_LARGEFONT_CHARS 18
 	#define CITY_MAX_LARGEFONT_CHARS 18
-	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 21
+	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 16
 	
      static int dst;
      int src;
@@ -860,10 +860,10 @@ void draw_rx_screen(unsigned int bg_color)
 		else {
             usr.callsign = "ID" ;
             usr.firstname = "not found" ;
-            usr.name = "in user.bin." ;
-            usr.place = "Update with" ;
-            usr.state = "glvusers," ;
-            usr.country = "then flashdb";
+            usr.name = "Update with" ;
+            usr.place = "glvusers," ;
+            usr.state = "then flashdb";
+            usr.country = "";
 		}
     }
 	
