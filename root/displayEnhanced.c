@@ -813,7 +813,8 @@ void draw_micbargraph()
 
 void draw_rx_screen(unsigned int bg_color)
 {
-	#define FULLNAME_MAX_LARGEFONT_CHARS 18
+	#define FULLNAME_MAX_LARGEFONT_CHARS 16
+     #define FULLNAME_MAX_MIDDLEFONT_CHARS 18
 	#define CITY_MAX_LARGEFONT_CHARS 18
 	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 16
 	
@@ -952,7 +953,12 @@ void draw_rx_screen(unsigned int bg_color)
      if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
           // TA or TA/DB mode
           if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
-               dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+          if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
+                    dc.font = LCD_OPT_FONT_6x12; // drastic measures
+               } 
+               else {
+                    dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+               }
                dc.y-=4;
                LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
                dc.y--;
@@ -970,7 +976,12 @@ void draw_rx_screen(unsigned int bg_color)
           // user.bin or codeplug or talkerAlias length=0
           if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
                dc.y-=4;
-               dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+               if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
+                    dc.font = LCD_OPT_FONT_6x12; // drastic measures
+               } 
+               else {
+                    dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+               }
                LCD_Printf( &dc, "\t%s\r", usr.name );
                dc.y--;
           }
