@@ -816,7 +816,7 @@ void draw_rx_screen(unsigned int bg_color)
 	#define FULLNAME_MAX_LARGEFONT_CHARS 16
      #define FULLNAME_MAX_MIDDLEFONT_CHARS 18
 	#define CITY_MAX_LARGEFONT_CHARS 18
-	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 16
+	#define STATECOUNTRY_MAX_LARGEFONT_CHARS 15
 	
      static int dst;
      int src;
@@ -833,6 +833,7 @@ void draw_rx_screen(unsigned int bg_color)
      lcd_context_t dc;
      user_t usr;
      int displayLines;
+     int siglin;
      
      LCD_InitContext( &dc ); 
  
@@ -896,8 +897,8 @@ void draw_rx_screen(unsigned int bg_color)
      
      char *state = lookup_state(&usr, state_buf);
 	char *country = lookup_country(&usr, country_buf);
-     // 2220298 long 4 line
-     // 2620071 
+     //  long 4 line
+     //  
      displayLines = (strlen(state) + strlen(country)) > STATECOUNTRY_MAX_LARGEFONT_CHARS ? 5 : 4 ;
  
      dc.font = LCD_OPT_FONT_6x12;
@@ -916,44 +917,36 @@ void draw_rx_screen(unsigned int bg_color)
      dc.fg_color = LCD_COLOR_BLACK;
 #endif
      dc.x = 3;
-     dc.y +=3;
+     dc.y +=4;
  	dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
 	int nameLen = strlen(usr.name);
 	int smallFontFudge=0;
 	if (strlen(usr.firstname) > 0)  {  // have real nickname, display it as before
 		LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, usr.firstname );
+          dc.y+=2;
 	} else {
 		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
 		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
-			// do this if nickname is different than firstname 
 			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
-
+               dc.y+=2;
 		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
 			// or fullname is going to be in small font
                dc.y-=4;
                dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
+			LCD_Printf( &dc, "\t%s\r", usr.callsign);
                dc.y-=1;
                smallFontFudge=2;
 			
 		} else { 
-			// do this if fullname will be in large font, no need to display firstname
 			LCD_Printf( &dc, "\t%s\r", usr.callsign);
 		}
 	} 
-     // dc.font = LCD_OPT_FONT_6x12;
-     // LCD_Printf( &dc, "%s 6x12\n", usr.callsign);
-     // dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-     // LCD_Printf( &dc, "%s 6x12 dh\n", usr.callsign);
-     // dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
-     // LCD_Printf( &dc, "%s 8x8 dh\n", usr.callsign);
-     // dc.font = LCD_OPT_FONT_8x8;
-     // LCD_Printf( &dc, "%s 8x8\n", usr.callsign);
-     
+
+     // 2682100 2682101 2220298 2620071
      if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
           // TA or TA/DB mode
           if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
-          if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
+               if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
                     dc.font = LCD_OPT_FONT_6x12; // drastic measures
                } 
                else {
@@ -962,8 +955,8 @@ void draw_rx_screen(unsigned int bg_color)
                dc.y-=4;
                LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
                dc.y--;
-          }
-          else {
+               
+          } else {
                dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
                if (talkerAlias.length < 1) {
                     LCD_Printf( &dc, "\tDMRID: %d\r", src );
@@ -986,15 +979,16 @@ void draw_rx_screen(unsigned int bg_color)
                dc.y--;
           }
           else {  
+               dc.y-=2;
                dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
                LCD_Printf( &dc, "\t%s\r", usr.name );
           }
 	}
-     dc.y+=2;
-     LCD_HorzLine(0, dc.y, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? LCD_COLOR_GREEN : LCD_COLOR_RED );
-	dc.y+=4;
+     //dc.y+=2;
+     siglin= dc.y;
+     dc.y+=3;   // 4
      dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
-     
+   
 	switch( global_addl_config.userscsv ) {
 	case 0:
 		LCD_Printf( &dc, "%s\r", "Userinfo: CPS mode");
@@ -1013,32 +1007,38 @@ void draw_rx_screen(unsigned int bg_color)
 	
 		if( src != 0 ) { 
 			// city
-			if ( strlen(usr.place) > CITY_MAX_LARGEFONT_CHARS) { 
-				dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-				LCD_Printf( &dc, "%s\r", usr.place );  
-			} else {
-				LCD_Printf( &dc, "%s\r", usr.place );  
-			}
-               dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;  // 21 chars on line 4 max
+			if ( strlen(usr.place) > STATECOUNTRY_MAX_LARGEFONT_CHARS || displayLines == 5 ){ 
+                         dc.font = LCD_OPT_FONT_6x12;                   
+               } else {        
+                         dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;   
+               } 
+			LCD_Printf( &dc, "%s\r", usr.place );  
+		               
 			// state/province and country
 			// something in oem firmware is blocking end of line, so we lose a few chars at end and bottom of screen
-
+               dc.font = LCD_OPT_FONT_8x8;
 			if ( displayLines == 5) {  
-				dc.font = LCD_OPT_FONT_8x8;
-                    dc.y+=3;
-				LCD_Printf( &dc, "%s\r", state );
-                    dc.y+=2;
-				LCD_Printf( &dc, "%s\r", country );		
+                    if (strlen(state)> STATECOUNTRY_MAX_LARGEFONT_CHARS){
+                         dc.font = LCD_OPT_FONT_6x12;                   
+                    } else {        
+                         dc.font = LCD_OPT_FONT_8x8;   
+                    }                         
+                         dc.y+=3;
+                         LCD_Printf( &dc, "%s\r", state );
+                         dc.y+=2;
+                         LCD_Printf( &dc, "%s\r", country );
+                
 			} else {
-				gfx_select_font(gfx_font_norm);
-                    dc.y = dc.y + 3 - smallFontFudge;
+                    dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;  // 21 chars on line 4 max
+				dc.y = dc.y + 3 - smallFontFudge;
 				LCD_Printf( &dc,  "%s %s\r", state, country );			
 			}
           
 		}
 	  
 	}
-	 
+      siglin = siglin > 69 ? 69 : siglin;
+	 LCD_HorzLine(0, siglin, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? LCD_COLOR_GREEN : LCD_COLOR_RED );
     //gfx_select_font(gfx_font_norm);
     //gfx_set_fg_color(0xff8032);
     //gfx_set_bg_color(0xff0000);
