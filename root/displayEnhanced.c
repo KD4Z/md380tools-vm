@@ -834,6 +834,7 @@ void draw_rx_screen(unsigned int bg_color)
      user_t usr;
      int displayLines;
      int siglin;
+     int siglinfudge=0;
      
      LCD_InitContext( &dc ); 
  
@@ -929,20 +930,27 @@ void draw_rx_screen(unsigned int bg_color)
 		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
 			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
                dc.y+=2;
-		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
-			// or fullname is going to be in small font
-               dc.y-=4;
-               dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-			LCD_Printf( &dc, "\t%s\r", usr.callsign);
-               dc.y-=1;
-               smallFontFudge=2;
-			
+		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) { 
+               if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {   
+                    // name will be in small font, allow large font for call
+                    dc.y-=1;
+                   
+                    LCD_Printf( &dc, "\t%s\r", usr.callsign);
+                    dc.y-=1;
+               } else {
+                    // or fullname is going to be in medium font
+                    dc.y-=4;
+                    dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+                    LCD_Printf( &dc, "\t%s\r", usr.callsign);
+                    dc.y-=1;
+                    smallFontFudge=2;
+               }
 		} else { 
 			LCD_Printf( &dc, "\t%s\r", usr.callsign);
 		}
 	} 
 
-     // 2682100 2682101 2220298 2620071
+     // Display  Q/A ids 2682100 2682101 2220298 2620071 313675
      if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
           // TA or TA/DB mode
           if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
@@ -970,13 +978,18 @@ void draw_rx_screen(unsigned int bg_color)
           if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
                dc.y-=4;
                if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
+                    dc.y+=2;
+                    siglinfudge=-1;
                     dc.font = LCD_OPT_FONT_6x12; // drastic measures
-               } 
+                    LCD_Printf( &dc, "\t%s\r", usr.name );
+                    dc.y+=3;
+                } 
                else {
                     dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+                    LCD_Printf( &dc, "\t%s\r", usr.name );
+                    dc.y--;
                }
-               LCD_Printf( &dc, "\t%s\r", usr.name );
-               dc.y--;
+               
           }
           else {  
                dc.y-=2;
@@ -984,9 +997,9 @@ void draw_rx_screen(unsigned int bg_color)
                LCD_Printf( &dc, "\t%s\r", usr.name );
           }
 	}
-     //dc.y+=2;
-     siglin= dc.y;
-     dc.y+=3;   // 4
+  
+     siglin= dc.y + siglinfudge;
+     dc.y+=3;
      dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
    
 	switch( global_addl_config.userscsv ) {
@@ -1037,11 +1050,10 @@ void draw_rx_screen(unsigned int bg_color)
 		}
 	  
 	}
-      siglin = siglin > 69 ? 69 : siglin;
-	 LCD_HorzLine(0, siglin, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? LCD_COLOR_GREEN : LCD_COLOR_RED );
-    //gfx_select_font(gfx_font_norm);
-    //gfx_set_fg_color(0xff8032);
-    //gfx_set_bg_color(0xff0000);
+     // The infamous KD4Z "Red / Green Line"  Shows green if Talker Alias modes enabled, else is red.
+     // You saw it here first, and mimicked in others cuz it's cool.
+     siglin = siglin > 69 ? 69 : siglin;
+	LCD_HorzLine(0, siglin, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? LCD_COLOR_GREEN : LCD_COLOR_RED );
 }
 #else
  void draw_rx_screen(unsigned int bg_color)
