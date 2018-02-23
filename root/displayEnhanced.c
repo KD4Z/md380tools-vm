@@ -829,7 +829,6 @@ void draw_rx_screen(unsigned int bg_color)
 
      OS_EXIT_CRITICAL(primask);
    
-     //int sel_flags = SEL_FLAG_NONE;
      lcd_context_t dc;
      user_t usr;
      int displayLines;
@@ -837,15 +836,6 @@ void draw_rx_screen(unsigned int bg_color)
      int siglinfudge=0;
      
      LCD_InitContext( &dc ); 
- 
-	
-    // clear screen
-    //gfx_set_fg_color(bg_color);
-    //gfx_blockfill(0, 16, MAX_X, MAX_Y); 
-     
-    // gfx_set_bg_color(bg_color);
-    // gfx_set_fg_color(0x000000);
-    // gfx_select_font(gfx_font_small);
 
      char firstname_buf[FIRSTNAME_BUFSIZE];
 	char country_buf[COUNTRY_BUFSIZE];
@@ -869,7 +859,6 @@ void draw_rx_screen(unsigned int bg_color)
             usr.country = "";
 		}
     }
-	
     
 #if defined(FW_D13_020) || defined(FW_S13_020)
      channel_info_t *ci = &current_channel_info ;
@@ -947,6 +936,7 @@ void draw_rx_screen(unsigned int bg_color)
                }
 		} else { 
 			LCD_Printf( &dc, "\t%s\r", usr.callsign);
+               dc.y+=2;
 		}
 	} 
 
@@ -969,6 +959,7 @@ void draw_rx_screen(unsigned int bg_color)
                if (talkerAlias.length < 1) {
                     LCD_Printf( &dc, "\tDMRID: %d\r", src );
                } else {
+                    dc.y++;
                     LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
                }
           }
@@ -989,12 +980,12 @@ void draw_rx_screen(unsigned int bg_color)
                     LCD_Printf( &dc, "\t%s\r", usr.name );
                     dc.y--;
                }
-               
           }
           else {  
                dc.y-=2;
                dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
                LCD_Printf( &dc, "\t%s\r", usr.name );
+               dc.y+=2;
           }
 	}
   
@@ -1005,8 +996,7 @@ void draw_rx_screen(unsigned int bg_color)
 	switch( global_addl_config.userscsv ) {
 	case 0:
 		LCD_Printf( &dc, "%s\r", "Userinfo: CPS mode");
-		//y_index += GFX_FONT_SMALL_HEIGHT ;
-          break;
+	     break;
 
 	case 2:
 		if ( talkerAlias.length > 0 ) {
@@ -1023,7 +1013,8 @@ void draw_rx_screen(unsigned int bg_color)
 			if ( strlen(usr.place) > STATECOUNTRY_MAX_LARGEFONT_CHARS || displayLines == 5 ){ 
                          dc.font = LCD_OPT_FONT_6x12;                   
                } else {        
-                         dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;   
+                         dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
+                         dc.y+=2;
                } 
 			LCD_Printf( &dc, "%s\r", usr.place );  
 		               
