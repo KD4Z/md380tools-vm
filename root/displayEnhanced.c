@@ -974,6 +974,7 @@ void draw_rx_screen(unsigned int bg_color)
                     dc.y+=3;
                 } 
                else {
+                    dc.y++;
                     dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
                     LCD_Printf( &dc, "\t%s\r", usr.name );
                     dc.y--;
