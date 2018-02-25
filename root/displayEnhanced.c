@@ -813,6 +813,7 @@ void draw_micbargraph()
 
 void draw_rx_screen(unsigned int bg_color)
 {
+     // KD4Z primary RX screen
 	#define FULLNAME_MAX_LARGEFONT_CHARS 16
      #define FULLNAME_MAX_MIDDLEFONT_CHARS 18
 	#define CITY_MAX_LARGEFONT_CHARS 18
@@ -853,10 +854,10 @@ void draw_rx_screen(unsigned int bg_color)
 		else {
             usr.callsign = "ID" ;
             usr.firstname = "not found" ;
-            usr.name = "Update with" ;
-            usr.place = "glvusers," ;
-            usr.state = "then flashdb";
-            usr.country = "";
+            usr.name = talkerAlias.text;
+            usr.place = "Update with" ;
+            usr.state = "glvusers," ;
+            usr.country = "then flashdb";
 		}
     }
     
@@ -878,7 +879,6 @@ void draw_rx_screen(unsigned int bg_color)
      //dc.font = LCD_OPT_FONT_12x12;    // double width 6x12
 	//dc.font = LCD_OPT_FONT_12x24;    // double height and width of 6x24
 
-     //Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
      dc.bg_color = LCD_COLOR_MD380_BKGND_BLUE;
      LCD_FillRect( 0, 15, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, dc.bg_color );
 
@@ -887,8 +887,6 @@ void draw_rx_screen(unsigned int bg_color)
      
      char *state = lookup_state(&usr, state_buf);
 	char *country = lookup_country(&usr, country_buf);
-     //  long 4 line
-     //  
      displayLines = (strlen(state) + strlen(country)) > STATECOUNTRY_MAX_LARGEFONT_CHARS ? 5 : 4 ;
  
      dc.font = LCD_OPT_FONT_6x12;
@@ -909,13 +907,14 @@ void draw_rx_screen(unsigned int bg_color)
      dc.x = 3;
      dc.y +=4;
  	dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
-	int nameLen = strlen(usr.name);
+	int nameLen=0;
 	int smallFontFudge=0;
 	if (strlen(usr.firstname) > 0)  {  // have real nickname, display it as before
 		LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, usr.firstname );
           dc.y+=2;
 	} else {
 		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
+          nameLen = strlen(usr.name);
 		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
 			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
                dc.y+=2;
@@ -923,15 +922,13 @@ void draw_rx_screen(unsigned int bg_color)
                if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {   
                     // name will be in small font, allow large font for call
                     dc.y-=1;
-                   
                     LCD_Printf( &dc, "\t%s\r", usr.callsign);
                     dc.y-=1;
                } else {
                     // or fullname is going to be in medium font
-                    dc.y-=4;
-                    dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-                    LCD_Printf( &dc, "\t%s\r", usr.callsign);
                     dc.y-=1;
+                    LCD_Printf( &dc, "\t%s\r", usr.callsign);
+                    dc.y+=1;
                     smallFontFudge=2;
                }
 		} else { 
@@ -940,9 +937,10 @@ void draw_rx_screen(unsigned int bg_color)
 		}
 	} 
 
-     // Display  Q/A ids 2682100 2682101 2220298 2620071 313675
+     // Display  Q/A ids 2682100 2682101 2220298 2620071 2621168 3101380 (name=15) 3101439 (name=17)
      if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
           // TA or TA/DB mode
+          nameLen = strlen(talkerAlias.text);
           if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
                if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
                     dc.font = LCD_OPT_FONT_6x12; // drastic measures
@@ -1023,13 +1021,15 @@ void draw_rx_screen(unsigned int bg_color)
                dc.font = LCD_OPT_FONT_8x8;
 			if ( displayLines == 5) {  
                     if (strlen(state)> STATECOUNTRY_MAX_LARGEFONT_CHARS){
-                         dc.font = LCD_OPT_FONT_6x12;                   
+                         dc.font = LCD_OPT_FONT_6x12; 
+                         smallFontFudge = 4;
+                         
                     } else {        
                          dc.font = LCD_OPT_FONT_8x8;   
                     }                         
-                         dc.y+=3;
+                         dc.y = dc.y + 3 - smallFontFudge;
                          LCD_Printf( &dc, "%s\r", state );
-                         dc.y+=2;
+                         dc.y = dc.y + 2 - smallFontFudge;
                          LCD_Printf( &dc, "%s\r", country );
                 
 			} else {
@@ -1091,7 +1091,7 @@ void draw_rx_screen(unsigned int bg_color)
 		else {
             usr.callsign = "ID" ;
             usr.firstname = "not found" ;
-            usr.name = "in user.bin." ;
+            usr.name = talkerAlias.text;
             usr.place = "Update with" ;
             usr.state = "glvusers," ;
             usr.country = "then flashdb";
