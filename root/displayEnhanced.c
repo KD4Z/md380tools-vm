@@ -1045,7 +1045,7 @@ void draw_rx_screen(unsigned int bg_color)
      // The infamous KD4Z "Red / Green Line"  Shows green if Talker Alias modes enabled, else is red.
      // You saw it here first, and mimicked in others cuz it's cool.
      siglin = siglin > 69 ? 69 : siglin;
-	LCD_HorzLine(0, siglin, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? LCD_COLOR_GREEN : LCD_COLOR_RED );
+	LCD_HorzLine(0, siglin, LCD_SCREEN_WIDTH-1, (global_addl_config.userscsv > 1) ? 0x5000 : LCD_COLOR_RED );
 }
 #else
  void draw_rx_screen(unsigned int bg_color)
