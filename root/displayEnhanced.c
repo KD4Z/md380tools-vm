@@ -804,6 +804,8 @@ void draw_micbargraph()
     }
 }
 
+void who_dat(int mode){
+}
 
 #endif 
 
