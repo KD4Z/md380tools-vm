@@ -89,7 +89,7 @@ const gfx_bitmap bmp_eye = {12, 12, 6, 4, eye_pix, &eye_pal, 0};
 #define __RX_SCREEN_OPTION_WHITE
 #endif
 
-
+static int lh_painted = 0;
 static const char *const countries[] = {
 	"AD,Andorra",
 	"AR,Argentina",
@@ -421,10 +421,36 @@ char *lookup_state(user_t *up, char *buf) {
 	return buf;
 }
  
-
+void who_dat(int mode){
+#if defined(FW_D13_020) || defined(FW_S13_020)
+     lh_painted = 0;
+     uint32_t popup_timer;
+     uint32_t delay_timer;
+     int popup_time = 0;
+     int delay_time;
+  
+     if ( IS_PTT_PRESSED || IS_GREEN_LED_ON || gui_opmode2 == OPM2_MENU ){
+//          printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
+          return;
+     }
+     
+     StartStopwatch(&popup_timer);
+     while(popup_time < 3000) {
+          popup_time = ReadStopwatch_ms(&popup_timer);
+          
+          draw_tx_screen_layout(0);
+          
+          delay_time = 0;
+          StartStopwatch(&delay_timer);
+          while(delay_time < 500)
+               delay_time = ReadStopwatch_ms(&delay_timer);
+          
+     }
+     oem_repaint_screen();
+#endif
+}
 
 #if defined(__PTT_LASTHEARD)
-static int lh_painted = 0;
 static uint32_t stopwatch_cnt = 0;
 static int tot_beep_done = 0;
 static int previous_sec = -1;
@@ -558,35 +584,6 @@ void draw_tx_screen_layout(int showtimer) {
           }
      }
     
-#endif
-}
-
-void who_dat(int mode){
-#if defined(FW_D13_020) || defined(FW_S13_020)
-     lh_painted = 0;
-     uint32_t popup_timer;
-     uint32_t delay_timer;
-     int popup_time = 0;
-     int delay_time;
-  
-     if ( IS_PTT_PRESSED || IS_GREEN_LED_ON || gui_opmode2 == OPM2_MENU ){
-//          printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
-          return;
-     }
-     
-     StartStopwatch(&popup_timer);
-     while(popup_time < 3000) {
-          popup_time = ReadStopwatch_ms(&popup_timer);
-          
-          draw_tx_screen_layout(0);
-          
-          delay_time = 0;
-          StartStopwatch(&delay_timer);
-          while(delay_time < 500)
-               delay_time = ReadStopwatch_ms(&delay_timer);
-          
-     }
-     oem_repaint_screen();
 #endif
 }
 
@@ -802,9 +799,6 @@ void draw_micbargraph()
         red = 0;
         green = 0;
     }
-}
-
-void who_dat(int mode){
 }
 
 #endif 
