@@ -676,6 +676,9 @@ void draw_micbargraph()
 
 
 #else
+void draw_tx_screen_layout(int showtimer) {}
+void oem_repaint_screen () {}
+
 void draw_micbargraph()
 {
 	//
