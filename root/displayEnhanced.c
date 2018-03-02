@@ -240,9 +240,24 @@ static const char *const states[] = {
 	"ON,Ontario",
 	"OR,Oregon",
 	"OV,Overijssel",
-	"PA,Pennsylvania",
+     "PA,Pennsylvania",
 	"PE,Prince Edward Is.",
-	"PR,Puerto Rico",
+     "PLDS,Lower Silesia",
+     "PLKP,Kuyavia-Pomerania",
+     "PLLB,Lubusz",
+     "PLLD,Lodz",
+     "PLLU,Lublin",
+     "PLMA,Lesser Poland",
+     "PLMZ,Mazovia",
+     "PLOP,Opole",
+     "PLPD,Podlaskie",
+     "PLPK,Subcarpathia",
+     "PLPM,Pomerania",
+     "PLSK,Holy Cross",
+     "PLSL,Silesia",
+     "PLWN,Greater Poland",
+     "PLZP,West Pomerania",
+     "PR,Puerto Rico",
 	"QC,Quebec",
 	"QLD,Queensland",
 	"RI,Rhode Island",
@@ -982,7 +997,7 @@ void draw_rx_screen(unsigned int bg_color)
 		if( src != 0 ) { 
 			// city
 			if ( strlen(usr.place) > STATECOUNTRY_MAX_LARGEFONT_CHARS || displayLines == 5 ){ 
-                         dc.font = LCD_OPT_FONT_6x12;                   
+                         dc.font = LCD_OPT_FONT_8x8;                   
                } else {        
                          dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
                          dc.y+=2;
@@ -1000,9 +1015,9 @@ void draw_rx_screen(unsigned int bg_color)
                     } else {        
                          dc.font = LCD_OPT_FONT_8x8;   
                     }                         
-                         dc.y = dc.y + 3 - smallFontFudge;
+                         dc.y = dc.y + 4 - smallFontFudge;
                          LCD_Printf( &dc, "%s\r", state );
-                         dc.y = dc.y + 2 - smallFontFudge;
+                         dc.y = dc.y + 4 - smallFontFudge;
                          LCD_Printf( &dc, "%s\r", country );
                 
 			} else {
