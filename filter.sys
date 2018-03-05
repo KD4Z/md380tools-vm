@@ -16,11 +16,14 @@
 sed -i -e 's/Central Michigan Emergency Network Central Michigan Emergency Network/Central Michigan Emergency Net/g' $1
 sed -i -e 's/SILENT KEY/SK/g' $1
 sed -i -e 's/Communications/Comm/g' $1
+sed -i -e 's/Amateur Radio Club/ARC/g' $1
+sed -i -e 's:,cnty,:,,:g' $1
 
 # other states / provinces until supported in merge_users
 sed -i -e 's/All Others//g' $1
 sed -i -e 's/ALL OTHERS//g' $1
 sed -i -e 's:OESTERREICH/AUSTRIA:AUSTRIA:g' $1
+
 
 
 #sed -i -e 's/  / /g' $1

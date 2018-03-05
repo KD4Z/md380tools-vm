@@ -34,6 +34,9 @@ ALTERNATESEMADISABLE=~/extra.data.disable
 ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
 MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
+EXCLUDEIDS=~/exclude.ids
+EXCLUDECOUNTRIES=~/exclude.countries
+MERGECONFIG=~/md380tools-vm/mergeconfig
 
 if [ -f $FILENICKZIP ]; then
     if [ -f $FILENICK ]; then
@@ -92,6 +95,15 @@ if [ -f $FILESTATIC ]; then
 fi
 
 echo -e "${WHITE}Merging data...${NC}"
+
+if [ -f $MERGECONFIG ]; then rm $MERGECONFIG; fi
+if [ -f $EXCLUDECOUNTRIES ]; then
+  awk -F, 'length($1) {print "excludecountry * "$1}' $EXCLUDECOUNTRIES >$MERGECONFIG
+fi
+if [ -f $EXCLUDEIDS ]; then
+  awk -F, 'length($1) {print "excludeID * "$1}' $EXCLUDEIDS >>$MERGECONFIG
+fi
+
 if [ -f $FINALDMRMARC ]; then
 	FILELIST="$FINALDMRMARC"
 fi
@@ -104,7 +116,12 @@ fi
 if [ -f $FILENICK ]; then
 	FILELIST="$FILELIST $FILENICK"
 fi
-OPTS="-o AbbrevCountries -o AbbrevStates -o NoHeader"
+OPTS="--abbrevCountries --abbrevStates --noHeader --abbrevDirections"
+if [ -f $MERGECONFIG ]; then
+  OPTS="$OPTS --config $MERGECONFIG"
+  echo -e "${WHITE}Applying contact filters... ${YELLOW}"
+  cat $MERGECONFIG
+fi
 if [ -f ~/keep.tmp ]; then
  echo -e "Filelist=$FILELIST Options=$OPTS" 
 fi
@@ -112,7 +129,6 @@ if [ -f $MERGEERRORS ]; then rm $MERGEERRORS ; fi
 echo -e -n "${RED}"
 
 # Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex merge routine in python.
-
 python ~/md380tools-vm/merge_users.py $FILELIST $OPTS >$USERDB 2>$MERGEERRORS
 
 echo -e "${WHITE}Contact Merge completed.${NC}"

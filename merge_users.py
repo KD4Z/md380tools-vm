@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 # This program takes a list of userdb files and merges them together.
-# Fields for each DMR ID found in earlier files take precedence.
+# Fields for each DMR ID found in later files take precedence.
 # In other words, as each file is processed, a field for a DMR ID is
-# updated only if that field has not been set by a previous file.
+# updated if that field is non-empty. Non-empty fields always replace
+# fields from previously-processed files.  An empty field never replaces
+# an existing field.
 
 # Optionally, several other fixups are performed.  See the options below.
 
@@ -36,39 +38,96 @@ from __future__ import print_function
 
 import sys
 import argparse
+import shlex
 
-version = "0.5.2"
+version = "1.0.2+"
 
-users = {}
+optionList = [
+	dict(
+		name = "abbrevCountries",
+		default = True,
+		help = "Abbreviate country names.",
+	),
+	dict(
+		name = "abbrevDirections",
+		default = True,
+		help = "Abbreviate directions.",
+	),
+	dict(
+		name = "abbrevStates",
+		default = True,
+		help = "Abbreviate state and province names.",
+	),
+	dict(
+		name = "fixRomanNumerals",
+		default = True,
+		help = "Fix case on roman numerals. Changes mixed-case " +
+			"roman numerals at the end of the name field into " +
+			"upper case.",
+	),
+	dict(
+		name = "fixStateCountries",
+		default = True,
+		help = "Fix US state name found in country field.",
+	),
+	dict(
+		name = "miscChanges",
+		default = True,
+		help = "Do Miscellaneous cleanups.",
+	),
+	dict(
+		name = "removeCallFromNick",
+		default = True,
+		help = "Remove callsign from nickname field",
+	),
+	dict(
+		name = "removeDupSurnames",
+		default = True,
+		help = "Remove duplicated surname found at the end of the " +
+			"name field.",
+	),
+	dict(
+		name = "removeMatchingNick",
+		default = True,
+		help = "Remove nicknames that are the same as the first name " +
+			"in the name field.",
+	),
+	dict(
+		name = "removeRepeats",
+		default = True,
+		help = "Remove duplicated phrase in a field. If a field " +
+			"consists entirely of a duplicated phrase, " +
+			"one copy is removed.",
+	),
+	dict(
+		name = "titleCase",
+		default = True,
+		help = "Words consisting of all capital letters are examined " +
+			"and converted to title case if appropriate.",
+	),
+	dict(
+		name = "header",
+		default = True,
+		help = "Prefix the list with its byte count. The first line " +
+			"of the output file will contain a count of the " +
+			"remaining bytes in the file.",
+	),
 
-options = {
-	"FixRomanNumerals":	True,
-	"FixStateCountries":	True,
-	"MiscChanges":		True,
-	"RemoveCallFromNick":	True,
-	"RemoveDupSurnames":	True,
-	"RemoveMatchingNick":	True,
-	"RemoveRepeats":	True,
-	"TitleCase":		True,
-	"Header":		True,
-
-	"AbbrevCountries":	False,
-	"AbbrevDirections":	False,
-	"AbbrevStates":		False,
-	"CheckTitleCase":	False,
-	"RemoveNames":		False,
-}
+	dict(
+		name = "removeNames",
+		default = False,
+		help = "Remove personal names for privacy.",
+	),
+]
 
 countryAbbrevs = {
 	"Andorra":			"AD",
 	"Argentina":			"AR",
-	"Argentina Republic":		"AR",
 	"Australia":			"AU",
 	"Austria":			"AT",
 	"Barbados":			"BB",
 	"Belgium":			"BE",
 	"Belize":			"BZ",
-	"Bosnia and Hercegovi":		"BA",
 	"Bosnia and Hercegovina":	"BA",
 	"Brazil":			"BR",
 	"Bulgaria":			"BG",
@@ -100,12 +159,10 @@ countryAbbrevs = {
 	"Italy":			"IT",
 	"Japan":			"JP",
 	"Korea":			"KR",
-	"Korea S":			"KR",
 	"Kuwait":			"KW",
 	"Latvia":			"LV",
 	"Liechtenstein":		"LI",
 	"Luxembourg":			"LU",
-	"Luxemburg":			"LU",
 	"Macedonia":			"MK",
 	"Malaysia":			"MY",
 	"Malta":			"MT",
@@ -141,6 +198,18 @@ countryAbbrevs = {
 	"United States":		"US",
 	"Uruguay":			"UY",
 	"Venezuela":			"VE",
+}
+
+alternateCountryAbbrevs = {
+	"Argentina Republic":		"AR",
+	"Bosnia and Hercegovi":		"BA",
+	"DEU":				"DE",
+	"Korea S":			"KR",
+	"Luxemburg":			"LU",
+}
+
+inverseCountryAbbrevs = {
+	"DEU":				"Germany",
 }
 
 stateAbbrevsByCountry = {
@@ -222,7 +291,6 @@ stateAbbrevsByCountry = {
 	},
 	"Germany": {
 		"Baden-Wuerttemberg":		"BW",
-		"Baden-Wurttemberg":		"BW",
 		"Bavaria":			"BY",
 		"Berlin":			"BE",
 		"Brandenburg":			"BB",
@@ -232,12 +300,10 @@ stateAbbrevsByCountry = {
 		"Lower Saxony":			"NI",
 		"Mecklenburg-Vorpommern":	"MV",
 		"North Rhine-Westphalia":	"NW",
-		"Nordrhein-Westfalen":	"NW",
-		"Rheinland-Pfalz":	"RP",
-		"Rhineland-Palatinate":		"RP",
+		"Rheinland-Pfalz":		"RP",
 		"Saarland":			"SL",
-		"Saxony-Anhalt":		"ST",
 		"Saxony":			"SN",
+		"Saxony-Anhalt":		"ST",
 		"Schleswig-Holstein":		"SH",
 		"Thuringia":			"TH",
 	},
@@ -248,8 +314,6 @@ stateAbbrevsByCountry = {
 		"Gelderland":			"GE",
 		"Groningen":			"GR",
 		"Limburg":			"LI",
-		"Noord-Brabant":		"N-B",
-		"Noord-Holland":		"N-H",
 		"North Brabant":		"N-B",
 		"North Holland":		"N-H",
 		"Oost-Vlaanderen":		"O-V",
@@ -257,27 +321,108 @@ stateAbbrevsByCountry = {
 		"South Holland":		"ZH",
 		"Utrecht":			"UTR",
 		"Zeeland":			"ZE",
-		"Zuid-Holland":			"ZH",
 	},
 	"Belgium": {
-		"Antwerpen":			"VAN",
 		"Antwerp":			"VAN",
 		"East Flanders":		"VOV",
 		"Flemish Brabant":		"VBR",
 		"Hainaut":			"WHT",
-		"Henegouwen":			"WHT",
 		"Ile-de-France":		"IF",
-		"le-de-France":			"IF",
 		"Liege":			"WLG",
 		"Limburg":			"VLI",
 		"Luxembourg":			"WLX",
-		"Namen":			"WNA",
 		"Namur":			"WNA",
-		"Vlaams-Brabant":		"VBR",
 		"Walloon Brabant":		"WBR",
 		"West Flanders":		"VWV",
+	},
+	"Poland":{
+			"Dolnoslaskie":			"PLDS",
+			"Kujawsko-pomorskie":			"PLKP",
+			"Lubelskie":			"PLLU",
+			"Lubuskie":			"PLLB",
+			"Lodzkie":			"PLLD",
+			"Malopolskie":			"PLMA",
+			"Mazowieckie":			"PLMZ",
+			"Opolskie":			"PLOP",
+			"Podkarpackie":			"PLPK",
+			"Podlaskie":			"PLPD",
+			"Pomorskie":			"PLPM",
+			"Slaskie":			"PLSL",
+			"Swietokrzyskie":			"PLSK",
+			"Warminsko-mazurskie":			"PLWN",
+			"Wielkopolskie":			"PLWP",
+			"Zachodniopomorskie":			"PLZP",
+	},
+	"Italy": {
+		"Abruzzo":			"ABR",
+		"Basilicata":			"BAS",
+		"Calabria":			"CAL",
+		"Campania":			"CAM",
+		"Emila-Romagna":			"EMI",
+		"Friuli-Venezia Giulia":			"FRI",
+		"Lazio":			"LAZ",
+		"Liguria":			"LIG",
+		"Lombardia":			"LOM",
+		"Marche":			"MAR",
+		"Molise":			"MOL",
+		"Piemonte":			"PIE",
+		"Puglia":			"PUG",
+		"Sardegna":			"SAR",
+		"Sicilia":			"SIC",
+		"Toscana":			"TOS",
+		"Trentino-Alto Adige":			"TRE",
+		"Umbria":			"UMB",
+		"Valle d'Aosta":			"VAL",
+		"Veneto":			"VEN",
+	},
+}
+
+alternateStateAbbrevsByCountry = {
+	"Germany": {
+		"Baden-Wurttemberg":		"BW",
+		"Nordrhein-Westfalen":		"NW",
+		"Rhineland-Palatinate":		"RP",
+	},
+	"Netherlands": {
+		"Noord-Brabant":		"N-B",
+		"Noord-Holland":		"N-H",
+		"Zuid-Holland":			"ZH",
+	},
+	"Belgium": {
+		"Antwerpen":			"VAN",
+		"Henegouwen":			"WHT",
+		"le-de-France":			"IF",
+		"Namen":			"WNA",
+		"Vlaams-Brabant":		"VBR",
 		"West-Vlaanderen":		"VWV",
 	},
+	"Poland": {
+		"Lesser Poland Voivod":			"PLMA",
+		"Lower Silesian Voivo":			"PLDS",
+		"Lublin Voivodeship":			"PLLU",
+		"Lubusz Voivodeship":			"PLLB",
+		"Maeopolskie":			"PLMA",
+		"Maopolskie":				"PLMA",
+		"Masovian Voivodeship":			"PLMZ",
+		"Kuyavian-Pomeranian":			"PLPM",
+		"Opole Voivodeship":			"PLOP",
+		"Podkarpackie Voivode":			"PLPK",
+		"Podlaskie Voivodeshi":			"PLPD",
+		"Pomeranian Voivodesh":			"PLPM",
+		"Silesian Voivodeship":			"PLDS",
+		"Silesian Lowlands":			"PLDS",
+		"Wojewudztwo Udzkie":			"PLLD",
+	},
+	"Italy": {
+		"Valle d Aosta":			"VAL",
+		"Aosta Valley":			"VAL",
+		"Lombardy":			"LOM",
+		"Piedmont":			"PIE",
+		"Sardinia":			"SAR",
+		"Savona":			"SV",
+		"Tuscany":			"TOS",
+
+	}
 }
 
 directionAbbrevs = {
@@ -398,6 +543,7 @@ titleCaseWords = [
 	"AUXCOMM",
 	"AZORES",
 	"BAGARMOSSEN",
+	"BAK",
 	"BAKERSVILLE",
 	"BALANICI",
 	"BALBINO",
@@ -410,6 +556,7 @@ titleCaseWords = [
 	"BARTLESVILLE",
 	"BARTOLOMEO",
 	"BARTOSZ",
+	"BATIN",
 	"BAUD",
 	"BAUTISTA",
 	"BAY",
@@ -441,6 +588,7 @@ titleCaseWords = [
 	"BISHOPS",
 	"BIXBY",
 	"BLOCKED",
+	"BOBAN",
 	"BOCA",
 	"BODEN",
 	"BOELL",
@@ -617,6 +765,7 @@ titleCaseWords = [
 	"DEMIS",
 	"DEMO",
 	"DENIS",
+	"DENIZ",
 	"DENNI",
 	"DENNIS",
 	"DEON",
@@ -734,6 +883,7 @@ titleCaseWords = [
 	"FELIX",
 	"FERDINANDO",
 	"FERDY",
+	"FERHAT",
 	"FERNANDO",
 	"FERRARA",
 	"FERRY",
@@ -921,6 +1071,8 @@ titleCaseWords = [
 	"IEROTHEOS",
 	"IGINO",
 	"IGNACIO",
+	"IHOR",
+	"IHSAN",
 	"IINGNACIO",
 	"ILION",
 	"ILKESTON",
@@ -960,7 +1112,9 @@ titleCaseWords = [
 	"JANAUBA",
 	"JANEIRO",
 	"JANEZ",
+	"JAN",
 	"JANOS",
+	"JANUSZ",
 	"JASON",
 	"JAUME",
 	"JAVIER",
@@ -1001,11 +1155,13 @@ titleCaseWords = [
 	"JULIAN",
 	"JULIEN",
 	"JULIO",
+	"JUREK",
 	"JUSTO",
 	"KADIR",
 	"KAESER",
 	"KAILUA",
 	"KALIX",
+	"KAMIENICA",
 	"KANATA",
 	"KANE",
 	"KAPITI",
@@ -1013,6 +1169,7 @@ titleCaseWords = [
 	"KARG",
 	"KARL",
 	"KARLSBORG",
+	"KARLSTAD",
 	"KARST",
 	"KATARZYNA",
 	"KEANSBURG",
@@ -1076,6 +1233,7 @@ titleCaseWords = [
 	"LEONARDO",
 	"LESLIE",
 	"LESO",
+	"LEVENT",
 	"LEWISBERRY",
 	"LEXINGTON",
 	"LIANI",
@@ -1088,6 +1246,7 @@ titleCaseWords = [
 	"LIVONIA",
 	"LODI",
 	"LOMBARD",
+	"LORANI",
 	"LORENZO",
 	"LOS",
 	"LOUDONVILLE",
@@ -1108,6 +1267,7 @@ titleCaseWords = [
 	"LULEA",
 	"LURATI",
 	"LYE",
+	"MACIEK",
 	"MADISON",
 	"MADISONVILLE",
 	"MAERTENS",
@@ -1236,6 +1396,7 @@ titleCaseWords = [
 	"NEWARK",
 	"NEWINGTON",
 	"NEWTOWN",
+	"NEZIH",
 	"NG",
 	"NICHELINO",
 	"NICK",
@@ -1282,6 +1443,7 @@ titleCaseWords = [
 	"OMAR",
 	"ON",
 	"ONANCOCK",
+	"ONOFRIO",
 	"ONZ",
 	"OO",
 	"ORESTE",
@@ -1409,6 +1571,7 @@ titleCaseWords = [
 	"REINE",
 	"REMIGIUSZ",
 	"REMO",
+	"REMZI",
 	"RENATO",
 	"RENE",
 	"RENO",
@@ -1501,6 +1664,7 @@ titleCaseWords = [
 	"SERENA",
 	"SERGIO",
 	"SERGIPE",
+	"SERKAN",
 	"SERTAC",
 	"SETAUKET",
 	"SETTLE",
@@ -1509,6 +1673,7 @@ titleCaseWords = [
 	"SH",
 	"SHAH",
 	"SHAKOPEE",
+	"SHANE",
 	"SHAWNEE",
 	"SHEFFIELD",
 	"SHENZHEN",
@@ -1688,6 +1853,7 @@ titleCaseWords = [
 	"WAPPINGER",
 	"WARREN",
 	"WARSAW",
+	"WARSZAWA",
 	"WASHINGTON",
 	"WATERTOWN",
 	"WATERVLIET",
@@ -1730,20 +1896,28 @@ titleCaseWords = [
 	"ZCARLOS",
 	"ZDENKO",
 	"ZDRAVKO",
+	"ZE",
 	"ZEVIO",
 	"ZH",
 ]
 
 upperCaseWords = [
 	"AA",
+	"AB",
 	"ACCART",
+	"ACRAM",
 	"ACT",
+	"ACU",
 	"AFTT",
+	"AFVCR",
 	"AFZ",
 	"AIRE",
 	"AJT",
 	"AK",
+	"AL",
 	"ALA",
+	"AMRS",
+	"AN",
 	"ANFR",
 	"APRS",
 	"AQ",
@@ -1760,51 +1934,80 @@ upperCaseWords = [
 	"ASORL",
 	"ASRR",
 	"ASTT",
+	"AT",
 	"ATL",
 	"AU",
+	"AUS",
 	"AWR",
 	"AXPE",
 	"AZ",
+	"BA",
+	"BB",
 	"BC",
+	"BE",
+	"BG",
 	"BGD",
+	"BK",
 	"BL",
+	"BR",
 	"BRU",
 	"BSG",
+	"BW",
 	"BXE",
+	"BZ",
+	"CA",
+	"CAN",
 	"CARG",
 	"CAS",
 	"CDARC",
+	"CH",
 	"CIS",
 	"CK",
+	"CKRG",
+	"CL",
 	"CM",
 	"CMARS",
 	"CN",
+	"CR",
 	"CRD",
+	"CT",
+	"CY",
+	"CZ",
 	"DARC",
 	"DARES",
 	"DC",
+	"DEU",
+	"DFMA",
 	"DFW",
 	"DK",
 	"DLR",
 	"DLZA",
+	"DM",
 	"DMR",
 	"DOK",
+	"DR",
 	"DRC",
 	"DSTAR",
 	"DSTAT",
 	"DT",
+	"EC",
 	"EDF",
 	"EDR",
+	"EE",
 	"ELDA",
 	"ELZAS",
 	"EMA",
 	"EMC",
 	"EMRE",
 	"ERA",
+	"ES",
 	"FBI",
+	"FD",
 	"FFBG",
+	"FI",
 	"FM",
 	"FMLOG",
+	"FR",
 	"FRA",
 	"FRAG",
 	"FRAT",
@@ -1817,99 +2020,172 @@ upperCaseWords = [
 	"GFB",
 	"GM",
 	"GP",
+	"GR",
 	"GT",
 	"GV",
 	"GW",
+	"HB",
+	"HE",
 	"HFP",
+	"HH",
+	"HI",
 	"HK",
 	"HKG",
 	"HKI",
 	"HOLO",
 	"HORK",
 	"HP",
+	"HR",
 	"HRO",
 	"HRS",
 	"HS",
+	"HT",
+	"HU",
+	"HV",
+	"IA",
 	"ICOM",
 	"ID",
+	"IE",
+	"IF",
 	"IG",
 	"IGBF",
+	"II",
+	"III",
 	"IL",
+	"IN",
 	"IPHA",
 	"IPR",
+	"IT",
+	"IV",
 	"JAM",
 	"JB",
 	"JEZ",
 	"JF",
 	"JH",
+	"JL",
 	"JM",
 	"JMARC",
 	"JOTA",
 	"KBH",
 	"KLN",
+	"KP",
 	"KPGK",
+	"KR",
 	"KS",
 	"KTK",
+	"KW",
+	"KY",
 	"LARU",
+	"LI",
 	"LLV",
 	"LRRA",
+	"LU",
+	"LV",
+	"MA",
 	"MAD",
+	"MB",
 	"MBG",
+	"MD",
+	"ME",
 	"MERT",
+	"MI",
+	"MK",
 	"MLARS",
 	"MLB",
 	"MM",
+	"MN",
+	"MO",
 	"MOKPO",
+	"MS",
+	"MT",
+	"MV",
+	"MX",
+	"MY",
 	"NASA",
+	"NB",
 	"NC",
 	"NCD",
+	"ND",
 	"NDR",
+	"NE",
+	"NH",
+	"NJ",
 	"NJECT",
+	"NL",
+	"NM",
 	"NOZ",
 	"NRRL",
+	"NS",
 	"NT",
 	"NV",
+	"NW",
 	"NY",
 	"NYC",
+	"NZ",
 	"OE",
 	"OEARC",
 	"OEVSV",
+	"OK",
+	"OR",
 	"OT",
 	"OV",
 	"PA",
 	"PBL",
 	"PCRE",
+	"PE",
+	"PH",
+	"PL",
+	"PR",
+	"PT",
+	"PY",
 	"PZK",
+	"QA",
+	"QC",
+	"QLD",
 	"RA",
 	"RAAI",
 	"RACCW",
 	"RACW",
 	"RAGLAN",
+	"RATS",
 	"RC",
 	"RCA",
 	"RCL",
 	"RCV",
+	"RE",
 	"REC",
 	"RECEP",
 	"REEC",
 	"REM",
+	"RI",
+	"RN",
+	"RO",
+	"RP",
+	"RS",
 	"RSF",
 	"RSGB",
 	"RST",
+	"RU",
 	"RWEG",
 	"RWTH",
+	"SA",
 	"SAR",
 	"SAS",
 	"SBARC",
 	"SC",
 	"SCH",
 	"SCS",
+	"SD",
+	"SE",
 	"SES",
+	"SG",
+	"SI",
 	"SJ",
 	"SK",
 	"SL",
 	"SM",
 	"SNARS",
+	"SNCF",
 	"SORE",
 	"SSA",
 	"SSRA",
@@ -1919,13 +2195,21 @@ upperCaseWords = [
 	"SZ",
 	"SZCZEPAN",
 	"TAA",
+	"TAS",
 	"TC",
 	"TDOTA",
 	"TG",
+	"TH",
 	"THW",
 	"TJ",
+	"TN",
+	"TR",
+	"TT",
 	"TV",
+	"TW",
 	"TX",
+	"UA",
+	"UAICF",
 	"UBA",
 	"UK",
 	"UR",
@@ -1933,20 +2217,62 @@ upperCaseWords = [
 	"URCAT",
 	"URO",
 	"URP",
+	"US",
 	"USKA",
+	"UT",
+	"UTR",
+	"UY",
+	"VAN",
+	"VBR",
 	"VCDRC",
 	"VD",
+	"VE",
+	"VLI",
+	"VT",
+	"VWV",
+	"WA",
+	"WAU",
 	"WG",
+	"WHT",
+	"WI",
 	"WIMO",
 	"WLBR",
+	"WLX",
+	"WMY",
+	"WNA",
+	"WV",
 	"WX",
 	"YOTA",
+	"YT",
+	"ZA",
 ]
 
-enable_options = [x for x in sorted(options)]
+def upperFirst(x):
+    return x[0].upper() + x[1:]
+
+def lowerFirst(x):
+    return x[0].lower() + x[1:]
+
+enable_options = [upperFirst(x["name"]) for x in sorted(optionList)]
 disable_options = ["No" + x for x in enable_options]
 
-titleCaseDict = {word : word.capitalize() for word in titleCaseWords}
+titleCaseDict = {word : word.title() for word in titleCaseWords}
+
+stateAbbrevs = {}
+stateAbbrevsInverse = {}
+countryAbbrevsInverse = {}
+
+varbose = False
+options = {}
+files = []
+verbatim = []
+excludedIDRanges = {}
+includedIDRanges = {}
+excludedCountries = {}
+includedCountries = {}
+errors = []
+
+users = {}
 
 def cleanup_blanks(field):
 	# remove leading and trailing blanks
@@ -2045,8 +2371,8 @@ def fixStateCountries(user):
 
 def checkTitleCase():
 	upperCaseDict = {word : True for word in upperCaseWords}
+	newWordDict = {}
 
-	print("new upper-case words:")
 	for _, user in users.iteritems():
 		types = [ "name", "city", "state", "nick", "country"]
 		for field in [user[t] for t in types]:
@@ -2069,46 +2395,37 @@ def checkTitleCase():
 				if word in upperCaseDict:
 					continue
 
-				print(word)
+				newWordDict[word] = True
 
-	print("end of new upper-case words")
+	if len(newWordDict) == 0:
+		print("No new upper-case words.", file=sys.stderr)
+		return
+
+	print("New upper-case words:", file=sys.stderr)
+	for word in sorted(newWordDict):
+		print("\t" + word, file=sys.stderr)
 
 def massage_users():
-	stateAbbrevs = {}
-	for _, abbrevStates in stateAbbrevsByCountry.iteritems():
-		stateAbbrevs.update(abbrevStates)
-
-	stateAbbrevsInverse = {}
-	stateAbbrevsUpper = {}
-	for state, abbrev in stateAbbrevs.iteritems():
-		stateAbbrevsInverse[abbrev] = state
-		stateAbbrevsUpper[abbrev.upper()] = abbrev
-
-	countryAbbrevsInverse = {}
-	countryAbbrevsUpper = {}
-	for country, abbrev in countryAbbrevs.iteritems():
-		countryAbbrevsInverse[abbrev] = country
-		countryAbbrevsUpper[abbrev.upper()] = abbrev
-
 	for dmr_id, user in users.iteritems():
-		# remove blanks from within callsigns
-		user["call"] = user["call"].replace(" ", "")
+		# remove blanks from within callsigns for ids >= 1000000
+		if int(dmr_id) >= 1000000:
+			user["call"] = user["call"].replace(" ", "")
 
-		if options["RemoveDupSurnames"]:
+		if options["removeDupSurnames"]:
 			user["name"] = removeDupSurnames(user["name"])
 
-		if options["RemoveRepeats"]:
+		if options["removeRepeats"]:
 			for key, val in user.iteritems():
 				user[key] = removeRepeats(val)
 
-		if options["TitleCase"]:
+		if options["titleCase"]:
 			user["name"] = titleCase(user["name"])
 			user["city"] = titleCase(user["city"])
 			user["state"] = titleCase(user["state"])
 			user["nick"] = titleCase(user["nick"])
 			user["country"] = titleCase(user["country"])
 
-		if options["RemoveMatchingNick"]:
+		if options["removeMatchingNick"]:
 			first = user["name"].split(" ", 2)[0]
 			if first == user["nick"]:
 				user["nick"] = ""
@@ -2116,51 +2433,43 @@ def massage_users():
 			if user["nick"] == "":
 				user["nick"] = user["name"].split(" ", 2)[0]
 
-		if options["RemoveNames"]:
+		if options["removeNames"]:
 			user["name"] = ""
 			user["nick"] = ""
 
-		if options["FixStateCountries"]:
+		if options["fixStateCountries"]:
 			user = fixStateCountries(user)
 
-		abbrev = countryAbbrevsUpper.get(user["country"].upper(), "")
-		if abbrev != "":
-			user["country"] = abbrev
-
-		abbrev = stateAbbrevsUpper.get(user["state"].upper(), "")
-		if abbrev != "":
-			user["state"] = abbrev
-
-		if options["AbbrevCountries"]:
-			abbrev = countryAbbrevs.get(user["country"], "")
+		if options["abbrevCountries"]:
+			abbrev = countryAbbrevs.get(user["country"].upper(), "")
 			if abbrev != "":
 				user["country"] = abbrev
 		else:
-			country = countryAbbrevsInverse.get(user["country"], "")
+			country = countryAbbrevsInverse.get(user["country"].upper(), "")
 			if country != "":
 				user["country"] = country
 
-		if options["AbbrevStates"]:
-			abbrev = stateAbbrevs.get(user["state"], "")
+		if options["abbrevStates"]:
+			abbrev = stateAbbrevs.get(user["state"].upper(), "")
 			if abbrev != "":
 				user["state"] = abbrev
 		else:
-			state = stateAbbrevsInverse.get(user["state"], "")
+			state = stateAbbrevsInverse.get(user["state"].upper(), "")
 			if state != "":
 				user["state"] = state
 
-		if options["AbbrevDirections"]:
+		if options["abbrevDirections"]:
 			user["city"] = abbrevDirections(user["city"])
 			user["state"] = abbrevDirections(user["state"])
 
-		if options["RemoveCallFromNick"]:
+		if options["removeCallFromNick"]:
 			user["nick"] = removeSubstr(user["nick"], user["call"])
 
-		if options["MiscChanges"]:
+		if options["miscChanges"]:
 			if user["city"].endswith(" (B,"):
 				user["city"] = user["city"][:-len(" (B")]
 
-		if options["FixRomanNumerals"]:
+		if options["fixRomanNumerals"]:
 			user["name"] = fixRomanNumerals(user["name"])
 
 		for key, val in user.iteritems():
@@ -2186,8 +2495,8 @@ def read_user_line(file, i, line):
 	fields = line.split(",")
 
 	try:
-		dmr_id = int(fields[0])
-		if dmr_id > 16777215:
+		i_dmr_id = int(fields[0])
+		if i_dmr_id > 16777215:
 			print("{0}:{1} Invalid DMR ID value: {2}".format(
 				file.name, i, line), file=sys.stderr)
 			return
@@ -2210,6 +2519,52 @@ def read_user_line(file, i, line):
 
 	dmr_id, call, name, city, state, nick, country = fields
 
+	if file.name in excludedCountries:
+		if country.upper() in excludedCountries[file.name]:
+			return
+
+	if "*" in excludedCountries:
+		if country.upper() in excludedCountries["*"]:
+			return
+
+	includedCountry = True
+	if file.name in includedCountries or "*" in includedCountries:
+		includedCountry = False
+		if file.name in includedCountries:
+			if country.upper() in includedCountries[file.name]:
+				includedCountry = True
+		if "*" in includedCountries:
+			if country.upper() in includedCountries["*"]:
+				includedCountry = True
+	if not includedCountry:
+		return
+
+	excludedID = False
+	if file.name in excludedIDRanges:
+		for idRange in excludedIDRanges[file.name]:
+			if i_dmr_id >= idRange[0] and i_dmr_id <= idRange[1]:
+				excludedID = True
+	if "*" in excludedIDRanges:
+		for idRange in excludedIDRanges["*"]:
+			if i_dmr_id >= idRange[0] and i_dmr_id <= idRange[1]:
+				excludedID = True
+	if excludedID:
+		return
+
+	includedID = True
+	if file.name in includedIDRanges or "*" in includedIDRanges:
+		includedID = False
+		if file.name in includedIDRanges:
+			for idRange in includedIDRanges[file.name]:
+				if i_dmr_id >= idRange[0] and i_dmr_id <= idRange[1]:
+					includedID = True
+		if "*" in includedIDRanges:
+			for idRange in includedIDRanges[file.name]:
+				if i_dmr_id >= idRange[0] and i_dmr_id <= idRange[1]:
+					includedID = True
+	if not includedID:
+		return
+
 	new_user = {
 		"call": call,
 		"name": name,
@@ -2231,49 +2586,410 @@ def read_user_line(file, i, line):
 
 	user = users.get(dmr_id, blank_user)
 
+	changed = False
 	for key, val in new_user.iteritems():
 		if val != "":
 			user[key] = val
+			changed = True
 
-	users[dmr_id] = user
+	if changed:
+		users[dmr_id] = user
+
+def excludeIDRanges(filename, idRanges, errPrefix):
+	if filename != "*":
+		try:
+			file = open(filename, "r")
+			file.close()
+		except IOError as err:
+			errors.append(errPrefix + str(err))
+			return
+
+	for idRange in idRanges:
+		ids = idRange.split("-", 2)
+		if len(ids) == 1:
+			ids = [ids[0], ids[0]]
+
+		try:
+			ids = [int(ids[0]), int(ids[1])]
+		except ValueError:
+			errors.append(errPrefix + "bad IDRange {0}".format(idRange))
+			return
+
+		x = excludedIDRanges.get(filename, None)
+		if x == None:
+			excludedIDRanges[filename] = []
+
+		excludedIDRanges[filename].append(ids)
+
+def includeIDRanges(filename, idRanges, errPrefix):
+	if filename != "*":
+		try:
+			file = open(filename, "r")
+			file.close()
+		except IOError as err:
+			errors.append(errPrefix + str(err))
+			return
+
+	for idRange in idRanges:
+		ids = idRange.split("-", 2)
+		if len(ids) == 1:
+			ids = [ids[0], ids[0]]
+
+		try:
+			ids = [int(ids[0]), int(ids[1])]
+		except ValueError:
+			errors.append(errPrefix + "bad IDRange {0}".format(idRange))
+			return
+
+		x = includedIDRanges.get(filename, None)
+		if x == None:
+			includedIDRanges[filename] = []
+
+		includedIDRanges[filename].append(ids)
+
+def excludeCountries(filename, countries, errPrefix):
+	if filename != "*":
+		try:
+			file = open(filename, "r")
+			file.close()
+		except IOError as err:
+			errors.append(errPrefix + str(err))
+			return
+
+	countryMap = {}
+	for country in countries:
+		country = country.upper()
+		countryMap[country] = True
+		abbrev = countryAbbrevs.get(country, "")
+		if abbrev != "":
+			countryMap[abbrev.upper()] = True
+		abbrev = countryAbbrevsInverse.get(country, "")
+		if abbrev != "":
+			countryMap[abbrev.upper()] = True
+
+	x = excludedCountries.get(filename, None)
+	if x == None:
+		excludedCountries[filename] = []
+
+	excludedCountries[filename].extend(countryMap.keys())
+
+def includeCountries(filename, countries, errPrefix):
+	if filename != "*":
+		try:
+			file = open(filename, "r")
+			file.close()
+		except IOError as err:
+			errors.append(errPrefix + str(err))
+			return
+
+	countryMap = {}
+	for country in countries:
+		country = country.upper()
+		countryMap[country] = True
+		abbrev = countryAbbrevs.get(country, "")
+		if abbrev != "":
+			countryMap[abbrev.upper()] = True
+		abbrev = countryAbbrevsInverse.get(country, "")
+		if abbrev != "":
+			countryMap[abbrev.upper()] = True
+
+	x = includedCountries.get(filename, None)
+	if x == None:
+		includedCountries[filename] = []
+
+	includedCountries[filename].extend(countryMap.keys())
+
+def parseConfigLine(configFile, i, line):
+	global verbatim, debug, verbose
+
+	errPrefix = "{0}:{1}: ".format(configFile.name, i)
+	tokens = shlex.split(line, True)
+	if len(tokens) == 0:
+		return
+
+	cmd = tokens[0].lower()
+	args = tokens[1:]
+
+	if len(args) == 0:
+		for opt in enable_options:
+			if opt.lower() == cmd:
+				options[opt] = True
+				return
+
+		for opt in disable_options:
+			if opt.lower() == cmd:
+				options[opt[2:]] = False
+				return
+
+		if cmd == "debug":
+			debug = True
+			return
+
+		if cmd == "verbose":
+			verbose = True
+			return
+
+	if cmd == "file" or cmd == "files":
+		for arg in args:
+			try:
+				file = open(arg, "r")
+				files.append(file)
+			except IOError as err:
+				errors.append(errPrefix + str(err))
+		return
+
+	if cmd == "verbatim" or cmd == "verbatims":
+		for arg in args:
+			try:
+				verbatimFile = open(arg, "r")
+				verbatim.append(verbatimFile)
+			except IOError as err:
+				errors.append(errPrefix + str(err))
+		return
+
+	if cmd == "excludeid" or cmd == "excludeids":
+		filename = args[0]
+		idRanges = args[1:]
+		excludeIDRanges(filename, idRanges, errPrefix)
+		return
+
+	if cmd == "includeid" or cmd == "includeids":
+		filename = args[0]
+		idRanges = args[1:]
+		includeIDRanges(filename, idRanges, errPrefix)
+		return
+
+	if cmd == "excludecountry" or cmd == "excludecountries":
+		filename = args[0]
+		countries = args[1:]
+		excludeCountries(filename, countries, errPrefix)
+		return
+
+	if cmd == "includecountry" or cmd == "includecountries":
+		filename = args[0]
+		countries = args[1:]
+		includeCountries(filename, countries, errPrefix)
+		return
+
+	errors.append(errPrefix + "syntax error")
+
+def process_config_file(configFile):
+	i = 1
+	for line in configFile:
+		parseConfigLine(configFile, i, line)
+		i += 1
 
 def process_args():
-	parser = argparse.ArgumentParser(description="Merge userdb files")
-	parser.add_argument("-o", nargs=1, dest="options",
-		action="append", choices=enable_options + disable_options)
+	global verbatim, debug, verbose
 
-	parser.add_argument("--verbatim", nargs=1, dest="verbatim",
-		metavar="filename",
-		action="append", type=argparse.FileType("r"),
-		help="a filename to be merged without modification")
+	parser = argparse.ArgumentParser(description="Merge userdb files")
+
+	for opt in optionList:
+		parser.add_argument("--" + opt["name"],
+			action="store_true", dest=opt["name"], default=None,
+			help=opt["help"])
+		parser.add_argument("--no" + upperFirst(opt["name"]),
+			action="store_false", dest=opt["name"], default=None,
+			help="Do not " + lowerFirst(opt["help"]))
+
+	parser.add_argument("--config", nargs=1, metavar="configfilename",
+		action="store", type=argparse.FileType("r"),
+		help="A file containing configuration flags and options")
+
+	parser.add_argument("--verbatim", "--verbatims", nargs="+",
+		metavar="filename", action="append",
+		type=argparse.FileType("r"),
+		help="A filename whose fields are merged without " +
+			"modification. These files are merged after field " +
+			"fixups have been applied.")
 
 	parser.add_argument("files", metavar="filename", nargs="*",
-		type=argparse.FileType("r"), help="a filename to be merged")
+		type=argparse.FileType("r"), help="A filename to be merged. " +
+		"Files are merged in the order that they are named in this " +
+		"list. Fields from later files take precedence over " +
+		"(replace) those of previous files.")
 
-	parser.add_argument("--version", help="output the current version",
+	parser.add_argument("-v", "--verbose", help="Enable verbose output.",
 		action="store_true")
+
+	parser.add_argument("--debug", help="Enable debugging output.",
+		action="store_true")
+
+	parser.add_argument("--version", help="Output the current version.",
+		action="store_true")
+
+	parser.add_argument("--excludeID", "--excludeIDs", nargs="+",
+		action="append", metavar=("filename", "id1[-id2]"),
+		help="This option only applies to the named file. " +
+			"Any records with a dmr-id matching id1 or within " +
+			"the range id1-id2 is excluded from the output")
+
+	parser.add_argument("--includeID", "--includeIDs", nargs="+",
+		action="append", metavar=("filename", "id1[-id2]"),
+		help="This option only applies to the named file. " +
+			"Only records with a dmr-id matching id1 or within " +
+			"the range id1-id2 are included in the output")
+
+	parser.add_argument("--excludeCountry", "--excludeCountries",
+		nargs="+", action="append", metavar=("filename", "countryname"),
+		help="This option only applies to the named file. " +
+			"Any records with a country name matching " +
+			"countryname are excluded from the output")
+
+	parser.add_argument("--includeCountry", "--includeCountries",
+		nargs="+", action="append", metavar=("filename", "countryname"),
+		help="This option only applies to the named file. " +
+			"Only records with a country name matching " +
+			"countryname are included in the output")
+
+	parser.add_argument("-o", nargs=1, dest="options",
+		action="append", choices=enable_options + disable_options,
+		help=argparse.SUPPRESS)
 
 	args = parser.parse_args()
 
-	if args.options != None:
-		for opts in args.options:
-			for opt in opts:
-				if opt in enable_options:
-					options[opt] = True
-				elif opt in disable_options:
-					options[opt[2:]] = False
+	debug = False
+	if args.debug:
+		debug = True
 
-	verbatim = []
-	if args.verbatim != None:
-		for files in args.verbatim:
-			verbatim += files
-	args.verbatim = verbatim
+	verbose = False
+	if args.verbose or args.debug:
+		verbose = True
 
 	if args.version:
 		print(version)
 		sys.exit(0)
 
-	return args
+	for _, abbrevStates in stateAbbrevsByCountry.iteritems():
+		stateAbbrevs.update(abbrevStates)
+
+	for state, abbrev in stateAbbrevs.items():
+		stateAbbrevs[state.upper()] = abbrev
+		existing = stateAbbrevsInverse.get(abbrev.upper(), "")
+		if existing != "":
+			print("Error: duplicate abbreviation:", abbrev,
+				file=sys.stderr)
+		stateAbbrevsInverse[abbrev.upper()] = state
+
+	for _, abbrevStates in alternateStateAbbrevsByCountry.iteritems():
+		for state, abbrev in abbrevStates.items():
+			stateAbbrevs[state.upper()] = abbrev
+
+	for country, abbrev in countryAbbrevs.items():
+		countryAbbrevs[country.upper()] = abbrev
+		existing = countryAbbrevsInverse.get(abbrev.upper(), "")
+		if existing != "":
+			print("Error: duplicate abbreviation:", abbrev,
+				file=sys.stderr)
+		countryAbbrevsInverse[abbrev.upper()] = country
+
+	for country, abbrev in alternateCountryAbbrevs.items():
+		countryAbbrevs[country.upper()] = abbrev
+
+	for abbrev, country in inverseCountryAbbrevs.items():
+		countryAbbrevsInverse[abbrev.upper()] = country
+
+	for opt in optionList:
+		options[opt["name"]] = opt["default"]
+
+	if args.config != None:
+		for configFile in args.config:
+			process_config_file(configFile)
+
+	for opt in optionList:
+		name = opt["name"]
+		if vars(args)[name] != None:
+			options[name] = vars(args)[name]
+
+	if args.options != None:
+		flatOpts = [lowerFirst(opt)
+				for sublist in args.options for opt in sublist]
+		for opt in optionList:
+			name = lowerFirst(opt["name"])
+			if name in flatOpts:
+				options[name] = True
+				if verbose:
+					print("'-o " + upperFirst(name) +
+						"' is obsolete. Use '--" +
+						name + "'.", file=sys.stderr)
+				continue
+			noname = "no" + upperFirst(name)
+			if noname in flatOpts:
+				options[lowerFirst(name)] = False
+				if verbose:
+					print("'-o " + upperFirst(noname) +
+						"' is obsolete. Use '--" +
+						noname +"'.", file=sys.stderr)
+
+	if args.verbatim != None:
+		for verbatimFiles in args.verbatim:
+			verbatim += verbatimFiles
+
+	errPrefix = ""
+
+	if args.excludeID != None:
+		filename = args.excludeID[0][0]
+		idRanges = args.excludeID[0][1:]
+		excludeIDRanges(filename, idRanges, errPrefix)
+
+	if args.includeID != None:
+		filename = args.includeID[0][0]
+		includeIDRanges(filename, idRanges, errPrefix)
+
+	if args.excludeCountry != None:
+		filename = args.excludeCountry[0][0]
+		countries = args.excludeCountry[0][1:]
+		excludeCountries(filename, countries, errPrefix)
+
+	if args.includeCountry != None:
+		filename = args.includeCountry[0][0]
+		countries = args.includeCountry[0][1:]
+		includeCountries(filename, countries, errPrefix)
+
+	files.extend(args.files)
+
+	if len(errors) > 0:
+		for error in errors:
+			print(error, file=sys.stderr)
+		sys.exit(1)
+
+	if verbose:
+		for opt in sorted(options):
+			print(opt, options[opt], file=sys.stderr)
+
+		for filename in excludedIDRanges:
+			for range in excludedIDRanges[filename]:
+				if range[0] == range[1]:
+					s = str(range[0])
+				else:
+					s = str(range[0]) + "-" + str(range[1])
+
+				print("excludeID", filename, s, file=sys.stderr)
+
+		for filename in includedIDRanges:
+			for range in includedIDRanges[filename]:
+				if range[0] == range[1]:
+					s = str(range[0])
+				else:
+					s = str(range[0]) + "-" + str(range[1])
+
+				print("includeID", filename, s, file=sys.stderr)
+
+		for filename in excludedCountries:
+			for country in excludedCountries[filename]:
+				print("excludeCountry", filename, country,
+					file=sys.stderr)
+
+		for filename in includedCountries:
+			for country in includedCountries[filename]:
+				print("includeCountry", filename, country,
+					file=sys.stderr)
+
+		for file in files:
+			print("file:", file.name, file=sys.stderr)
+
+		for file in verbatim:
+			print("verbatim:", file.name, file=sys.stderr)
 
 def read_user_files(files):
 	for file in files:
@@ -2295,19 +3011,22 @@ def output_users():
 
 	lines[0] = str(byteCount)
 
-	if not options["Header"]:
+	if len(lines) == 1 or not options["header"]:
 		lines = lines[1:]
 
 	for line in lines:
 		print(line)
 
 def main():
-	args = process_args()
-	read_user_files(args.files)
+	process_args()
+
+	read_user_files(files)
 	massage_users()
-	read_user_files(args.verbatim)
-	if options["CheckTitleCase"]:
+	read_user_files(verbatim)
+
+	if verbose:
 		checkTitleCase()
+
 	output_users()
 
 if __name__ == '__main__':

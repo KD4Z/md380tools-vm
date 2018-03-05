@@ -170,26 +170,32 @@ static const char *const countries[] = {
 
 static const char *const states[] = {
 	"AB,Alberta",
+     "ABR,Abruzzo",
 	"ACT,Austrailian Capital T.",
 	"AK,Alaska",
 	"AL,Alabama",
 	"AN,Antwerpen",
 	"AR,Arkansas",
 	"AZ,Arizona",
+     "BAS,Basilicata",
 	"BB,Brandenburg",
 	"BC,British Columbia",
 	"BE,Berlin",
 	"BW,Baden-Wurttemberg",
 	"BY,Bavaria",
 	"CA,California",
+     "CAL,Calabria",
+     "CAM,Campania",
 	"CO,Colorada",
 	"CT,Connecticut",
 	"DC,District of Columbia",
 	"DE,Delaware",
 	"DR,Drenthe",
+     "EMI,Emila-Romagna",
 	"FD,Flevoland",
 	"FL,Florida",
 	"FR,Friesland",
+     "FRI,Friuli-Venezia Giulia",
 	"GA,Georgia",
 	"GE,Gelderland",
 	"GR,Groningen",
@@ -203,16 +209,21 @@ static const char *const states[] = {
 	"IL,Illinois",
 	"IN,Indiana",
 	"KS,Kansas",
-	"KY,Kentucky",
+  	"KY,Kentucky",
 	"LA,Louisiana",
+     "LAZ,Lazio",
 	"LI,Limburg",
+     "LIG,Liguria",  
+     "LOM,Lombardia", 
 	"MA,Massachusetts",
+     "MAR,Marche", 
 	"MB,Manitoba",
 	"MD,Maryland",
 	"ME,Maine",
 	"MI,Michigan",
 	"MN,Minnesota",
 	"MO,Missouri",
+     "MOL,Molise",
 	"MS,Mississippi",
 	"MT,Montana",
 	"MV,Mecklenburg-Vorpommern",
@@ -242,6 +253,7 @@ static const char *const states[] = {
 	"OV,Overijssel",
      "PA,Pennsylvania",
 	"PE,Prince Edward Is.",
+     "PIE,Piemonte", 
      "PLDS,Lower Silesia",
      "PLKP,Kuyavia-Pomerania",
      "PLLB,Lubusz",
@@ -256,30 +268,39 @@ static const char *const states[] = {
      "PLSK,Holy Cross",
      "PLSL,Silesia",
      "PLWN,Greater Poland",
-     "PLZP,West Pomerania",
+     "PLZP,W. Pomerania",
      "PR,Puerto Rico",
+     "PUG,Puglia",
 	"QC,Quebec",
 	"QLD,Queensland",
 	"RI,Rhode Island",
 	"RP,Rhineland-Palatinate",
 	"SA,S. Australia",
+     "SAR,Sardegna",
 	"SC,S. Carolina",
 	"SD,S. Dakota",
 	"SH,Schleswig-Holstein",
+     "SIC,Sicilia",
 	"SK,Saskatchewan",
 	"SL,Saarland",
 	"SN,Saxony",
 	"ST,Saxony-Anhalt",
+     "SV,Savona",
 	"TAS,Tasmania",
 	"TH,Thuringia",
 	"TN,Tennessee",
+     "TOS,Toscana",
+     "TRE,Trentino-Alto Adige",
 	"TX,Texas",
+     "UMB,Umbria",
 	"UT,Utah",
 	"UTR,Utrecht",
 	"VA,Virginia",
+     "VAL,Valle d'Aosta",
 	"VAN,Antwerp",
 	"VB,Vlaams-Brabant",
 	"VBR,Flemish Brabant",
+     "VEN,Veneto",
 	"VIC,Victoria",
 	"VLI,Limburg",
 	"VOV,E. Flanders",
@@ -307,7 +328,7 @@ int abbrevs_sorted(const char *const a[], int size) {
 	for (int i = 1; i < size; i++)
 		if (strcmp(a[i-1], a[i]) >= 0) {
 			hasSortIssue = 0;
-			//printf("Sort problem, these need to be swapped: %s and %s \n",a[i-1],a[i]);
+			printf("Sort problem, these need to be swapped: %s and %s \n",a[i-1],a[i]);
 			return hasSortIssue;
 			
 		}
@@ -426,6 +447,8 @@ char *get_firstname(user_t *up, char *buf, int buflen) {
 
 char *lookup_country(user_t *up, char *buf) {
 	const char *p = lookupAbbrev(up->country, countries, ARRAY_SIZE(countries));
+     //printf("lookup country in %s",up->country);
+     //printf(" out=%s\n",p);
 	strcpy(buf, p);
 	return buf;
 }
@@ -871,7 +894,7 @@ void draw_rx_screen(unsigned int bg_color)
 
  	dc.x = 0;
 	dc.y = 15;
-     
+     //printf("usr.country= %s \n",usr.country);
      char *state = lookup_state(&usr, state_buf);
 	char *country = lookup_country(&usr, country_buf);
      displayLines = (strlen(state) + strlen(country)) > STATECOUNTRY_MAX_LARGEFONT_CHARS ? 5 : 4 ;

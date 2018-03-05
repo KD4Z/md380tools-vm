@@ -71,6 +71,7 @@ fi
 
 echo -e ""
 echo -e "  ${YELLOW}${ZCOM5}${NC} ${BLUE}${ZCOM51}${NC} -- ${ZWRITE4} "
+
 echo -e ""
 echo -e -n "\t${YELLOW}menu${NC}     -- ${ZMESS61}${NC}"
 if [ -f /etc/motd.save ]; then
@@ -78,5 +79,6 @@ if [ -f /etc/motd.save ]; then
 else
   echo -e ""
 fi
+echo -e "\t${YELLOW}${ZCOM8}${NC}   -- ${ZCOM22}"
 echo -e "\t${YELLOW}help${NC}     -- ${ZMESS71}"
 echo -e ""
