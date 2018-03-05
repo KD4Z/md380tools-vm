@@ -1,6 +1,6 @@
 #!/bin/bash 
 # KD4Z
-# Version:  4.40
+# Version:  4.41
 # main menu
 
 if [ ! -f /etc/motd.save ]; then
@@ -19,7 +19,7 @@ else
   cntcolor=${GREEN}
 fi
  
-vers="4.40"
+vers="4.41"
  
 
 echo -e " ${WHITE}${ZPROJ} (v${vers})${NC}\t  (${ZCOUNT1}${cntcolor} ${countmarc} / ${userbinsize}${NC} bytes)"
