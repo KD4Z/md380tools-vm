@@ -91,7 +91,7 @@ export ZCOM23="Back to main"
 export ZCOM34="Active"
 export ZCOM35="Inactive"
 export ZCOM32="Option settings are controlled by file existence in the home directory."
-export ZCOM33="These take affect during your next ${YELLOW}glv${NC}.  ${RED}*${NC} indicates tweakfile present."
+export ZCOM33="These take effect during your next ${YELLOW}glv${NC}.  ${RED}*${NC} indicates tweakfile present."
 export ZCOM37="Example"
 export ZCOM38="abbreviation"
 export ZCOM39="Add"
@@ -119,7 +119,7 @@ export ZCOM60="Recover Locked Radio"
 export ZCOM61="Utility"
 export ZCOM62="Legacy RX Screen"
 export ZCOM63="Black Font in RX Screen"
-
+export ZCOM64="Contact Filters"
 #### SECTION 3 ########################################################################
 
 # Only localize variables below

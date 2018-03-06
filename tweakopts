@@ -11,6 +11,13 @@ echo -e ""
 echo -e "  ${ZCOM37}:  ${YELLOW}${ZCOM29}${NC} ~/volumebar.enable"
 echo -e ""
 echo -e " ${WHITE}-- tweakfile list  --${NC}"
+echo -e -n "  ${BLUE}~/filter.disable${NC}  ${ZCOM43} ${ZCOM64}" 
+if [ -f ~/filter.disable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+
 echo -e -n "  ${BLUE}~/extra.data.disable${NC}  ${ZCOM43} ${ZCOM48}" 
 if [ -f ~/extra.data.disable ]; then
  echo -e "${RED} *${NC}"

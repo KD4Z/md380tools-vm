@@ -1,11 +1,17 @@
 # stats
 # KD4Z
-# Version:  3.20
+# Version:  4.42
 # displays stats of various items
 
 clear
 . ~/md380tools-vm/strings
  
+EXCLUDEIDS=~/exclude.ids
+EXCLUDECOUNTRIES=~/exclude.countries
+INCLUDEIDS=~/include.ids
+INCLUDECOUNTRIES=~/include.countries
+MERGECONFIG=~/md380tools-vm/mergeconfig
+FILTERDISABLESEMA=~/filter.disable
 
 echo -e "Collecting information..."
 ipin=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
@@ -49,6 +55,35 @@ echo -e "${WHITE}Contact Data${NC}"
 echo -e "${GREEN} Contact datafile : ${YELLOW}${userbinsize}		${WHITE}(flashdb)"
 echo -e "${GREEN} DMR-MARC count   : ${YELLOW}${countmarc}"
 echo -e "${GREEN} Contact records  : ${YELLOW}${countall}"
+echo -e ""
+MERGECONFIG=~/md380tools-vm/mergeconfig
+if [ -f $MERGECONFIG ]; then
+  echo -e "${WHITE}Contact Filter was Enabled during last run${NC}"
+  echo -e -n "${YELLOW}"
+  countfilter=$(wc --lines $MERGECONFIG | cut -d" " -f1)
+   if (( countfilter < 10 )); then
+   		if [ -f $INCLUDEIDS ]; then
+			echo -e -n "${GREEN} Include DMR IDs: ${YELLOW}"
+			awk -F" " 'length($1) {printf " %s,",$1}' $INCLUDEIDS
+			echo -e ""
+		fi
+		if [ -f $INCLUDECOUNTRIES ]; then
+			echo -e -n "${GREEN} Include Countries: ${YELLOW}"
+			awk -F" " 'length($1) {printf "%s,",$1}' $INCLUDECOUNTRIES
+			echo -e ""
+		fi
+  		if [ -f $EXCLUDEIDS ]; then
+			echo -e -n "${GREEN} Exclude DMR IDs: ${YELLOW}"
+			awk -F" " 'length($1) {printf " %s,",$1}' $EXCLUDEIDS
+			echo -e ""
+		fi
+		if [ -f $EXCLUDECOUNTRIES ]; then
+			echo -e -n "${GREEN} Exclude Countries: ${YELLOW}"
+			awk -F" " 'length($1) {printf "%s,",$1}' $EXCLUDECOUNTRIES
+			echo -e ""
+		fi
+   fi
+fi
 
 echo -e "${NC}"
 echo -e ""
