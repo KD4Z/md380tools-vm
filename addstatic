@@ -36,6 +36,8 @@ MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
 EXCLUDEIDS=~/exclude.ids
 EXCLUDECOUNTRIES=~/exclude.countries
+INCLUDEIDS=~/include.ids
+INCLUDECOUNTRIES=~/include.countries
 MERGECONFIG=~/md380tools-vm/mergeconfig
 
 if [ -f $FILENICKZIP ]; then
@@ -103,7 +105,12 @@ fi
 if [ -f $EXCLUDEIDS ]; then
   awk -F, 'length($1) {print "excludeID * "$1}' $EXCLUDEIDS >>$MERGECONFIG
 fi
-
+if [ -f $INCLUDECOUNTRIES ]; then
+  awk -F, 'length($1) {print "includecountry * "$1}' $INCLUDECOUNTRIES >>$MERGECONFIG
+fi
+if [ -f $INCLUDEIDS ]; then
+  awk -F, 'length($1) {print "includeID * "$1}' $INCLUDEIDS >>$MERGECONFIG
+fi
 if [ -f $FINALDMRMARC ]; then
 	FILELIST="$FINALDMRMARC"
 fi
