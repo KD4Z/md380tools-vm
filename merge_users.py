@@ -40,7 +40,7 @@ import sys
 import argparse
 import shlex
 
-version = "1.0.2+"
+version = "1.0.3++"
 
 optionList = [
 	dict(
@@ -336,22 +336,22 @@ stateAbbrevsByCountry = {
 		"West Flanders":		"VWV",
 	},
 	"Poland":{
-			"Dolnoslaskie":			"PLDS",
-			"Kujawsko-pomorskie":			"PLKP",
-			"Lubelskie":			"PLLU",
-			"Lubuskie":			"PLLB",
-			"Lodzkie":			"PLLD",
-			"Malopolskie":			"PLMA",
-			"Mazowieckie":			"PLMZ",
-			"Opolskie":			"PLOP",
-			"Podkarpackie":			"PLPK",
-			"Podlaskie":			"PLPD",
-			"Pomorskie":			"PLPM",
-			"Slaskie":			"PLSL",
-			"Swietokrzyskie":			"PLSK",
-			"Warminsko-mazurskie":			"PLWN",
-			"Wielkopolskie":			"PLWP",
-			"Zachodniopomorskie":			"PLZP",
+		"Dolnoslaskie":			"PLDS",
+		"Kujawsko-pomorskie":			"PLKP",
+		"Lubelskie":			"PLLU",
+		"Lubuskie":			"PLLB",
+		"Lodzkie":			"PLLD",
+		"Malopolskie":			"PLMA",
+		"Mazowieckie":			"PLMZ",
+		"Opolskie":			"PLOP",
+		"Podkarpackie":			"PLPK",
+		"Podlaskie":			"PLPD",
+		"Pomorskie":			"PLPM",
+		"Slaskie":			"PLSL",
+		"Swietokrzyskie":			"PLSK",
+		"Warminsko-mazurskie":			"PLWN",
+		"Wielkopolskie":			"PLWP",
+		"Zachodniopomorskie":			"PLZP",
 	},
 	"Italy": {
 		"Abruzzo":			"ABR",
@@ -2421,9 +2421,9 @@ def massage_users():
 		if options["titleCase"]:
 			user["name"] = titleCase(user["name"])
 			user["city"] = titleCase(user["city"])
-			user["state"] = titleCase(user["state"])
+			#user["state"] = titleCase(user["state"])
 			user["nick"] = titleCase(user["nick"])
-			user["country"] = titleCase(user["country"])
+			#user["country"] = titleCase(user["country"])
 
 		if options["removeMatchingNick"]:
 			first = user["name"].split(" ", 2)[0]

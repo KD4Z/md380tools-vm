@@ -79,7 +79,7 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
-		python ~/md380tools-vm/merge_users.py $TMPALTERNATE -o AbbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
+		python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
 	fi
 fi
 
