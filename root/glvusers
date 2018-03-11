@@ -1,7 +1,7 @@
 #!/bin/bash
 # glvusers
 # KD4Z
-# Version:  3.11
+# Version:  4.43
 # builds the user.bin and flashes to radio.
 # skips the firmware build portion for faster updates
 
@@ -12,7 +12,15 @@ if [ ! -d ~/md380tools ]; then
   exit 1
 fi
 
-cd ~/md380tools
+
+cd ~/md380tools-vm
+~/md380tools-vm/exec.post
+
+echo -e "${WHITE}Run ${YELLOW}  menu   ${WHITE}to return to the main menu screen ${NC}"
+
+cd ~
+exit 1
+
 
 if [ -f ~/md380tools/db/stripped.csv ]; then
   rm ~/md380tools/db/stripped.csv
