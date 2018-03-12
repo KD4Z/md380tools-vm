@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.42
+# Version:  4.43
 # Part of the user.db creation step.  Far more advanced than just
 # including dmr-marc data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -25,7 +25,8 @@ FILESTATIC=~/static.users
 FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
-FINALDMRMARC=~/md380tools/db/stripped.csv
+STRIPPEDFROMJSON=~/dmrmarc_json.tmp
+#FINALDMRMARC=~/md380tools/db/stripped.csv
 USERDB=~/user.bin
 TMPALTERNATE=~/alternate_strippedCSV.tmp
 FINALALTERNATE=~/alternate_strippedCSV.final
@@ -34,6 +35,7 @@ ALTERNATESEMADISABLE=~/extra.data.disable
 ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
 MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
+JSONERROR=~/dmrmarc.json.error
 EXCLUDEIDS=~/exclude.ids
 EXCLUDECOUNTRIES=~/exclude.countries
 INCLUDEIDS=~/include.ids
@@ -65,17 +67,22 @@ if [ -f $FILENICKZIP ]; then
 		fi
 	fi
 fi
-
+if [ -f ~/md380tools-vm/get_dmrmarc.py ]; then
+	echo -e -n "${WHITE}Downloading dmr-marc data."
+	python ~/md380tools-vm/get_dmrmarc.py > $STRIPPEDFROMJSON 2>$JSONERROR
+	echo -e "...done${NC}"
+fi
 if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
 if [ ! -f $ALTERNATESEMADISABLE ]; then
 	OPTS="-quiet --no-verbose"
 	if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
-	echo -e "${WHITE}Downloading alternate data...${NC}"
+	echo -e -n "${WHITE}Downloading alternate data."
 	if [ -f ~/keep.tmp ]; then
 		timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
 	else
 		timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE  2>$ALTFILEDLERROR
 	fi 
+	echo -e "...done${NC}"
 	if [ ! -f $TMPALTERNATE ]; then 
 			echo -e " ${RED}Alternate data not downloaded.  See ${ALTFILEDLERROR} ${NC}"
 	fi
@@ -115,8 +122,9 @@ if [ ! -f $FILTERDISABLESEMA ]; then
 	  awk -F, 'length($1) {print "includeID * "$1}' $INCLUDEIDS >>$MERGECONFIG
 	fi
 fi
-if [ -f $FINALDMRMARC ]; then
-	FILELIST="$FINALDMRMARC"
+
+if [ -f $STRIPPEDFROMJSON ]; then
+	FILELIST="$STRIPPEDFROMJSON"
 fi
 if [ -f $FINALALTERNATE ]; then 
 	FILELIST="$FILELIST $FINALALTERNATE"  
@@ -157,8 +165,8 @@ if [ -f $FINALALTERNATE ] ; then
   countalter=$(wc --lines $FINALALTERNATE | cut -d" " -f1)
   sizealter=$(ls -l $FINALALTERNATE | cut -d" " -f5)
 fi
-countmarc=$(wc --lines $FINALDMRMARC | cut -d" " -f1)
-sizemarc=$(ls -l $FINALDMRMARC | cut -d" " -f5)
+countmarc=$(wc --lines $STRIPPEDFROMJSON | cut -d" " -f1)
+sizemarc=$(ls -l $STRIPPEDFROMJSON | cut -d" " -f5)
 countall=$(wc --lines $USERDB | cut -d" " -f1)
 sizemergeerrors=$(ls -l $MERGEERRORS | cut -d" " -f5)
 countmergeerrors=$(wc --lines $MERGEERRORS | cut -d" " -f1)
@@ -182,7 +190,7 @@ fi
 if (( sizemergeerrors > 10 )); then
 echo -e "${GREEN}  Records skipped  :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
 fi
-if (( countmarc < 83000 )); then
+if (( countmarc < 50000 )); then
   echo -e "${RED} ** The Downloads for Contact information may have failed - run ${YELLOW}glvusers${RED} again"
   echo -e "${RED} ** before running ${YELLOW}flashdb${RED}, as the user.bin is not normal size.${NC}"
   echo -e "\a"
