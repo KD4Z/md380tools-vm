@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # KD4Z
 # dmr-marc decided to stop offering CSV output format, so json here we come
-
+from __future__ import print_function
 import requests
 import sys
 
@@ -23,6 +23,9 @@ def noCommas(field):
 def dmrmarc_json():
 	
 	myreq = requests.get('http://www.dmr-marc.net/cgi-bin/trbo-database/datadump.cgi?table=users&format=json')
+	if len(myreq.text) < 1000:
+		print("dmr-marc site error:", myreq.text, file=sys.stderr)
+		return
 
 	dmrmarc = myreq.json()
 
