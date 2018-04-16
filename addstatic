@@ -29,7 +29,7 @@ STRIPPEDFROMJSON=~/dmrmarc_json.tmp
 DMRMARCSTATICUSERSURL=https://dmr-marc.net/static/users.csv
 DMRMARCSTATICFILE=~/users.csv
 DMRMARCERROR=~/dmrmarc.errors
-#FINALDMRMARC=~/md380tools/db/stripped.csv
+FINALDMRMARC=~/md380tools/db/stripped.csv
 USERDB=~/user.bin
 TMPALTERNATE=~/alternate_strippedCSV.tmp
 FINALALTERNATE=~/alternate_strippedCSV.final
@@ -38,7 +38,7 @@ ALTERNATESEMADISABLE=~/extra.data.disable
 ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
 MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
-JSONERROR=~/dmrmarc.json.error
+#JSONERROR=~/dmrmarc.json.error
 EXCLUDEIDS=~/exclude.ids
 EXCLUDECOUNTRIES=~/exclude.countries
 INCLUDEIDS=~/include.ids
@@ -94,11 +94,12 @@ countmarc=$(wc --lines $DMRMARCSTATICFILE | cut -d" " -f1)
 if (( countmarc < 10 )); then
 	echo -e "${RED}"
 	cat $DMRMARCERROR
-if [ -f $DMRMARCSTATICFILE ]; then rm $DMRMARCSTATICFILE ; fi
 	echo -e "${WHITE}"
+    if [ -f $DMRMARCSTATICFILE ]; then rm $DMRMARCSTATICFILE ; fi
 fi
-
-
+if [ -f $DMRMARCSTATICFILE ]; then
+   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $DMRMARCSTATICFILE >$FINALDMRMARC
+fi
 if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
 if [ ! -f $ALTERNATESEMADISABLE ]; then
 	OPTS="-quiet --no-verbose"
@@ -156,8 +157,8 @@ if [ ! -f $FILTERDISABLESEMA ]; then
 fi
 
 FILELIST=""
-if [ -f $DMRMARCSTATICFILE ]; then
-	FILELIST="$DMRMARCSTATICFILE"
+if [ -f $FINALDMRMARC ]; then
+	FILELIST="$FINALDMRMARC"
 fi
 if [ -f $FINALALTERNATE ]; then 
 	FILELIST="$FILELIST $FINALALTERNATE"  
@@ -210,7 +211,7 @@ if [ -f ~/keep.tmp ]; then
 	sleep 6
   fi
 fi
-if [ -f $DMRMARCSTATICFILE ]; then
+if [ -f $FINALDMRMARC ]; then
 echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}  records  ${GREEN}(${sizemarc}  bytes)"
 fi
 if [ -f $FILENICK ] ; then
