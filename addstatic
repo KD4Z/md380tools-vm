@@ -26,6 +26,9 @@ FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 STRIPPEDFROMJSON=~/dmrmarc_json.tmp
+DMRMARCSTATICUSERSURL=https://dmr-marc.net/static/users.csv
+DMRMARCSTATICFILE=~/users.csv
+DMRMARCERROR=~/dmrmarc.errors
 #FINALDMRMARC=~/md380tools/db/stripped.csv
 USERDB=~/user.bin
 TMPALTERNATE=~/alternate_strippedCSV.tmp
@@ -65,19 +68,37 @@ if [ -f $FILENICKZIP ]; then
 		fi
 	fi
 fi
-if [ -f ~/md380tools-vm/get_dmrmarc.py ]; then
-	echo -e -n "${WHITE}Downloading dmr-marc data."
-	python ~/md380tools-vm/get_dmrmarc.py > $STRIPPEDFROMJSON 2>$JSONERROR
-	echo -e "...done${NC}"
-	sizemarc=$(ls -l $STRIPPEDFROMJSON | cut -d" " -f5)
-	countmarc=$(wc --lines $STRIPPEDFROMJSON | cut -d" " -f1)
-	if (( countmarc < 10 )); then
-		echo -e "${RED}"
-		cat $JSONERROR
-		if [ -f $STRIPPEDFROMJSON ]; then rm $STRIPPEDFROMJSON ; fi
-		echo -e "${WHITE}"
-	fi
+#if [ -f ~/md380tools-vm/get_dmrmarc.py ]; then
+#	echo -e -n "${WHITE}Downloading dmr-marc data."
+#	python ~/md380tools-vm/get_dmrmarc.py > $STRIPPEDFROMJSON 2>$JSONERROR
+#	echo -e "...done${NC}"
+#	sizemarc=$(ls -l $STRIPPEDFROMJSON | cut -d" " -f5)
+#	countmarc=$(wc --lines $STRIPPEDFROMJSON | cut -d" " -f1)
+#	if (( countmarc < 10 )); then
+#		echo -e "${RED}"
+#		cat $JSONERROR
+#		if [ -f $STRIPPEDFROMJSON ]; then rm $STRIPPEDFROMJSON ; fi
+#		echo -e "${WHITE}"
+#	fi
+#fi
+
+echo -e -n "${WHITE}Downloading dmr-marc data."
+if [ -f ~/keep.tmp ]; then
+		timeout 120 wget --no-check-certificate --wait=3 $DMRMARCSTATICUSERSURL -O $DMRMARCSTATICFILE
+else
+		timeout 120 wget --no-check-certificate --wait=3 $DMRMARCSTATICUSERSURL -O $DMRMARCSTATICFILE  2>$DMRMARCERROR
+fi 
+echo -e "...done${NC}"
+sizemarc=$(ls -l $DMRMARCSTATICFILE | cut -d" " -f5)
+countmarc=$(wc --lines $DMRMARCSTATICFILE | cut -d" " -f1)
+if (( countmarc < 10 )); then
+	echo -e "${RED}"
+	cat $DMRMARCERROR
+if [ -f $DMRMARCSTATICFILE ]; then rm $DMRMARCSTATICFILE ; fi
+	echo -e "${WHITE}"
 fi
+
+
 if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
 if [ ! -f $ALTERNATESEMADISABLE ]; then
 	OPTS="-quiet --no-verbose"
@@ -96,11 +117,12 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
-		if (( countmarc > 100 )); then
-			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
-		else
+# for now, use all records as the yahoo database programmer at dmr-marc needs to find another line of work.  1362 records have bad record counts.
+		#		if (( countmarc > 100 )); then
+#			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
+#		else
 			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries >$FINALALTERNATE
-		fi
+#		fi
 	fi
 fi
 
@@ -134,9 +156,8 @@ if [ ! -f $FILTERDISABLESEMA ]; then
 fi
 
 FILELIST=""
-if [ -f $STRIPPEDFROMJSON ]; then
-
-	FILELIST="$STRIPPEDFROMJSON"
+if [ -f $DMRMARCSTATICFILE ]; then
+	FILELIST="$DMRMARCSTATICFILE"
 fi
 if [ -f $FINALALTERNATE ]; then 
 	FILELIST="$FILELIST $FINALALTERNATE"  
@@ -189,7 +210,7 @@ if [ -f ~/keep.tmp ]; then
 	sleep 6
   fi
 fi
-if [ -f $STRIPPEDFROMJSON ]; then
+if [ -f $DMRMARCSTATICFILE ]; then
 echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}  records  ${GREEN}(${sizemarc}  bytes)"
 fi
 if [ -f $FILENICK ] ; then
