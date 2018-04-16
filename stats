@@ -1,6 +1,6 @@
 # stats
 # KD4Z
-# Version:  4.42
+# Version:  4.43
 # displays stats of various items
 
 clear
@@ -16,7 +16,7 @@ FILTERDISABLESEMA=~/filter.disable
 echo -e "Collecting information..."
 ipin=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 up=$(/usr/bin/uptime)
-countmarc=$(wc --lines ~/md380tools/db/dmrmarc.tmp | cut -d" " -f1)
+countmarc=$(wc --lines ~/md380tools/db/stripped.csv | cut -d" " -f1)
 countall=$(wc --lines ~/user.bin | cut -d" " -f1)
 if [ -f ~/user.bin ]; then
 	userbinsize=$(ls -l ~/user.bin | awk '{print $5,$6,$7,$8,$9}')
