@@ -118,12 +118,12 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
-# for now, use all records as the yahoo database programmer at dmr-marc needs to find another line of work.  1362 records have bad record counts.
-		#		if (( countmarc > 100 )); then
-#			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
-#		else
+# Don't use all records as the yahoo database programmer at dmr-marc needs to find another line of work.  1362 records have bad record counts.
+		if (( countmarc > 100 )); then
+			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
+		else
 			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries >$FINALALTERNATE
-#		fi
+		fi
 	fi
 fi
 
