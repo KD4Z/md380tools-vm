@@ -46,7 +46,7 @@ INCLUDECOUNTRIES=~/include.countries
 MERGECONFIG=~/md380tools-vm/mergeconfig
 FILTERDISABLESEMA=~/filter.disable
 
-if [ -f $JSONERROR ]; then rm $JSONERROR ; fi
+#if [ -f $JSONERROR ]; then rm $JSONERROR ; fi
 if [ -f $FILENICKZIP ]; then
     if [ -f $FILENICK ]; then rm $FILENICK ; fi
     unzip $FILENICKZIP $FILENICK
