@@ -1,9 +1,9 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.43
+# Version:  4.44
 # Part of the user.db creation step.  Far more advanced than just
-# including dmr-marc data.
+# including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
 #
 # Optional static.users file requires a format that mimics the exact field layout of user.bin
@@ -26,7 +26,7 @@ FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 STRIPPEDFROMJSON=~/dmrmarc_json.tmp
-DMRMARCSTATICUSERSURL=https://dmr-marc.net/static/users.csv
+DMRMARCSTATICUSERSURL=https://ham-digital.org/status/users.csv
 DMRMARCSTATICFILE=~/users.csv
 DMRMARCERROR=~/dmrmarc.errors
 FINALDMRMARC=~/md380tools/db/stripped.csv
@@ -82,7 +82,7 @@ fi
 #	fi
 #fi
 
-echo -e -n "${WHITE}Downloading dmr-marc data."
+echo -e -n "${WHITE}Downloading ham digital data."
 if [ -f ~/keep.tmp ]; then
 		timeout 120 wget --no-check-certificate --wait=3 $DMRMARCSTATICUSERSURL -O $DMRMARCSTATICFILE
 else
@@ -118,12 +118,11 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
-# Don't use all records as the yahoo database programmer at dmr-marc needs to find another line of work.  1362 records have bad record counts.
-		if (( countmarc > 100 )); then
-			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
-		else
+#		if (( countmarc > 100 )); then
+#			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
+#		else
 			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries >$FINALALTERNATE
-		fi
+#		fi
 	fi
 fi
 
@@ -212,19 +211,19 @@ if [ -f ~/keep.tmp ]; then
   fi
 fi
 if [ -f $FINALDMRMARC ]; then
-echo -e "${GREEN}  DMR-MARC count   :  ${YELLOW}${countmarc}  records  ${GREEN}(${sizemarc}  bytes)"
+echo -e "${GREEN}  Ham-Digital count   :  ${YELLOW}${countmarc}  records  ${GREEN}(${sizemarc}  bytes)"
 fi
 if [ -f $FILENICK ] ; then
-echo -e "${GREEN}  Nickname count   :  ${YELLOW}${countnick}  records"
+echo -e "${GREEN}  Nickname count      :  ${YELLOW}${countnick}  records"
 fi
 if [ -f $FINALALTERNATE ] ; then
-echo -e "${GREEN}  Alternate count  :  ${YELLOW}${countalter}  records  ${GREEN}(${sizealter}  bytes)"
+echo -e "${GREEN}  Alternate count     :  ${YELLOW}${countalter}  records  ${GREEN}(${sizealter}  bytes)"
 fi
 if [ -f $FILESTATIC ] ; then
-echo -e "${GREEN}  Static ID count  :  ${YELLOW}${countstatic}  records"
+echo -e "${GREEN}  Static ID count     :  ${YELLOW}${countstatic}  records"
 fi
 if (( sizemergeerrors > 10 )); then
-echo -e "${GREEN}  Records skipped  :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
+echo -e "${GREEN}  Records skipped     :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
 fi
 if (( countall < 1000 )); then
   echo -e "${RED} ** The Downloads for Contact information may have failed - run ${YELLOW}glvusers${RED} again"
@@ -232,7 +231,7 @@ if (( countall < 1000 )); then
   echo -e "\a"
   sleep 8
 fi
-echo -e "${GREEN}  Merged total     :  ${YELLOW}${countall}  records${NC}"
+echo -e "${GREEN}  Merged total        :  ${YELLOW}${countall}  records${NC}"
 
 if [ ! -f ~/keep.tmp ]; then
     if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi	

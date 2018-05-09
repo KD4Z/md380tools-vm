@@ -1,7 +1,7 @@
 #!/bin/bash
 # exec.post
 # KD4Z
-# Version:  3.20
+# Version:  4.44
 # Runs after glv is completed
 
 
@@ -34,7 +34,7 @@ if [ -f ~/exec.post.local ]; then
 fi
 
 userbinsize=$(ls -l $userfile | cut -d" " -f5)
-echo -e "${GREEN}  User.bin filesize:  ${YELLOW}${userbinsize}  bytes  ${GREEN}(not including header record) ${NC}"
+echo -e "${GREEN}  User.bin filesize   :  ${YELLOW}${userbinsize}  bytes  ${GREEN}(not including header record) ${NC}"
 
 # now put back the header
 wc -c < $userfile >$usertmp
@@ -42,6 +42,6 @@ cat $userfile >>$usertmp
 cat $usertmp >$userfile
 rm $usertmp
 echo -e "${WHITE}Processing complete.${NC}"
-sleep 5
+ 
 
 
