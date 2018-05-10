@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.44
+# Version:  4.45
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -25,11 +25,11 @@ FILESTATIC=~/static.users
 FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
-STRIPPEDFROMJSON=~/dmrmarc_json.tmp
-DMRMARCSTATICUSERSURL=https://ham-digital.org/status/users.csv
-DMRMARCSTATICFILE=~/users.csv
-DMRMARCERROR=~/dmrmarc.errors
-FINALDMRMARC=~/md380tools/db/stripped.csv
+
+HDSTATICUSERSURL=https://ham-digital.org/status/users.csv
+HDSTATICFILE=~/users.csv
+HDERROR=~/hamdigital.errors
+FINALHD=~/md380tools/db/stripped.csv
 USERDB=~/user.bin
 TMPALTERNATE=~/alternate_strippedCSV.tmp
 FINALALTERNATE=~/alternate_strippedCSV.final
@@ -38,7 +38,6 @@ ALTERNATESEMADISABLE=~/extra.data.disable
 ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
 MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
-#JSONERROR=~/dmrmarc.json.error
 EXCLUDEIDS=~/exclude.ids
 EXCLUDECOUNTRIES=~/exclude.countries
 INCLUDEIDS=~/include.ids
@@ -46,7 +45,6 @@ INCLUDECOUNTRIES=~/include.countries
 MERGECONFIG=~/md380tools-vm/mergeconfig
 FILTERDISABLESEMA=~/filter.disable
 
-#if [ -f $JSONERROR ]; then rm $JSONERROR ; fi
 if [ -f $FILENICKZIP ]; then
     if [ -f $FILENICK ]; then rm $FILENICK ; fi
     unzip $FILENICKZIP $FILENICK
@@ -68,37 +66,25 @@ if [ -f $FILENICKZIP ]; then
 		fi
 	fi
 fi
-#if [ -f ~/md380tools-vm/get_dmrmarc.py ]; then
-#	echo -e -n "${WHITE}Downloading dmr-marc data."
-#	python ~/md380tools-vm/get_dmrmarc.py > $STRIPPEDFROMJSON 2>$JSONERROR
-#	echo -e "...done${NC}"
-#	sizemarc=$(ls -l $STRIPPEDFROMJSON | cut -d" " -f5)
-#	countmarc=$(wc --lines $STRIPPEDFROMJSON | cut -d" " -f1)
-#	if (( countmarc < 10 )); then
-#		echo -e "${RED}"
-#		cat $JSONERROR
-#		if [ -f $STRIPPEDFROMJSON ]; then rm $STRIPPEDFROMJSON ; fi
-#		echo -e "${WHITE}"
-#	fi
-#fi
 
-echo -e -n "${WHITE}Downloading ham digital data."
+
+echo -e -n "${WHITE}Downloading Ham-Digital data."
 if [ -f ~/keep.tmp ]; then
-		timeout 120 wget --no-check-certificate --wait=3 $DMRMARCSTATICUSERSURL -O $DMRMARCSTATICFILE
+		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE
 else
-		timeout 120 wget --no-check-certificate --wait=3 $DMRMARCSTATICUSERSURL -O $DMRMARCSTATICFILE  2>$DMRMARCERROR
+		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE  2>$HDERROR
 fi 
 echo -e "...done${NC}"
-sizemarc=$(ls -l $DMRMARCSTATICFILE | cut -d" " -f5)
-countmarc=$(wc --lines $DMRMARCSTATICFILE | cut -d" " -f1)
-if (( countmarc < 10 )); then
+sizeHD=$(ls -l $HDSTATICFILE | cut -d" " -f5)
+countHD=$(wc --lines $HDSTATICFILE | cut -d" " -f1)
+if (( countHD < 10 )); then
 	echo -e "${RED}"
-	cat $DMRMARCERROR
+	cat $HDERROR
 	echo -e "${WHITE}"
-    if [ -f $DMRMARCSTATICFILE ]; then rm $DMRMARCSTATICFILE ; fi
+    if [ -f $HDSTATICFILE ]; then rm $HDSTATICFILE ; fi
 fi
-if [ -f $DMRMARCSTATICFILE ]; then
-   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $DMRMARCSTATICFILE >$FINALDMRMARC
+if [ -f $HDSTATICFILE ]; then
+   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $HDSTATICFILE >$FINALHD
 fi
 if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
 if [ ! -f $ALTERNATESEMADISABLE ]; then
@@ -118,7 +104,7 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
-#		if (( countmarc > 100 )); then
+#		if (( counthd > 100 )); then
 #			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries | awk -F, '!($7=="CA" || $7=="US") {print}' - >$FINALALTERNATE
 #		else
 			python ~/md380tools-vm/merge_users.py $TMPALTERNATE --abbrevCountries >$FINALALTERNATE
@@ -156,8 +142,8 @@ if [ ! -f $FILTERDISABLESEMA ]; then
 fi
 
 FILELIST=""
-if [ -f $FINALDMRMARC ]; then
-	FILELIST="$FINALDMRMARC"
+if [ -f $FINALHD ]; then
+	FILELIST="$FINALHD"
 fi
 if [ -f $FINALALTERNATE ]; then 
 	FILELIST="$FILELIST $FINALALTERNATE"  
@@ -210,8 +196,8 @@ if [ -f ~/keep.tmp ]; then
 	sleep 6
   fi
 fi
-if [ -f $FINALDMRMARC ]; then
-echo -e "${GREEN}  Ham-Digital count   :  ${YELLOW}${countmarc}  records  ${GREEN}(${sizemarc}  bytes)"
+if [ -f $FINALHD ]; then
+echo -e "${GREEN}  Ham-Digital count   :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
 fi
 if [ -f $FILENICK ] ; then
 echo -e "${GREEN}  Nickname count      :  ${YELLOW}${countnick}  records"
@@ -235,6 +221,5 @@ echo -e "${GREEN}  Merged total        :  ${YELLOW}${countall}  records${NC}"
 
 if [ ! -f ~/keep.tmp ]; then
     if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi	
-	if [ -f $FINALALTERNATE ]; then rm $FINALALTERNATE ; fi
 	if [ -f $FILENICK ]; then rm $FILENICK ; fi
 fi
