@@ -1,7 +1,7 @@
 # stats
 # KD4Z
-# Version:  4.44
-# displays stats of various items
+# Version:  4.46
+# displays stats of various items
 
 clear
 . ~/md380tools-vm/strings
@@ -59,7 +59,7 @@ echo -e "${GREEN} Firmware Bin GPS : ${YELLOW}${fwgps}	${WHITE}(flashgps)"
 echo -e "${GREEN} Firmware OLD     : ${YELLOW}${fwold}	${WHITE}(flashold)"
 echo -e ""
 echo -e "${WHITE}Contact Data${NC}"
-echo -e "${GREEN} Ham-Digital count: ${YELLOW}${countHD}  ${GREEN}(${sizeHD}  bytes)"
+echo -e "${GREEN} radioId.net count: ${YELLOW}${countHD}  ${GREEN}(${sizeHD}  bytes)"
 if [ -f $FINALALTERNATE ]; then
 	sizealter=$(ls -l $FINALALTERNATE | cut -d" " -f5)
 	echo -e "${GREEN} Alternate count  : ${YELLOW}${countalter}  ${GREEN}(${sizealter}  bytes)"

@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.45
+# Version:  4.46
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -26,7 +26,7 @@ FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 
-HDSTATICUSERSURL=https://ham-digital.org/status/users.csv
+HDSTATICUSERSURL=http://radioid.net/static/users.csv
 HDSTATICFILE=~/users.csv
 HDERROR=~/hamdigital.errors
 FINALHD=~/md380tools/db/stripped.csv
@@ -68,7 +68,7 @@ if [ -f $FILENICKZIP ]; then
 fi
 
 
-echo -e -n "${WHITE}Downloading Ham-Digital data."
+echo -e -n "${WHITE}Downloading radioId.net data."
 if [ -f ~/keep.tmp ]; then
 		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE
 else
@@ -197,7 +197,7 @@ if [ -f ~/keep.tmp ]; then
   fi
 fi
 if [ -f $FINALHD ]; then
-echo -e "${GREEN}  Ham-Digital count   :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
+echo -e "${GREEN}  radioId.net count   :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
 fi
 if [ -f $FILENICK ] ; then
 echo -e "${GREEN}  Nickname count      :  ${YELLOW}${countnick}  records"
