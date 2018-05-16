@@ -26,7 +26,7 @@ FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 
-HDSTATICUSERSURL=https://radioid.net/static/users.csv
+HDSTATICUSERSURL=https://www.radioid.net/static/users.csv
 HDSTATICFILE=~/users.csv
 HDERROR=~/hamdigital.errors
 FINALHD=~/md380tools/db/stripped.csv
