@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.46
+# Version:  4.47
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -26,10 +26,18 @@ FILENICK=user.nicknames
 FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 
-HDSTATICUSERSURL=https://www.radioid.net/static/users.csv
-HDSTATICFILE=~/users.csv
+#radioid : full data, missing 2nnnnnn
+RISTATICUSERSURL=https://www.radioid.net/static/users.csv
+RISTATICFILE=~/riusers.csv
+RIERROR=~/radioid.errors
+FINALRI=~/md380tools/db/stripped.csv
+
+#ham-digital :  minimal info, all ids
+HDSTATICUSERSURL=https://ham-digital.org/status/users.csv
+HDSTATICFILE=~/hdusers.csv
 HDERROR=~/hamdigital.errors
-FINALHD=~/md380tools/db/stripped.csv
+FINALHD=~/hdfinal.csv
+
 USERDB=~/user.bin
 TMPALTERNATE=~/alternate_strippedCSV.tmp
 FINALALTERNATE=~/alternate_strippedCSV.final
@@ -68,7 +76,27 @@ if [ -f $FILENICKZIP ]; then
 fi
 
 
-echo -e -n "${WHITE}Downloading radioId.net data."
+echo -e -n "${WHITE}Downloading data from RadioId.net"
+if [ -f ~/keep.tmp ]; then
+		timeout 120 wget --no-check-certificate --wait=3 $RISTATICUSERSURL -O $RISTATICFILE
+else
+		timeout 120 wget --no-check-certificate --wait=3 $RISTATICUSERSURL -O $RISTATICFILE  2>$RIERROR
+fi 
+echo -e "...done${NC}"
+sizeRI=$(ls -l $RISTATICFILE | cut -d" " -f5)
+countRI=$(wc --lines $RISTATICFILE | cut -d" " -f1)
+if (( countRI < 10 )); then
+	echo -e "${RED}"
+	cat $RIERROR
+	echo -e "${WHITE}"
+    if [ -f $RISTATICFILE ]; then rm $RISTATICFILE ; fi
+fi
+if [ -f $RISTATICFILE ]; then
+   echo -e -n "${WHITE}Normalizing data."
+   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $RISTATICFILE >$FINALRI
+   echo -e "...done${NC}"
+fi
+echo -e -n "${WHITE}Downloading data from HamDigital.org"
 if [ -f ~/keep.tmp ]; then
 		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE
 else
@@ -84,8 +112,12 @@ if (( countHD < 10 )); then
     if [ -f $HDSTATICFILE ]; then rm $HDSTATICFILE ; fi
 fi
 if [ -f $HDSTATICFILE ]; then
+	echo -e -n "${WHITE}Normalizing data."
    awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $HDSTATICFILE >$FINALHD
+   echo -e "...done${NC}"
 fi
+
+
 if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
 if [ ! -f $ALTERNATESEMADISABLE ]; then
 	OPTS="-quiet --no-verbose"
@@ -145,6 +177,9 @@ FILELIST=""
 if [ -f $FINALHD ]; then
 	FILELIST="$FINALHD"
 fi
+if [ -f $FINALRI ]; then
+	FILELIST="$FILELIST $FINALRI"
+fi
 if [ -f $FINALALTERNATE ]; then 
 	FILELIST="$FILELIST $FINALALTERNATE"  
 fi
@@ -196,8 +231,11 @@ if [ -f ~/keep.tmp ]; then
 	sleep 6
   fi
 fi
+if [ -f $FINALRI ]; then
+echo -e "${GREEN}  RadioId count       :  ${YELLOW}${countRI}  records  ${GREEN}(${sizeRI}  bytes)"
+fi
 if [ -f $FINALHD ]; then
-echo -e "${GREEN}  radioId.net count   :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
+echo -e "${GREEN}  HamDigital count    :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
 fi
 if [ -f $FILENICK ] ; then
 echo -e "${GREEN}  Nickname count      :  ${YELLOW}${countnick}  records"

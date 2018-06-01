@@ -1,6 +1,6 @@
 #!/bin/bash 
 # KD4Z
-# Version:  4.46
+# Version:  4.47
 # main menu
 
 if [ ! -f /etc/motd.save ]; then
