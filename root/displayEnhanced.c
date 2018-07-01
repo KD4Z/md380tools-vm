@@ -302,6 +302,7 @@ static const char *const states[] = {
 	"VBR,Flemish Brabant",
 	"VEN,Veneto",
 	"VIC,Victoria",
+	"VLI,Limburg",
 	"VOV,East Flanders",
 	"VT,Vermont",
 	"VWV,West Flanders",
