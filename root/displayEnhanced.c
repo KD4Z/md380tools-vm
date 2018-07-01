@@ -194,7 +194,7 @@ static const char *const states[] = {
 	"EMI,Emila-Romagna",
 	"FD,Flevoland",
 	"FL,Florida",
-	"FRL,Friesland",
+	"FR,Friesland",
 	"FRI,Friuli-Venezia Giulia",
 	"GA,Georgia",
 	"GLD,Gelderland",
