@@ -197,7 +197,7 @@ static const char *const states[] = {
 	"FR,Friesland",
      "FRI,Friuli-Venezia Giulia",
 	"GA,Georgia",
-	"GE,Gelderland",
+	"GLD,Gelderland",
 	"GR,Groningen",
 	"HB,Bremen",
 	"HE,Hessen",
@@ -212,7 +212,7 @@ static const char *const states[] = {
   	"KY,Kentucky",
 	"LA,Louisiana",
      "LAZ,Lazio",
-	"LI,Limburg",
+	"LB,Limburg",
      "LIG,Liguria",  
      "LOM,Lombardia", 
 	"MA,Massachusetts",
@@ -318,7 +318,7 @@ static const char *const states[] = {
 	"WY,Wyoming",
 	"YT,Yukon",
 	"ZE,Zeeland",
-	"ZH,S. Holland",
+	"ZH,Z. Holland",
 };
 
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
