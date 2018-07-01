@@ -861,7 +861,7 @@ void draw_rx_screen(unsigned int bg_color)
             usr.country = "";
 		}
 		else {
-            usr.callsign = "ID" ;
+            usr.callsign = "Callsign" ;
             usr.firstname = "not found" ;
             usr.name = talkerAlias.text;
             usr.place = "Update with" ;
@@ -1099,7 +1099,7 @@ void draw_rx_screen(unsigned int bg_color)
             usr.country = "";
 		}
 		else {
-            usr.callsign = "ID" ;
+            usr.callsign = "Callsign" ;
             usr.firstname = "not found" ;
             usr.name = talkerAlias.text;
             usr.place = "Update with" ;
