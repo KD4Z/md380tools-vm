@@ -161,8 +161,8 @@ static const char *const countries[] = {
 	"TT,Trinidad and Tobago",
 	"TW,Taiwan",
 	"UA,Ukraine",
-	"UK,UK",
-	"US,USA",
+	"UK,Uk",
+	"US,Usa",
 	"UY,Uruguay",
 	"VE,Venezuela",
 	"ZA,South Africa",
@@ -227,8 +227,8 @@ static const char *const states[] = {
 	"MS,Mississippi",
 	"MT,Montana",
 	"MV,Mecklenburg-Vorpommern",
-	"N-B,North Brabant",
-	"N-H,North Holland",
+	"N-B,Noord Brabant",
+	"N-H,Noord Holland",
 	"NB,New Brunswick",
 	"NC,North Carolina",
 	"ND,North Dakota",
@@ -318,7 +318,7 @@ static const char *const states[] = {
 	"WY,Wyoming",
 	"YT,Yukon",
 	"ZE,Zeeland",
-	"ZH,South Holland",
+	"ZH,Zuid Holland",
 };
 
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
