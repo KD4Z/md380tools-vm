@@ -227,7 +227,7 @@ static const char *const states[] = {
 	"MS,Mississippi",
 	"MT,Montana",
 	"MV,Mecklenburg-Vorpommern",
-	"N-B,Noord Brabant",
+	"N-BR,Noord Brabant",
 	"N-H,Noord Holland",
 	"NB,New Brunswick",
 	"NC,North Carolina",
