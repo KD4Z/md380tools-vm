@@ -26,7 +26,7 @@
 #include "etsi.h"
 #include "codeplug.h"
 #include "app_menu.h"
-#include "syslog.h"        // LOGB()
+#include "syslog.h"	// LOGB()
 #include "irq_handlers.h"  // boot_flags, BOOT_FLAG_DREW_STATUSLINE
 #include "lcd_driver.h"
 #include "codeplug.h"
@@ -95,7 +95,7 @@ static const char *const countries[] = {
 	"AR,Argentina",
 	"AT,Austria",
 	"AU,Australia",
-	"BA,Bosnia and Hercegovi",
+	"BA,Bosnia and Herzegovina",
 	"BB,Barbados",
 	"BE,Belgium",
 	"BG,Bulgaria",
@@ -161,8 +161,8 @@ static const char *const countries[] = {
 	"TT,Trinidad and Tobago",
 	"TW,Taiwan",
 	"UA,Ukraine",
-	"UK,UK",
-	"US,USA",
+	"UK,Uk",
+	"US,Usa",
 	"UY,Uruguay",
 	"VE,Venezuela",
 	"ZA,South Africa",
@@ -170,34 +170,34 @@ static const char *const countries[] = {
 
 static const char *const states[] = {
 	"AB,Alberta",
-     "ABR,Abruzzo",
+	"ABR,Abruzzo",
 	"ACT,Austrailian Capital T.",
 	"AK,Alaska",
 	"AL,Alabama",
 	"AN,Antwerpen",
 	"AR,Arkansas",
 	"AZ,Arizona",
-     "BAS,Basilicata",
+	"BAS,Basilicata",
 	"BB,Brandenburg",
 	"BC,British Columbia",
 	"BE,Berlin",
 	"BW,Baden-Wurttemberg",
 	"BY,Bavaria",
 	"CA,California",
-     "CAL,Calabria",
-     "CAM,Campania",
+	"CAL,Calabria",
+	"CAM,Campania",
 	"CO,Colorada",
 	"CT,Connecticut",
 	"DC,District of Columbia",
 	"DE,Delaware",
 	"DR,Drenthe",
-     "EMI,Emila-Romagna",
-	"FD,Flevoland",
+	"EMI,Emila-Romagna",
 	"FL,Florida",
+	"FLD,Flevoland",
 	"FR,Friesland",
-     "FRI,Friuli-Venezia Giulia",
+	"FRI,Friuli-Venezia Giulia",
 	"GA,Georgia",
-	"GE,Gelderland",
+	"GLD,Gelderland",
 	"GR,Groningen",
 	"HB,Bremen",
 	"HE,Hessen",
@@ -209,29 +209,29 @@ static const char *const states[] = {
 	"IL,Illinois",
 	"IN,Indiana",
 	"KS,Kansas",
-  	"KY,Kentucky",
+	"KY,Kentucky",
 	"LA,Louisiana",
-     "LAZ,Lazio",
-	"LI,Limburg",
-     "LIG,Liguria",  
-     "LOM,Lombardia", 
+	"LAZ,Lazio",
+	"LB,Limburg",
+	"LIG,Liguria",
+	"LOM,Lombardia",
 	"MA,Massachusetts",
-     "MAR,Marche", 
+	"MAR,Marche",
 	"MB,Manitoba",
 	"MD,Maryland",
 	"ME,Maine",
 	"MI,Michigan",
 	"MN,Minnesota",
 	"MO,Missouri",
-     "MOL,Molise",
+	"MOL,Molise",
 	"MS,Mississippi",
 	"MT,Montana",
 	"MV,Mecklenburg-Vorpommern",
-	"N-B,N. Brabant",
-	"N-H,N. Holland",
+	"N-BR,Noord Brabant",
+	"N-H,Noord Holland",
 	"NB,New Brunswick",
-	"NC,N. Carolina",
-	"ND,N. Dakota",
+	"NC,North Carolina",
+	"ND,North Dakota",
 	"NE,Nebraska",
 	"NH,New Hampshire",
 	"NI,Lower Saxony",
@@ -251,61 +251,61 @@ static const char *const states[] = {
 	"ON,Ontario",
 	"OR,Oregon",
 	"OV,Overijssel",
-     "PA,Pennsylvania",
+	"PA,Pennsylvania",
 	"PE,Prince Edward Is.",
-     "PIE,Piemonte", 
-     "PLDS,Lower Silesia",
-     "PLKP,Kuyavia-Pomerania",
-     "PLLB,Lubusz",
-     "PLLD,Lodz",
-     "PLLU,Lublin",
-     "PLMA,Lesser Poland",
-     "PLMZ,Mazovia",
-     "PLOP,Opole",
-     "PLPD,Podlaskie",
-     "PLPK,Subcarpathia",
-     "PLPM,Pomerania",
-     "PLSK,Holy Cross",
-     "PLSL,Silesia",
-     "PLWN,Greater Poland",
-     "PLZP,W. Pomerania",
-     "PR,Puerto Rico",
-     "PUG,Puglia",
+	"PIE,Piemonte",
+	"PLDS,Lower Silesia",
+	"PLKP,Kuyavia-Pomerania",
+	"PLLB,Lubusz",
+	"PLLD,Lodz",
+	"PLLU,Lublin",
+	"PLMA,Lesser Poland",
+	"PLMZ,Mazovia",
+	"PLOP,Opole",
+	"PLPD,Podlaskie",
+	"PLPK,Subcarpathia",
+	"PLPM,Pomerania",
+	"PLSK,Holy Cross",
+	"PLSL,Silesia",
+	"PLWN,Greater Poland",
+	"PLZP,West Pomerania",
+	"PR,Puerto Rico",
+	"PUG,Puglia",
 	"QC,Quebec",
 	"QLD,Queensland",
 	"RI,Rhode Island",
 	"RP,Rhineland-Palatinate",
-	"SA,S. Australia",
-     "SAR,Sardegna",
-	"SC,S. Carolina",
-	"SD,S. Dakota",
+	"SA,South Australia",
+	"SAR,Sardegna",
+	"SC,South Carolina",
+	"SD,South Dakota",
 	"SH,Schleswig-Holstein",
-     "SIC,Sicilia",
+	"SIC,Sicilia",
 	"SK,Saskatchewan",
 	"SL,Saarland",
 	"SN,Saxony",
 	"ST,Saxony-Anhalt",
-     "SV,Savona",
+	"SV,Savona",
 	"TAS,Tasmania",
 	"TH,Thuringia",
 	"TN,Tennessee",
-     "TOS,Toscana",
-     "TRE,Trentino-Alto Adige",
+	"TOS,Toscana",
+	"TRE,Trentino-Alto Adige",
 	"TX,Texas",
-     "UMB,Umbria",
+	"UMB,Umbria",
 	"UT,Utah",
 	"UTR,Utrecht",
 	"VA,Virginia",
-     "VAL,Valle d'Aosta",
+	"VAL,Valle d'Aosta",
 	"VAN,Antwerp",
 	"VB,Vlaams-Brabant",
 	"VBR,Flemish Brabant",
-     "VEN,Veneto",
+	"VEN,Veneto",
 	"VIC,Victoria",
 	"VLI,Limburg",
-	"VOV,E. Flanders",
+	"VOV,East Flanders",
 	"VT,Vermont",
-	"VWV,W. Flanders",
+	"VWV,West Flanders",
 	"WA,Washington",
 	"WAU,Western Australia",
 	"WBR,Walloon Brabant",
@@ -314,11 +314,11 @@ static const char *const states[] = {
 	"WLG,Leige",
 	"WLX,Luxembourg",
 	"WNA,Namur",
-	"WV,W. Virginia",
+	"WV,West Virginia",
 	"WY,Wyoming",
 	"YT,Yukon",
 	"ZE,Zeeland",
-	"ZH,S. Holland",
+	"ZH,Zuid Holland",
 };
 
 #define ARRAY_SIZE(x) (sizeof x / sizeof x[0])
@@ -377,7 +377,7 @@ void draw_eye_opt()
 #if defined(FW_D13_020) || defined(FW_S13_020)
     // draw promiscous mode eye symbol 
     if( global_addl_config.promtg == 1 ) {
-        gfx_drawbmp((char *) &bmp_eye, D_ICON_EYE_X, D_ICON_EYE_Y);
+	gfx_drawbmp((char *) &bmp_eye, D_ICON_EYE_X, D_ICON_EYE_Y);
     }
 #endif
 }
@@ -389,22 +389,22 @@ void draw_eye_opt()
 int intCentibel(long ampli)
 {
     if( ampli <= 0 )
-        return -1; // invalid
+	return -1; // invalid
     int log_2 = 0;
     while (ampli >= 32 * 8) {
-        ampli >>= 1 + 3;
-        log_2 += 1 + 3;
+	ampli >>= 1 + 3;
+	log_2 += 1 + 3;
     }
     while (ampli >= 32) {
-        ampli >>= 1;
-        log_2 += 1;
+	ampli >>= 1;
+	log_2 += 1;
     }
     // 1 <= ampli < 32
     static const short fine[] = {
-        -1, 0, 60, 95, 120, 140, 156, 169,
-        181, 191, 200, 208, 216, 223, 229, 235,
-        243, 249, 253, 258, 262, 266, 270, 274,
-        278, 281, 285, 288, 291, 294, 297, 300
+	-1, 0, 60, 95, 120, 140, 156, 169,
+	181, 191, 200, 208, 216, 223, 229, 235,
+	243, 249, 253, 258, 262, 266, 270, 274,
+	278, 281, 285, 288, 291, 294, 297, 300
     };
     return (log_2 * 301 + 2) / 5 + fine[ampli];
 }
@@ -472,7 +472,7 @@ void oem_repaint_screen () {
  }
 
 void draw_tx_screen_layout(int showtimer) {
-        
+	
 #if defined(FW_D13_020) || defined(FW_S13_020)
 	
 	int sel_flags = SEL_FLAG_NONE;
@@ -502,97 +502,97 @@ void draw_tx_screen_layout(int showtimer) {
  	dc.x = 0;
 	dc.y = 17;
      if (lh_painted != 1 ) {
-          LCD_FillRect( 0, 15, dc.x2, LCD_SCREEN_HEIGHT-1, dc.bg_color );
-          lh_painted = 1;
+	 LCD_FillRect( 0, 15, dc.x2, LCD_SCREEN_HEIGHT-1, dc.bg_color );
+	 lh_painted = 1;
 	} 
      if ( dst > 0 ) {
-          dc.x = VU_TEXT_X;
-          dc.font = LCD_OPT_FONT_8x8; 
-          dc.fg_color = LCD_COLOR_WHITE;
-          dc.bg_color = LCD_COLOR_BLUE;
-          LCD_Printf( &dc, "LH: TG %d \r",dst);
+	 dc.x = VU_TEXT_X;
+	 dc.font = LCD_OPT_FONT_8x8; 
+	 dc.fg_color = LCD_COLOR_WHITE;
+	 dc.bg_color = LCD_COLOR_BLUE;
+	 LCD_Printf( &dc, "LH: TG %d \r",dst);
      }
 
      Menu_GetColours( sel_flags, &dc.fg_color, &dc.bg_color );
      if (showtimer == 1){     
-          ptt_seconds = ReadStopwatch_ms(&stopwatch_cnt)/1000;
+	 ptt_seconds = ReadStopwatch_ms(&stopwatch_cnt)/1000;
   
 #if defined(__PTT_LASTHEARD_DOWN)
 		secs_display = ch_to - ptt_seconds;
-          if ( tot_beep_done == 0 && ( secs_display < 11) ) {
-                    bp_send_beep(BEEP_TEST_1);
-                    tot_beep_done++;
-                    reset_backlight();
-          } else if ( tot_beep_done == 1 && ( secs_display < 6) ) {
-                    bp_send_beep(BEEP_TEST_1);
-                    tot_beep_done++;
-                    reset_backlight();
-          }
+	 if ( tot_beep_done == 0 && ( secs_display < 11) ) {
+		  bp_send_beep(BEEP_TEST_1);
+		  tot_beep_done++;
+		  reset_backlight();
+	 } else if ( tot_beep_done == 1 && ( secs_display < 6) ) {
+		  bp_send_beep(BEEP_TEST_1);
+		  tot_beep_done++;
+		  reset_backlight();
+	 }
 #else
 		secs_display = ptt_seconds;
 #endif
-          to_barvalue =  ptt_seconds * 127 / ch_to;
-          if (to_barvalue > 127) {
-               to_barvalue = 127;
-          }
-          if (to_barvalue < VU_BAR_TOP_Y){
-               to_barvalue = VU_BAR_TOP_Y;
-          }
-          if ( previous_sec != secs_display) {
-               gfx_set_bg_color(0x000000);  
-               gfx_set_fg_color(0x000000);		
-               gfx_blockfill(TO_BAR_X, VU_BAR_TOP_Y, TO_BAR_X + TO_BAR_WIDTH, to_barvalue);
-               gfx_set_fg_color(0x0000ff);  // red
-               gfx_blockfill(TO_BAR_X, to_barvalue+1, TO_BAR_X + TO_BAR_WIDTH, 127);
-          }
+	 to_barvalue =  ptt_seconds * 127 / ch_to;
+	 if (to_barvalue > 127) {
+	      to_barvalue = 127;
+	 }
+	 if (to_barvalue < VU_BAR_TOP_Y){
+	      to_barvalue = VU_BAR_TOP_Y;
+	 }
+	 if ( previous_sec != secs_display) {
+	      gfx_set_bg_color(0x000000);  
+	      gfx_set_fg_color(0x000000);		
+	      gfx_blockfill(TO_BAR_X, VU_BAR_TOP_Y, TO_BAR_X + TO_BAR_WIDTH, to_barvalue);
+	      gfx_set_fg_color(0x0000ff);  // red
+	      gfx_blockfill(TO_BAR_X, to_barvalue+1, TO_BAR_X + TO_BAR_WIDTH, 127);
+	 }
      }
      if ( have_lh_info >0 ) {
  
-          dc.font = LCD_OPT_FONT_12x24;
-          if (showtimer == 1) {
-                
-               LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);   
-          } else {
-               dc.x = 5;
-               LCD_Printf( &dc, "%s\r", usr.callsign);
-               dc.x = 8;               
-          }
+	 dc.font = LCD_OPT_FONT_12x24;
+	 if (showtimer == 1) {
+	       
+	      LCD_Printf( &dc, "%s %d\r", usr.callsign,secs_display);   
+	 } else {
+	      dc.x = 5;
+	      LCD_Printf( &dc, "%s\r", usr.callsign);
+	      dc.x = 8;	      
+	 }
 
-          dc.y =  dc.y - 1;
-          dc.font = LCD_OPT_FONT_8x16;
-          LCD_Printf( &dc, "%s\r", usr.name);
-          LCD_Printf( &dc, "%s\r", usr.place); 
-          LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
-          LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
-          LCD_DrawString( &dc, "\r");
-          
+	 dc.y =  dc.y - 1;
+	 dc.font = LCD_OPT_FONT_8x16;
+	 LCD_Printf( &dc, "%s\r", usr.name);
+	 LCD_Printf( &dc, "%s\r", usr.place); 
+	 LCD_Printf( &dc, "%s\r", lookup_state(&usr, state_buf));
+	 LCD_Printf( &dc, "%s\r", lookup_country(&usr, state_buf));
+	 LCD_DrawString( &dc, "\r");
+	 
      } else {
-          //printf("no lh else  previous_sec=%d  secs_display=%d\n",previous_sec,secs_display);
-          if (showtimer == 1){
-               if ( previous_sec != secs_display) {
-                    dc.font = LCD_OPT_FONT_12x24;
-                    dc.x = VU_TEXT_X;
-                    LCD_DrawString( &dc, "    PTT\r");
-                    LCD_Printf( &dc, "    %d\r",secs_display);
+	 //printf("no lh else  previous_sec=%d  secs_display=%d\n",previous_sec,secs_display);
+	 if (showtimer == 1){
+	      if ( previous_sec != secs_display) {
+		  dc.font = LCD_OPT_FONT_12x24;
+		  dc.x = VU_TEXT_X;
+		  LCD_DrawString( &dc, "    PTT\r");
+		  LCD_Printf( &dc, "    %d\r",secs_display);
      #if defined(__PTT_LASTHEARD_DOWN)
-                    LCD_DrawString( &dc, " Secs until\r  Timeout\r");
-                    LCD_DrawString( &dc, "\r");
+		  LCD_DrawString( &dc, " Secs until\r  Timeout\r");
+		  LCD_DrawString( &dc, "\r");
      #else
-                    LCD_DrawString( &dc, "  Seconds\r");
+		  LCD_DrawString( &dc, "  Seconds\r");
      #endif  
-               }
-                   
-          } else {
-               
-               dc.font = LCD_OPT_FONT_8x16;
-               dc.y += 12;
-               LCD_DrawString( &dc, " No\r Last Heard\r Info yet!!");
-          }
-          if (showtimer == 1){
-               if ( previous_sec != secs_display) {
-                    previous_sec = secs_display;
-               }
-          }
+	      }
+		 
+	 } else {
+	      
+	      dc.font = LCD_OPT_FONT_8x16;
+	      dc.y += 12;
+	      LCD_DrawString( &dc, " No\r Last Heard\r Info yet!!");
+	 }
+	 if (showtimer == 1){
+	      if ( previous_sec != secs_display) {
+		  previous_sec = secs_display;
+	      }
+	 }
      }
     
 #endif
@@ -605,8 +605,8 @@ void draw_micbargraph()
 	//
  
     if( gui_opmode2 == OPM2_MENU || Menu_IsVisible()  ) {
-        // case for pressing the PTT during 'Manual Dial' in 'Contacts'
-        return ;
+	// case for pressing the PTT during 'Manual Dial' in 'Contacts'
+	return ;
     }
  
      static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
@@ -620,7 +620,7 @@ void draw_micbargraph()
 
 
      if( fullscale_offset == 0 ) { // init int_centibel()
-        fullscale_offset = intCentibel(3000); // maybe wav max max_level
+	fullscale_offset = intCentibel(3000); // maybe wav max max_level
      }
 
      int is_tx = 0 ;
@@ -631,9 +631,9 @@ void draw_micbargraph()
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
     {
-        uint8_t s = radio_status_1.m1 ;
-        is_tx = s & 1 ;
-        is_rx = s & 2 ;
+	uint8_t s = radio_status_1.m1 ;
+	is_tx = s & 1 ;
+	is_rx = s & 2 ;
     }
 #endif    
 
@@ -642,68 +642,68 @@ void draw_micbargraph()
 			StartStopwatch(&stopwatch_cnt);
 		
 	
-        if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
-            lastframe = ambe_encode_frame_cnt;
-            rx_active = 1;
+	if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
+	   lastframe = ambe_encode_frame_cnt;
+	   rx_active = 1;
 
-            relative_peak_cb = intCentibel(max_level) - fullscale_offset;
-            centibel_val = relative_peak_cb;
+	   relative_peak_cb = intCentibel(max_level) - fullscale_offset;
+	   centibel_val = relative_peak_cb;
 
-            if( lastframe % 5 == 1 ) { // reduce drawing
+	   if( lastframe % 5 == 1 ) { // reduce drawing
  
 			if( centibel_val < -220 ) { // limit 110 pixel bargraph 15 125 -> 110 pixel for vertical bargraph
-                    centibel_val = -220;
-                } else if( centibel_val > 0 ) {
-                    centibel_val = 0;
-                }
-               centibel_val += 220; // shift to positive
-               centibel_val /= 2; // scale
+		  centibel_val = -220;
+	       } else if( centibel_val > 0 ) {
+		  centibel_val = 0;
+	       }
+	      centibel_val += 220; // shift to positive
+	      centibel_val /= 2; // scale
 				
-               previous_sec=0;
+	      previous_sec=0;
 			draw_tx_screen_layout(1);
 			lh_painted = 1;
 				
-               gfx_set_bg_color(0x000000);  
+	      gfx_set_bg_color(0x000000);  
 			gfx_set_fg_color(0x000000);		
 			gfx_blockfill(VU_BAR_X, VU_BAR_TOP_Y, VU_BAR_X + VU_BAR_WIDTH, 127);
-               	          
-               // paint legend
+	      		 
+	      // paint legend
  			gfx_set_fg_color(0x0000ff);  // red
-               gfx_blockfill(VU_LEGEND_X, VU_BAR_TOP_Y, VU_LEGEND_X + VU_LEGEND_WIDTH, 40);                           // 135,67,150,70
-               gfx_set_fg_color(0x00ff00);  // green
-               gfx_blockfill(VU_LEGEND_X, 41, VU_LEGEND_X + VU_LEGEND_WIDTH, 90);     // 85,67,134,70
-               gfx_set_fg_color(0x555555);  // grey
-               gfx_blockfill(VU_LEGEND_X, 91, VU_LEGEND_X + VU_LEGEND_WIDTH,127);						// 10,67,84,70
+	      gfx_blockfill(VU_LEGEND_X, VU_BAR_TOP_Y, VU_LEGEND_X + VU_LEGEND_WIDTH, 40);			// 135,67,150,70
+	      gfx_set_fg_color(0x00ff00);  // green
+	      gfx_blockfill(VU_LEGEND_X, 41, VU_LEGEND_X + VU_LEGEND_WIDTH, 90);     // 85,67,134,70
+	      gfx_set_fg_color(0x555555);  // grey
+	      gfx_blockfill(VU_LEGEND_X, 91, VU_LEGEND_X + VU_LEGEND_WIDTH,127);						// 10,67,84,70
 				
-                // set color
-                if( relative_peak_cb > -3 || red > 0 ) {
-                    if( red > 0 ) red--;
-                    if( relative_peak_cb > -3 ) red = 30;
-                    gfx_set_fg_color(0x0000ff);
-                } else if( relative_peak_cb > -130 || green > 0 ) {
-                    if( green > 0 ) green--;
-                    if( relative_peak_cb > -130 ) green = 30;
-                    gfx_set_fg_color(0x00ff00);
-                } else {
-                    gfx_set_fg_color(0x555555);
-                }
-               	// paint the VU bar	
+	       // set color
+	       if( relative_peak_cb > -3 || red > 0 ) {
+		  if( red > 0 ) red--;
+		  if( relative_peak_cb > -3 ) red = 30;
+		  gfx_set_fg_color(0x0000ff);
+	       } else if( relative_peak_cb > -130 || green > 0 ) {
+		  if( green > 0 ) green--;
+		  if( relative_peak_cb > -130 ) green = 30;
+		  gfx_set_fg_color(0x00ff00);
+	       } else {
+		  gfx_set_fg_color(0x555555);
+	       }
+	      	// paint the VU bar	
 				if (centibel_val > 125)
 					centibel_val = 125;
 				
-                gfx_blockfill(VU_BAR_X, (127 - centibel_val), VU_BAR_X + VU_BAR_WIDTH, 124);	  			
-            }
-        }
+	       gfx_blockfill(VU_BAR_X, (127 - centibel_val), VU_BAR_X + VU_BAR_WIDTH, 124);	  			
+	   }
+	}
     }
 
      if( is_rx && rx_active == 1 ) {
-          rx_active = 0;
-          red = 0;
-          green = 0;
-          lh_painted = 0;
+	 rx_active = 0;
+	 red = 0;
+	 green = 0;
+	 lh_painted = 0;
 		stopwatch_cnt = 0;
-          tot_beep_done = 0;
-          previous_sec=1;
+	 tot_beep_done = 0;
+	 previous_sec=1;
 #if defined(FW_D13_020) || defined(FW_S13_020)
 		LCD_FillRect( 0,0, LCD_SCREEN_WIDTH-1, LCD_SCREEN_HEIGHT-1, LCD_COLOR_MD380_BKGND_BLUE );
 		oem_repaint_screen();
@@ -723,8 +723,8 @@ void draw_micbargraph()
 	// original mic bargraph routine
 	//
     if( gui_opmode2 == OPM2_MENU ) {
-        // case for pressing the PTT during 'Manual Dial' in 'Contacts'
-        return ;
+	// case for pressing the PTT during 'Manual Dial' in 'Contacts'
+	return ;
     }
     
     static int rx_active; // flag to syncronice this hook ( operatingmode == 0x11 is also on rx seeded)
@@ -737,7 +737,7 @@ void draw_micbargraph()
     int centibel_val;
 
     if( fullscale_offset == 0 ) { // init int_centibel()
-        fullscale_offset = intCentibel(3000); // maybe wav max max_level
+	fullscale_offset = intCentibel(3000); // maybe wav max max_level
     }
     
     int is_tx = 0 ;
@@ -748,70 +748,70 @@ void draw_micbargraph()
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
     {
-        uint8_t s = radio_status_1.m1 ;
-        is_tx = s & 1 ;
-        is_rx = s & 2 ;
+	uint8_t s = radio_status_1.m1 ;
+	is_tx = s & 1 ;
+	is_rx = s & 2 ;
 		channel_info_t *ci = &current_channel_info ; 
     }
 #endif    
 
     if( is_tx && max_level < 4500 ) { 
-        if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
-            lastframe = ambe_encode_frame_cnt;
-            rx_active = 1;
+	if( lastframe < ambe_encode_frame_cnt ) { // check for new frame
+	   lastframe = ambe_encode_frame_cnt;
+	   rx_active = 1;
 
-            relative_peak_cb = intCentibel(max_level) - fullscale_offset;
-            centibel_val = relative_peak_cb;
+	   relative_peak_cb = intCentibel(max_level) - fullscale_offset;
+	   centibel_val = relative_peak_cb;
 
 
-            if( lastframe % 5 == 1 ) { // reduce drawing
-                if( centibel_val < -280 ) { // limit 160 pixel bargraph 10 150 -> 140 pixel for bargraph
-                    centibel_val = -280;
-                } else if( centibel_val > 0 ) {
-                    centibel_val = 0;
-                }
-                centibel_val += 280; // shift to positive
-                centibel_val /= 2; // scale
+	   if( lastframe % 5 == 1 ) { // reduce drawing
+	       if( centibel_val < -280 ) { // limit 160 pixel bargraph 10 150 -> 140 pixel for bargraph
+		  centibel_val = -280;
+	       } else if( centibel_val > 0 ) {
+		  centibel_val = 0;
+	       }
+	       centibel_val += 280; // shift to positive
+	       centibel_val /= 2; // scale
 
-                gfx_set_fg_color(0x999999);
-                gfx_set_bg_color(0xff000000);
-                gfx_blockfill(9, 54, 151, 66);
+	       gfx_set_fg_color(0x999999);
+	       gfx_set_bg_color(0xff000000);
+	       gfx_blockfill(9, 54, 151, 66);
 
-                // paint legend
-                gfx_set_fg_color(0x0000ff);
-                gfx_blockfill((-30 + 280) / 2 + 10, 67, 150, 70);
-                gfx_set_fg_color(0x00ff00);
-                gfx_blockfill((-130 + 280) / 2 + 10, 67, (-30 + 280) / 2 - 1 + 10, 70);
-                gfx_set_fg_color(0x555555);
-                gfx_blockfill(10, 67, (-130 + 280) / 2 - 1 + 10, 70);
+	       // paint legend
+	       gfx_set_fg_color(0x0000ff);
+	       gfx_blockfill((-30 + 280) / 2 + 10, 67, 150, 70);
+	       gfx_set_fg_color(0x00ff00);
+	       gfx_blockfill((-130 + 280) / 2 + 10, 67, (-30 + 280) / 2 - 1 + 10, 70);
+	       gfx_set_fg_color(0x555555);
+	       gfx_blockfill(10, 67, (-130 + 280) / 2 - 1 + 10, 70);
 
-                // set color
-                if( relative_peak_cb > -3 || red > 0 ) {
-                    if( red > 0 ) red--;
-                    if( relative_peak_cb > -3 ) red = 30;
-                    gfx_set_fg_color(0x0000ff);
-                } else if( relative_peak_cb > -130 || green > 0 ) {
-                    if( green > 0 ) green--;
-                    if( relative_peak_cb > -130 ) green = 30;
-                    gfx_set_fg_color(0x00ff00);
-                } else {
-                    gfx_set_fg_color(0x555555);
-                }
-                gfx_set_bg_color(0xff000000);
-                gfx_blockfill(10, 55, centibel_val, 65);
-                gfx_set_fg_color(0xff8032);
-                gfx_set_bg_color(0xff000000);
-            }
-        }
+	       // set color
+	       if( relative_peak_cb > -3 || red > 0 ) {
+		  if( red > 0 ) red--;
+		  if( relative_peak_cb > -3 ) red = 30;
+		  gfx_set_fg_color(0x0000ff);
+	       } else if( relative_peak_cb > -130 || green > 0 ) {
+		  if( green > 0 ) green--;
+		  if( relative_peak_cb > -130 ) green = 30;
+		  gfx_set_fg_color(0x00ff00);
+	       } else {
+		  gfx_set_fg_color(0x555555);
+	       }
+	       gfx_set_bg_color(0xff000000);
+	       gfx_blockfill(10, 55, centibel_val, 65);
+	       gfx_set_fg_color(0xff8032);
+	       gfx_set_bg_color(0xff000000);
+	   }
+	}
     }
 
     if( is_rx && rx_active == 1 ) { // clear screen area
-        gfx_set_fg_color(0xff8032);
-        gfx_set_bg_color(0xff000000);
-        gfx_blockfill(9, 54, 151, 70);
-        rx_active = 0;
-        red = 0;
-        green = 0;
+	gfx_set_fg_color(0xff8032);
+	gfx_set_bg_color(0xff000000);
+	gfx_blockfill(9, 54, 151, 70);
+	rx_active = 0;
+	red = 0;
+	green = 0;
     }
 }
 
@@ -855,19 +855,19 @@ void draw_rx_screen(unsigned int bg_color)
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
 		if( src==4000 ) {
 			usr.callsign = "Message" ;
-            usr.firstname = "from" ;
-            usr.name = "Server" ;
-            usr.place = "" ;
-            usr.state = "" ;
-            usr.country = "";
+	   usr.firstname = "from" ;
+	   usr.name = "Server" ;
+	   usr.place = "" ;
+	   usr.state = "" ;
+	   usr.country = "";
 		}
 		else {
-            usr.callsign = "ID" ;
-            usr.firstname = "not found" ;
-            usr.name = talkerAlias.text;
-            usr.place = "Update with" ;
-            usr.state = "glvusers," ;
-            usr.country = "then flashdb";
+	   usr.callsign = "Callsign" ;
+	   usr.firstname = "not found" ;
+	   usr.name = talkerAlias.text;
+	   usr.place = "Update with" ;
+	   usr.state = "glvusers," ;
+	   usr.country = "then flashdb";
 		}
     }
     
@@ -903,9 +903,9 @@ void draw_rx_screen(unsigned int bg_color)
      dc.fg_color = LCD_COLOR_WHITE;
      dc.bg_color = LCD_COLOR_BLUE;
      if( grp ) {
-          LCD_Printf( &dc, "\t%d-TG %d %s CC%d\r", src, dst, ( ts2==1 ? "T2" : "T1"),cc );  
+	 LCD_Printf( &dc, "\t%d-TG %d %s CC%d\r", src, dst, ( ts2==1 ? "T2" : "T1"),cc );  
      } else {
-          LCD_Printf( &dc, "\t%d-%d %s CC%d\r", src, dst, ( ts2==1 ? "T2" : "T1"),cc ); 
+	 LCD_Printf( &dc, "\t%d-%d %s CC%d\r", src, dst, ( ts2==1 ? "T2" : "T1"),cc ); 
      }
  
      dc.bg_color = LCD_COLOR_MD380_BKGND_BLUE;
@@ -921,81 +921,81 @@ void draw_rx_screen(unsigned int bg_color)
 	int smallFontFudge=0;
 	if (strlen(usr.firstname) > 0)  {  // have real nickname, display it as before
 		LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, usr.firstname );
-          dc.y+=2;
+	 dc.y+=2;
 	} else {
 		char *firstname = get_firstname(&usr, firstname_buf, FIRSTNAME_BUFSIZE);
-          nameLen = strlen(usr.name);
+	 nameLen = strlen(usr.name);
 		if (strcmp(usr.firstname, firstname) != 0  && strlen(usr.firstname)>0) {
 			LCD_Printf( &dc, "\t%s - %s\r", usr.callsign, firstname );
-               dc.y+=2;
+	      dc.y+=2;
 		} else if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) { 
-               if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {   
-                    // name will be in small font, allow large font for call
-                    dc.y-=1;
-                    LCD_Printf( &dc, "\t%s\r", usr.callsign);
-                    dc.y-=1;
-               } else {
-                    // or fullname is going to be in medium font
-                    dc.y-=1;
-                    LCD_Printf( &dc, "\t%s\r", usr.callsign);
-                    dc.y+=1;
-                    smallFontFudge=2;
-               }
+	      if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {   
+		  // name will be in small font, allow large font for call
+		  dc.y-=1;
+		  LCD_Printf( &dc, "\t%s\r", usr.callsign);
+		  dc.y-=1;
+	      } else {
+		  // or fullname is going to be in medium font
+		  dc.y-=1;
+		  LCD_Printf( &dc, "\t%s\r", usr.callsign);
+		  dc.y+=1;
+		  smallFontFudge=2;
+	      }
 		} else { 
 			LCD_Printf( &dc, "\t%s\r", usr.callsign);
-               dc.y+=2;
+	      dc.y+=2;
 		}
 	} 
 
      // Display  Q/A ids 2682100 2682101 2220298 2620071 2621168 3101380 (name=15) 3101439 (name=17)
      if ( global_addl_config.userscsv > 1 && talkerAlias.length > 0 ) {		// 2017-02-19 show Talker Alias depending on setup 0=CPS 1=DB 2=TA 3=TA & DB
-          // TA or TA/DB mode
-          nameLen = strlen(talkerAlias.text);
-          if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
-               if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
-                    dc.font = LCD_OPT_FONT_6x12; // drastic measures
-               } 
-               else {
-                    dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-               }
-               dc.y-=4;
-               LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
-               dc.y--;
-               
-          } else {
-               dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
-               if (talkerAlias.length < 1) {
-                    LCD_Printf( &dc, "\tDMRID: %d\r", src );
-               } else {
-                    dc.y++;
-                    LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
-               }
-          }
+	 // TA or TA/DB mode
+	 nameLen = strlen(talkerAlias.text);
+	 if ( talkerAlias.length > FULLNAME_MAX_LARGEFONT_CHARS ) {  
+	      if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
+		  dc.font = LCD_OPT_FONT_6x12; // drastic measures
+	      } 
+	      else {
+		  dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+	      }
+	      dc.y-=4;
+	      LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
+	      dc.y--;
+	      
+	 } else {
+	      dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
+	      if (talkerAlias.length < 1) {
+		  LCD_Printf( &dc, "\tDMRID: %d\r", src );
+	      } else {
+		  dc.y++;
+		  LCD_Printf( &dc, "\t%s\r", talkerAlias.text );
+	      }
+	 }
      } 
 	else {
-          // user.bin or codeplug or talkerAlias length=0
-          if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
-               dc.y-=4;
-               if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
-                    dc.y+=2;
-                    siglinfudge=-1;
-                    dc.font = LCD_OPT_FONT_6x12; // drastic measures
-                    LCD_Printf( &dc, "\t%s\r", usr.name );
-                    dc.y+=3;
-                } 
-               else {
-                    dc.y++;
-                    dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
-                    LCD_Printf( &dc, "\t%s\r", usr.name );
-                    dc.y--;
-               }
-          }
-          else {  
-               dc.y-=2;
-               dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
-               LCD_Printf( &dc, "\t%s\r", usr.name );
-               dc.y+=2;
-          }
+	 // user.bin or codeplug or talkerAlias length=0
+	 if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  
+	      dc.y-=4;
+	      if (nameLen > FULLNAME_MAX_MIDDLEFONT_CHARS ) {
+		  dc.y+=2;
+		  siglinfudge=-1;
+		  dc.font = LCD_OPT_FONT_6x12; // drastic measures
+		  LCD_Printf( &dc, "\t%s\r", usr.name );
+		  dc.y+=3;
+	       } 
+	      else {
+		  dc.y++;
+		  dc.font = LCD_OPT_FONT_6x12|LCD_OPT_DOUBLE_HEIGHT;
+		  LCD_Printf( &dc, "\t%s\r", usr.name );
+		  dc.y--;
+	      }
+	 }
+	 else {  
+	      dc.y-=2;
+	      dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;
+	      LCD_Printf( &dc, "\t%s\r", usr.name );
+	      dc.y+=2;
+	 }
 	}
   
      siglin= dc.y + siglinfudge;
@@ -1009,9 +1009,9 @@ void draw_rx_screen(unsigned int bg_color)
 
 	case 2:
 		if ( talkerAlias.length > 0 ) {
-               LCD_Printf( &dc, "%s\r", "Userinfo: TalkerAlias");
+	      LCD_Printf( &dc, "%s\r", "Userinfo: TalkerAlias");
 		}
-          break;
+	 break;
 	}
 	switch( global_addl_config.userscsv ) {
 	case 1:
@@ -1020,35 +1020,35 @@ void draw_rx_screen(unsigned int bg_color)
 		if( src != 0 ) { 
 			// city
 			if ( strlen(usr.place) > STATECOUNTRY_MAX_LARGEFONT_CHARS || displayLines == 5 ){ 
-                         dc.font = LCD_OPT_FONT_8x8;                   
-               } else {        
-                         dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
-                         dc.y+=2;
-               } 
+		       dc.font = LCD_OPT_FONT_8x8;		 
+	      } else {	
+		       dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT; 
+		       dc.y+=2;
+	      } 
 			LCD_Printf( &dc, "%s\r", usr.place );  
-		               
+			      
 			// state/province and country
 			// something in oem firmware is blocking end of line, so we lose a few chars at end and bottom of screen
-               dc.font = LCD_OPT_FONT_8x8;
+	      dc.font = LCD_OPT_FONT_8x8;
 			if ( displayLines == 5) {  
-                    if (strlen(state)> STATECOUNTRY_MAX_LARGEFONT_CHARS){
-                         dc.font = LCD_OPT_FONT_6x12; 
-                         smallFontFudge = 4;
-                         
-                    } else {        
-                         dc.font = LCD_OPT_FONT_8x8;   
-                    }                         
-                         dc.y = dc.y + 4 - smallFontFudge;
-                         LCD_Printf( &dc, "%s\r", state );
-                         dc.y = dc.y + 4 - smallFontFudge;
-                         LCD_Printf( &dc, "%s\r", country );
-                
+		  if (strlen(state)> STATECOUNTRY_MAX_LARGEFONT_CHARS){
+		       dc.font = LCD_OPT_FONT_6x12; 
+		       smallFontFudge = 4;
+		       
+		  } else {	
+		       dc.font = LCD_OPT_FONT_8x8;   
+		  }		       
+		       dc.y = dc.y + 4 - smallFontFudge;
+		       LCD_Printf( &dc, "%s\r", state );
+		       dc.y = dc.y + 4 - smallFontFudge;
+		       LCD_Printf( &dc, "%s\r", country );
+	       
 			} else {
-                    dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;  // 21 chars on line 4 max
+		  dc.font = LCD_OPT_FONT_8x8|LCD_OPT_DOUBLE_HEIGHT;  // 21 chars on line 4 max
 				dc.y = dc.y + 3 - smallFontFudge;
 				LCD_Printf( &dc,  "%s %s\r", state, country );			
 			}
-          
+	 
 		}
 	  
 	}
@@ -1093,19 +1093,19 @@ void draw_rx_screen(unsigned int bg_color)
     if( usr_find_by_dmrid(&usr,src) == 0 ) {
 		if( src==4000 ) {
 			usr.callsign = "Message" ;
-            usr.firstname = "from" ;
-            usr.name = "Server" ;
-            usr.place = "" ;
-            usr.state = "" ;
-            usr.country = "";
+	   usr.firstname = "from" ;
+	   usr.name = "Server" ;
+	   usr.place = "" ;
+	   usr.state = "" ;
+	   usr.country = "";
 		}
 		else {
-            usr.callsign = "ID" ;
-            usr.firstname = "not found" ;
-            usr.name = talkerAlias.text;
-            usr.place = "Update with" ;
-            usr.state = "glvusers," ;
-            usr.country = "then flashdb";
+	   usr.callsign = "Callsign" ;
+	   usr.firstname = "not found" ;
+	   usr.name = talkerAlias.text;
+	   usr.place = "Update with" ;
+	   usr.state = "glvusers," ;
+	   usr.country = "then flashdb";
 		}
     }
 	
@@ -1123,9 +1123,9 @@ void draw_rx_screen(unsigned int bg_color)
 
 	if (global_addl_config.mode_color == 1) { gfx_set_fg_color(0xffffff); gfx_set_bg_color(0xff4f32);}
     if( grp ) {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-TG %d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );        
+	gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-TG %d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );	
     } else {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-%d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );
+	gfx_printf_pos( RX_POPUP_X_START, y_index, "%d-%d %s CC:%d", src, dst, ( ts2==1 ? "T2" : "T1"),cc );
     }
 	gfx_set_fg_color(0x000000); gfx_set_bg_color(bg_color);
     y_index += GFX_FONT_SMALL_HEIGHT ;
@@ -1175,13 +1175,13 @@ void draw_rx_screen(unsigned int bg_color)
       // user.bin or codeplug or talkerAlias length=0
       y_index++;
       if (nameLen > FULLNAME_MAX_LARGEFONT_CHARS) {  // print in smaller font
-        gfx_select_font(gfx_font_small);
-        gfx_puts_pos(RX_POPUP_X_START, y_index, usr.name );
-        y_index += GFX_FONT_SMALL_HEIGHT ; // previous line was in small font
+	gfx_select_font(gfx_font_small);
+	gfx_puts_pos(RX_POPUP_X_START, y_index, usr.name );
+	y_index += GFX_FONT_SMALL_HEIGHT ; // previous line was in small font
       }
       else {  // print in larger font if it will fit
-        gfx_puts_pos(RX_POPUP_X_START, y_index, usr.name );
-        y_index += GFX_FONT_NORML_HEIGHT;
+	gfx_puts_pos(RX_POPUP_X_START, y_index, usr.name );
+	y_index += GFX_FONT_NORML_HEIGHT;
       }
 	}
 	
@@ -1201,14 +1201,14 @@ void draw_rx_screen(unsigned int bg_color)
 	case 0:
 		gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: CPS mode");
 		y_index += GFX_FONT_SMALL_HEIGHT ;
-        break;
+	break;
 
 	case 2:
 		if ( talkerAlias.length > 0 ) {
-            gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TalkerAlias");
+	   gfx_puts_pos(RX_POPUP_X_START, y_index, "Userinfo: TalkerAlias");
 			y_index += GFX_FONT_SMALL_HEIGHT ;
 	    }
-        break;
+	break;
 	}
 	switch( global_addl_config.userscsv ) {
 	case 1:
@@ -1238,7 +1238,7 @@ void draw_rx_screen(unsigned int bg_color)
 				gfx_select_font(gfx_font_norm);
 				gfx_printf_pos2(RX_POPUP_X_START, y_index, 10, "%s %s", state, country );			
 			}
-          
+	 
 		}
 	  
 	}
@@ -1258,21 +1258,21 @@ void who_dat(int mode){
      int delay_time;
   
      if ( IS_PTT_PRESSED || IS_GREEN_LED_ON || gui_opmode2 == OPM2_MENU ){
-//          printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
-          return;
+//	 printf("who_dat skip ptt=%d led=%d opmode2=%d\n",IS_PTT_PRESSED,IS_GREEN_LED_ON,gui_opmode2);
+	 return;
      }
      
      StartStopwatch(&popup_timer);
      while(popup_time < 3000) {
-          popup_time = ReadStopwatch_ms(&popup_timer);
-          
-          draw_tx_screen_layout(0);
-          
-          delay_time = 0;
-          StartStopwatch(&delay_timer);
-          while(delay_time < 500)
-               delay_time = ReadStopwatch_ms(&delay_timer);
-          
+	 popup_time = ReadStopwatch_ms(&popup_timer);
+	 
+	 draw_tx_screen_layout(0);
+	 
+	 delay_time = 0;
+	 StartStopwatch(&delay_timer);
+	 while(delay_time < 500)
+	      delay_time = ReadStopwatch_ms(&delay_timer);
+	 
      }
      oem_repaint_screen();
 #endif
@@ -1307,9 +1307,9 @@ void draw_ta_screen(unsigned int bg_color)
     
     gfx_select_font(gfx_font_small);
     if( grp ) {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> TG %d", src, dst );        
+	gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> TG %d", src, dst );	
     } else {
-        gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> %d", src, dst );
+	gfx_printf_pos( RX_POPUP_X_START, y_index, "%d -> %d", src, dst );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ;
 
@@ -1327,7 +1327,7 @@ void draw_ta_screen(unsigned int bg_color)
     {
 	gfx_puts_pos(RX_POPUP_X_START, y_index, "No userdb info");
     } else {
-        gfx_printf_pos(RX_POPUP_X_START, y_index, "%s %s", usr.callsign, usr.firstname );
+	gfx_printf_pos(RX_POPUP_X_START, y_index, "%s %s", usr.callsign, usr.firstname );
     }
     y_index += GFX_FONT_SMALL_HEIGHT ; // previous line was in small font
 
@@ -1383,8 +1383,8 @@ void draw_statusline_hook( uint32_t r0 )
 # endif // CONFIG_APP_MENU ?
 
     if( is_netmon_visible() ) {
-        con_redraw();
-        return ;
+	con_redraw();
+	return ;
     }
     draw_statusline( r0 );
 }
@@ -1401,11 +1401,11 @@ void draw_alt_statusline()
 
     char mode = ' ' ;
     if( rst_voice_active ) {
-        if( rst_mycall ) {
-            mode = '*' ; // on my tg            
-        } else {
-            mode = '!' ; // on other tg
-        }
+	if( rst_mycall ) {
+	   mode = '*' ; // on my tg	   
+	} else {
+	   mode = '!' ; // on other tg
+	}
     }
 
     user_t usr;
@@ -1416,9 +1416,9 @@ void draw_alt_statusline()
     if( src == 0 ) {
 		if ( global_addl_config.datef == 5 )
 		{
-	        gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:");
+		gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:");
 		} else {
-	        gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "TA:");
+		gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "TA:");
 		}
     } else {
 		if ( global_addl_config.datef == 6 && talkerAlias.length > 0 )				// 2017-02-18 show talker alias in status if rcvd valid
@@ -1433,7 +1433,7 @@ void draw_alt_statusline()
 						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%d>%d %c", src, rst_dst, mode);
 					}
 			} else {
-	                if( usr_find_by_dmrid(&dst, rst_dst) != 0 ) {
+		       if( usr_find_by_dmrid(&dst, rst_dst) != 0 ) {
 						firstname = get_firstname(&dst, firstname_buf, FIRSTNAME_BUFSIZE);
 						gfx_printf_pos2(RX_POPUP_X_START, 96, 157, "LH:%s %s>%s %c", usr.callsign, firstname, dst.callsign, mode);
 					} else  {
@@ -1552,7 +1552,7 @@ void draw_adhoc_statusline()
 		}
 	} else {
 		strcpy(mic_gain_stat, "    ");						// blank if now mic gain display status selected
-        }
+	}
 
 //	BOOL fIsAnalog = current_channel_info_E.bIsAnalog;
 	BOOL fIsDigital = current_channel_info_E.bIsDigital;
@@ -1560,17 +1560,17 @@ void draw_adhoc_statusline()
 	
 	// the top statusline is build by the following strings:
 	// -----------------------------------------------------
-	//      |         DMR  |-R|
-	//      |         DMR |-R[1|2|2623445]  --- [n|n|   = 5 DMR compact mode
-	//      |         DMR  |-R| [CC1]
-	//      |         FM |N|-R| [CTS]
-	//      |         FM |N|-R| [DCS]
-	//                 !  !  !    !
-	//                 !  !  !    ! 
-	//                 !  !  !    +------------- [CCn]    = 5
-	//                 !  !  +------------------ |-R|     = 4
-	//                 !  +--------------------- |N or |W = 2
-	//                 +------------------------ Mode     = 3
+	//      |	DMR  |-R|
+	//      |	DMR |-R[1|2|2623445]  --- [n|n|   = 5 DMR compact mode
+	//      |	DMR  |-R| [CC1]
+	//      |	FM |N|-R| [CTS]
+	//      |	FM |N|-R| [DCS]
+	//		!  !  !    !
+	//		!  !  !    ! 
+	//		!  !  !    +------------- [CCn]    = 5
+	//		!  !  +------------------ |-R|     = 4
+	//		!  +--------------------- |N or |W = 2
+	//		+------------------------ Mode     = 3
 
 	//========================================================================================================================//
 	if (!fIsDigital) {								// DMR channel active
@@ -1637,7 +1637,7 @@ void draw_adhoc_statusline()
 
 			if (global_addl_config.chan_stat == 1) {						// show TS / TG / CTS / DCS status
 				if (global_addl_config.mode_stat != 3) {					// if MODE/CC compact display set in config 
-					gfx_printf_pos2(x, y, 120, "%s%d %s%s:%d          ", bot_status, ch_ts, (ad_hoc_tg_channel ? "Ad" : ""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "TG" : "Priv"), tgNum);
+					gfx_printf_pos2(x, y, 120, "%s%d %s%s:%d	 ", bot_status, ch_ts, (ad_hoc_tg_channel ? "Ad" : ""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "TG" : "Priv"), tgNum);
 				} else {
 					if (global_addl_config.chan_stat != 4) {		// top=compact - bottom not rx/tx, so show rx, or if 3 = tx
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
@@ -1669,7 +1669,7 @@ void draw_adhoc_statusline()
 		    } else {
 			if (global_addl_config.chan_color == 1) { gfx_set_fg_color(0x261162); gfx_set_bg_color(0xff9f32);}
 			if (global_addl_config.chan_stat == 1) { 
-				gfx_printf_pos2(x, y, 120, "%s%d %s%s:%s          ", bot_status, ch_ts, (ad_hoc_tg_channel ? "Ad" : ""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "TG" : "Priv"), usr.callsign);
+				gfx_printf_pos2(x, y, 120, "%s%d %s%s:%s	 ", bot_status, ch_ts, (ad_hoc_tg_channel ? "Ad" : ""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "TG" : "Priv"), usr.callsign);
 			} else {
 					if (global_addl_config.chan_stat < 4) {
 						gfx_printf_pos2(x, y, 120, "%s:%s MHz   ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
@@ -1756,7 +1756,7 @@ void draw_adhoc_statusline()
 
 				if (global_addl_config.chan_stat == 1) { 		// 1=show Status CC/CTS/DCS Info
 					if (global_addl_config.mode_stat != 3) {	// if MODE/CC compact display set in config
-						gfx_printf_pos2(x, y, 120, "%s                  ", bot_status);
+						gfx_printf_pos2(x, y, 120, "%s		", bot_status);
 					} else {
 						if (global_addl_config.chan_stat != 4) {
 							gfx_printf_pos2(x, y, 120, "%s:%s MHz     ", (global_addl_config.chan_stat == 3 ? "TX" : "RX"), (global_addl_config.chan_stat == 3 ? freq_tx : freq_rx) );
@@ -1806,14 +1806,14 @@ void draw_datetime_row_hook()
 
 #if defined(FW_D13_020) || defined(FW_S13_020)
     if( is_netmon_visible() ) {
-        return ;
+	return ;
     }
     //if( global_addl_config.mode_stat != 0 || global_addl_config.chan_stat != 0 ) {
 	draw_adhoc_statusline(); 
     //}	
     if( is_statusline_visible() || global_addl_config.datef == 6 ) {
-        draw_alt_statusline();
-        return ; 
+	draw_alt_statusline();
+	return ; 
     }
     draw_datetime_row();
 #else
