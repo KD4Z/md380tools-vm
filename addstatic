@@ -82,7 +82,7 @@ if [ -f ~/keep.tmp ]; then
 else
 		timeout 120 wget --no-check-certificate --wait=3 $RISTATICUSERSURL -O $RISTATICFILE  2>$RIERROR
 fi 
-echo -e "...done${NC}"
+
 sizeRI=$(ls -l $RISTATICFILE | cut -d" " -f5)
 countRI=$(wc --lines $RISTATICFILE | cut -d" " -f1)
 if (( countRI < 10 )); then
@@ -92,7 +92,7 @@ if (( countRI < 10 )); then
     if [ -f $RISTATICFILE ]; then rm $RISTATICFILE ; fi
 fi
 if [ -f $RISTATICFILE ]; then
-   echo -e -n "${WHITE}Normalizing data."
+   echo -e -n "${WHITE}...Normalizing data."
    awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $RISTATICFILE >$FINALRI
    echo -e "...done${NC}"
 fi
@@ -102,7 +102,7 @@ if [ -f ~/keep.tmp ]; then
 else
 		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE  2>$HDERROR
 fi 
-echo -e "...done${NC}"
+
 sizeHD=$(ls -l $HDSTATICFILE | cut -d" " -f5)
 countHD=$(wc --lines $HDSTATICFILE | cut -d" " -f1)
 if (( countHD < 10 )); then
@@ -112,7 +112,7 @@ if (( countHD < 10 )); then
     if [ -f $HDSTATICFILE ]; then rm $HDSTATICFILE ; fi
 fi
 if [ -f $HDSTATICFILE ]; then
-	echo -e -n "${WHITE}Normalizing data."
+	echo -e -n "${WHITE}...Normalizing data."
    awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $HDSTATICFILE >$FINALHD
    echo -e "...done${NC}"
 fi
@@ -128,9 +128,11 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	else
 		timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE  2>$ALTFILEDLERROR
 	fi 
-	echo -e "...done${NC}"
+	 
 	if [ ! -f $TMPALTERNATE ]; then 
 			echo -e " ${RED}Alternate data not downloaded.  See ${ALTFILEDLERROR} ${NC}"
+	else
+			echo -e "...done${NC}"
 	fi
 	
 	if [ -f $TMPALTERNATE ]; then

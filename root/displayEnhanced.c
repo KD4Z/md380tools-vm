@@ -95,7 +95,7 @@ static const char *const countries[] = {
 	"AR,Argentina",
 	"AT,Austria",
 	"AU,Australia",
-	"BA,Bosnia and Hercegovi",
+	"BA,Bosnia and Herzegovina",
 	"BB,Barbados",
 	"BE,Belgium",
 	"BG,Bulgaria",
@@ -212,7 +212,7 @@ static const char *const states[] = {
   	"KY,Kentucky",
 	"LA,Louisiana",
      "LAZ,Lazio",
-	"LI,Limburg",
+	"LB,Limburg",
      "LIG,Liguria",  
      "LOM,Lombardia", 
 	"MA,Massachusetts",
@@ -862,7 +862,7 @@ void draw_rx_screen(unsigned int bg_color)
             usr.country = "";
 		}
 		else {
-            usr.callsign = "ID" ;
+            usr.callsign = "Callsign" ;
             usr.firstname = "not found" ;
             usr.name = talkerAlias.text;
             usr.place = "Update with" ;
@@ -1100,7 +1100,7 @@ void draw_rx_screen(unsigned int bg_color)
             usr.country = "";
 		}
 		else {
-            usr.callsign = "ID" ;
+            usr.callsign = "Callsign" ;
             usr.firstname = "not found" ;
             usr.name = talkerAlias.text;
             usr.place = "Update with" ;
@@ -1465,23 +1465,23 @@ void draw_adhoc_statusline()
 	char top_status[25];								// top status line
 	char bot_status[25];								// bottom status line
 
-	char ch_rx[10];
-	char ch_tx[10];
-	char freq_rx[10];
-	char freq_tx[10];
+	char ch_rx[12];
+	char ch_tx[12];
+	char freq_rx[12];
+	char freq_tx[12];
 
 	//char ch_mode[3];								// DMR / FM / FM-N / FM-W
 	//char ch_wide[2];								// DMR / FM / FM-N / FM-W
 	//char ch_rpt[4];									// [-R] / [+R] repeater shift
 	char dmr_cc[2];									// [CC1] color code
 	//char dmr_compact[5];								// [1|2| ... CC/TS prefix
-	char ch_offset[4];								// repeater offset
+	char ch_offset[5];								// repeater offset
 	//char ch_tmp[10];								// temp
 	//char ch_cc[1];									// temp CC
 
-	char fm_bw_stat[2];								// |N or |W
-	char mic_gain_stat[3];								// off, 3dB, 6dB
-	char fm_sql[3];									// CTS oder DCS
+	char fm_bw_stat[3];								// |N or |W
+	char mic_gain_stat[5];								// off, 3dB, 6dB
+	char fm_sql[4];									// CTS oder DCS
 	char tg_fill[7];								// talkgroup space filler
 
 	char ch_tone_type[2];								// N=none D=DCS 0-9=CTS

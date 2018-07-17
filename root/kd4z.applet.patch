@@ -42,14 +42,14 @@ Only in /home/tyt/md380tools/applet/src/: i2c.c
 Only in /home/tyt/md380tools/applet/src/: irq_handlers.c
 Only in /home/tyt/md380tools/applet/src/: irq_handlers.h
 diff -rBu4 /home/tyt/md380tools/applet/src/keyb.c /home/tyt/src/md380tools/applet/src/keyb.c
---- /home/tyt/md380tools/applet/src/keyb.c	2018-02-14 13:52:29.123758570 -0600
-+++ /home/tyt/src/md380tools/applet/src/keyb.c	2018-02-14 07:34:37.000000000 -0600
+--- /home/tyt/md380tools/applet/src/keyb.c	2018-07-17 17:01:54.956877301 -0500
++++ /home/tyt/src/md380tools/applet/src/keyb.c	2018-02-19 13:10:10.000000000 -0600
 @@ -134,8 +134,9 @@
  #endif
  
  void handle_hotkey( int keycode )
  {
-+    printf("keycode= %d \n",keycode); 
++    //printf("keycode= %d \n",keycode); 
      if (global_addl_config.devmode_level != 0) 	
  	PRINT("handle hotkey: %d\n", keycode );
      
@@ -77,21 +77,6 @@ diff -rBu4 /home/tyt/md380tools/applet/src/keyb.c /home/tyt/src/md380tools/apple
  	} else if ( (keycode) == (kc_syslog_dump) ) {
              static int cnt = 0 ;
              syslog_printf("=dump %d=\n",cnt++);
-@@ -521,11 +530,11 @@
- 
- 
- inline int is_intercept_allowed()
- {
--    if( !is_netmon_enabled() ) {
--        return 0 ;
--    }
-+    //if( !is_netmon_enabled() ) {
-+    // return 0 ;
-+    //}
-     
- //    switch( get_main_mode() ) {
- //        case 28 :
- //            return 1 ;
 @@ -595,13 +604,12 @@
  		if (is_intercepted_keycode2(kc)) {
  				handle_hotkey(kc);
@@ -109,7 +94,7 @@ diff -rBu4 /home/tyt/md380tools/applet/src/keyb.c /home/tyt/src/md380tools/apple
  }
  #endif
 diff -rBu4 /home/tyt/md380tools/applet/src/keyb.h /home/tyt/src/md380tools/applet/src/keyb.h
---- /home/tyt/md380tools/applet/src/keyb.h	2018-02-14 13:52:29.123758570 -0600
+--- /home/tyt/md380tools/applet/src/keyb.h	2018-07-17 17:01:54.956877301 -0500
 +++ /home/tyt/src/md380tools/applet/src/keyb.h	2018-02-14 13:26:41.000000000 -0600
 @@ -74,8 +74,10 @@
  void set_keyb(int);
@@ -136,121 +121,23 @@ Only in /home/tyt/md380tools/applet/src/: narrator.c
 Only in /home/tyt/md380tools/applet/src/: narrator.h
 Only in /home/tyt/md380tools/applet/src/: netmon.c
 diff -rBu4 /home/tyt/md380tools/applet/src/netmon.h /home/tyt/src/md380tools/applet/src/netmon.h
---- /home/tyt/md380tools/applet/src/netmon.h	2018-02-14 13:52:29.127758570 -0600
-+++ /home/tyt/src/md380tools/applet/src/netmon.h	2018-02-14 07:11:18.000000000 -0600
-@@ -1,56 +1,56 @@
--/*
-- *  netmon.h
-- * 
-- */
--
--#ifndef NETMON_H
--#define NETMON_H
--
--#include <stdint.h>
--
--#include "console.h"
--#include "addl_config.h"
--
--#ifdef __cplusplus
--extern "C" {
--#endif
--
--void netmon_update();
--
--extern uint8_t last_radio_event ;
--extern uint8_t last_event2 ;
--extern uint8_t last_event3 ;
--extern uint8_t last_event4 ;
--extern uint8_t last_event5 ;
--
--extern uint8_t nm_screen ;
--extern uint8_t nm_started ;
--extern uint8_t nm_started5 ;
--extern uint8_t nm_started6 ;
--extern uint8_t rx_voice ;
--
--inline int is_netmon_enabled()
--{
--    return global_addl_config.netmon != 0 ;
--}
--
--inline int is_netmon_visible()
--{
+--- /home/tyt/md380tools/applet/src/netmon.h	2018-07-17 17:01:54.960877301 -0500
++++ /home/tyt/src/md380tools/applet/src/netmon.h	2018-07-17 17:00:51.000000000 -0500
+@@ -39,11 +39,11 @@
+ }
+ 
+ inline int is_netmon_visible()
+ {
 -    if( !is_netmon_enabled() ) {
 -        return 0 ;
 -    }
--    return nm_screen != 0 ;
--    //return !is_menu_visible();
--}
--
--inline int is_statusline_visible()
--{    
--    return global_addl_config.datef == 5 ;
--}
--
--#ifdef __cplusplus
--}
--#endif
--
--#endif /* NETMON_H */
--
-+/*
-+ *  netmon.h
-+ * 
-+ */
-+
-+#ifndef NETMON_H
-+#define NETMON_H
-+
-+#include <stdint.h>
-+
-+#include "console.h"
-+#include "addl_config.h"
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+void netmon_update();
-+
-+extern uint8_t last_radio_event ;
-+extern uint8_t last_event2 ;
-+extern uint8_t last_event3 ;
-+extern uint8_t last_event4 ;
-+extern uint8_t last_event5 ;
-+
-+extern uint8_t nm_screen ;
-+extern uint8_t nm_started ;
-+extern uint8_t nm_started5 ;
-+extern uint8_t nm_started6 ;
-+extern uint8_t rx_voice ;
-+
-+inline int is_netmon_enabled()
-+{
-+    return global_addl_config.netmon != 0 ;
-+}
-+
-+inline int is_netmon_visible()
-+{
 +    //if( !is_netmon_enabled() ) {
 +    //    return 0 ;
-+   // }
-+    return nm_screen != 0 ;
-+    //return !is_menu_visible();
-+}
-+
-+inline int is_statusline_visible()
-+{    
-+    return global_addl_config.datef == 5 ;
-+}
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif /* NETMON_H */
-+
++    //}
+     return nm_screen != 0 ;
+     //return !is_menu_visible();
+ }
+ 
 Only in /home/tyt/md380tools/applet/src/: os.c
 Only in /home/tyt/md380tools/applet/src/: os.h
 Only in /home/tyt/md380tools/applet/src/: printf.c
