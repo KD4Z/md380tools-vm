@@ -1532,13 +1532,13 @@ void draw_adhoc_statusline()
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
 			strcpy(ch_offset, "|-R|");
 		} else {
-			strcpy(ch_offset, "|-R");
+			strcpy(ch_offset, "|-|");
 		}
 	} else {
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
 			strcpy(ch_offset, "|+R|");
 		} else {
-			strcpy(ch_offset, "|+R");
+			strcpy(ch_offset, "|+|");
 		}
 	}
 
@@ -1585,7 +1585,7 @@ void draw_adhoc_statusline()
 		if (global_addl_config.mode_stat != 3) {				// if MODE/CC compact display set in config
 		strcpy(top_status, "DMR ");						// init DMR string
 		} else {
-		strcpy(top_status, "DMR");						// init DMR string compact
+		strcpy(top_status, "D");						// init DMR string compact
 		}
 
 		strcat(top_status, ch_offset);						// DMR + repeaterstatus
@@ -1625,7 +1625,7 @@ void draw_adhoc_statusline()
 				if (global_addl_config.mode_stat != 3) {					// if MODE/CC compact display set in config
 					gfx_printf_pos2(x, top_y, 120, "%s%d%s ", top_status, ch_cc, mic_gain_stat);
 				} else {
-					gfx_printf_pos2(x, top_y, 120, "%s%d|%d|%s%s%d%s%s   ", top_status, ch_cc, ch_ts, (ad_hoc_tg_channel ? "A":""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "" : "P"), tgNum, tg_fill, mic_gain_stat);
+					gfx_printf_pos2(x, top_y, 120, "%s%d|%d|%s%s%d%s%s", top_status, ch_cc, ch_ts, (ad_hoc_tg_channel ? "A":""), (callType == CONTACT_GROUP || callType == CONTACT_GROUP2 ? "" : "P"), tgNum, tg_fill, mic_gain_stat);
 				}
 			gfx_set_fg_color(0x000000);
 			gfx_set_bg_color(0xff8032);
