@@ -22,7 +22,7 @@ alias dir="ls -lH"
 alias reboot="/bin/sync && /sbin/reboot"
 alias shutdown="/bin/sync && /sbin/shutdown -h now"
 alias stats="~/md380tools-vm/stats"
-alias clone="cd ~/ && echo -e '\033[1;37mCloning source from Github for the KD4Z Toolkit' && echo -e '\033[1;32m' && rm -rf ~/md380tools-vm ~/md380tools && git clone https://github.com/KD4Z/md380tools-vm.git && echo -e '\033[1;37mUpdating md380tools' && echo -e '\033[1;32m' && git clone https://github.com/travisgoodspeed/md380tools.git && echo -e '\033[1;32m'
+alias clone="cd ~/ && echo -e '\033[1;37mCloning source from Github for the KD4Z Toolkit' && echo -e '\033[1;32m' && rm -rf ~/md380tools-vm ~/md380tools && git clone https://github.com/KD4Z/md380tools-vm.git && echo -e '\033[1;37mUpdating md380tools' && echo -e '\033[1;32m' && git clone https://github.com/travisgoodspeed/md380tools.git && echo -e '\033[1;32m'"
 lookup() { ~/lookup "$1"; }
 save() { ~/save "$1"; }
 restore() { ~/restore "$1"; }
