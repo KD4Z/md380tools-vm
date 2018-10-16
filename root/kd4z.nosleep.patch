@@ -1,0 +1,106 @@
+Only in /home/tyt/md380tools/applet/src/: addl_config.c
+Only in /home/tyt/md380tools/applet/src/: addl_config.h
+Only in /home/tyt/md380tools/applet/src/: aes.c
+Only in /home/tyt/md380tools/applet/src/: ambe.c
+Only in /home/tyt/md380tools/applet/src/: ambe.h
+Only in /home/tyt/md380tools/applet/src/: amenu_channels.c
+Only in /home/tyt/md380tools/applet/src/: amenu_channels.h
+Only in /home/tyt/md380tools/applet/src/: amenu_codeplug.c
+Only in /home/tyt/md380tools/applet/src/: amenu_codeplug.h
+Only in /home/tyt/md380tools/applet/src/: amenu_hexmon.c
+Only in /home/tyt/md380tools/applet/src/: amenu_hexmon.h
+Only in /home/tyt/md380tools/applet/src/: amenu_set_tg.c
+Only in /home/tyt/md380tools/applet/src/: amenu_set_tg.h
+Only in /home/tyt/md380tools/applet/src/: amenu_utils.c
+Only in /home/tyt/md380tools/applet/src/: app_menu.c
+Only in /home/tyt/md380tools/applet/src/: app_menu.h
+Only in /home/tyt/md380tools/applet/src/: beep.c
+Only in /home/tyt/md380tools/applet/src/: beep.h
+Only in /home/tyt/md380tools/applet/src/: codeplug.h
+Only in /home/tyt/md380tools/applet/src/: codeplug.md
+Only in /home/tyt/md380tools/applet/src/: color_picker.c
+Only in /home/tyt/md380tools/applet/src/: console.c
+Only in /home/tyt/md380tools/applet/src/: console.h
+Only in /home/tyt/md380tools/applet/src/: debug.c
+Only in /home/tyt/md380tools/applet/src/: debug.h
+Only in /home/tyt/md380tools/applet/src/: dispflip.c
+Only in /home/tyt/md380tools/applet/src/: dispinit.c
+Only in /home/tyt/md380tools/applet/src/: display.c
+Only in /home/tyt/md380tools/applet/src/: display.h
+Only in /home/tyt/md380tools/applet/src/: dmesg.c
+Only in /home/tyt/md380tools/applet/src/: dmesg.h
+Only in /home/tyt/md380tools/applet/src/: dmr.c
+Only in /home/tyt/md380tools/applet/src/: dmr.h
+Only in /home/tyt/md380tools/applet/src/: etsi.c
+Only in /home/tyt/md380tools/applet/src/: etsi.h
+Only in /home/tyt/md380tools/applet/src/: font_8_8.bmp
+Only in /home/tyt/md380tools/applet/src/: font_8_8.c
+Only in /home/tyt/md380tools/applet/src/: gfx.c
+Only in /home/tyt/md380tools/applet/src/: gfx.h
+Only in /home/tyt/md380tools/applet/src/: gps.h
+Only in /home/tyt/md380tools/applet/src/: i2c.c
+diff -rBu4 /home/tyt/md380tools/applet/src/irq_handlers.c /home/tyt/src/md380tools/applet/src/irq_handlers.c
+--- /home/tyt/md380tools/applet/src/irq_handlers.c	2018-10-15 21:01:47.794184051 -0400
++++ /home/tyt/src/md380tools/applet/src/irq_handlers.c	2018-10-15 21:00:11.000000000 -0400
+@@ -1508,9 +1508,13 @@
+       { LED_GREEN_OFF;
+       }
+    }
+ #endif
+-
++// kd4z nosleep hack for version 5 hardware until unsleep can be hooked
++if ( *((uint16_t*)MD380_ADDR_DMR_POWER_SAVE_COUNTDOWN) < 20 )
++{
++  *((uint16_t*)MD380_ADDR_DMR_POWER_SAVE_COUNTDOWN) |= 0x80 + 0x40;
++}
+   if( boot_flags & BOOT_FLAG_OPEN_FOR_BUSINESS )
+    { // 2017-05-14 : Removed the brightness 'ramp-up' test. 
+      //   The 9 intensity levels can now be tested in app_menu.c in inc/dec edit mode.
+ #   if( CONFIG_DIMMED_LIGHT ) // Support dimmed backlight ?
+Only in /home/tyt/md380tools/applet/src/: irq_handlers.h
+Only in /home/tyt/md380tools/applet/src/: keyb.c
+Only in /home/tyt/md380tools/applet/src/: keyb.h
+Only in /home/tyt/md380tools/applet/src/: lastheard.c
+Only in /home/tyt/md380tools/applet/src/: lastheard.h
+Only in /home/tyt/md380tools/applet/src/: lcd_driver.c
+Only in /home/tyt/md380tools/applet/src/: lcd_driver.h
+Only in /home/tyt/md380tools/applet/src/: main.c
+Only in /home/tyt/md380tools/applet/src/: mbox.c
+Only in /home/tyt/md380tools/applet/src/: mbox.h
+Only in /home/tyt/md380tools/applet/src/: md380.h
+Only in /home/tyt/md380tools/applet/src/: menu.c
+Only in /home/tyt/md380tools/applet/src/: menu.h
+Only in /home/tyt/md380tools/applet/src/: narrator.c
+Only in /home/tyt/md380tools/applet/src/: narrator.h
+Only in /home/tyt/md380tools/applet/src/: netmon.c
+Only in /home/tyt/md380tools/applet/src/: netmon.h
+Only in /home/tyt/md380tools/applet/src/: os.c
+Only in /home/tyt/md380tools/applet/src/: os.h
+Only in /home/tyt/md380tools/applet/src/: printf.c
+Only in /home/tyt/md380tools/applet/src/: printf.h
+Only in /home/tyt/md380tools/applet/src/: radio_config.h
+Only in /home/tyt/md380tools/applet/src/: radiostate.c
+Only in /home/tyt/md380tools/applet/src/: radiostate.h
+Only in /home/tyt/md380tools/applet/src/: rtc_timer.c
+Only in /home/tyt/md380tools/applet/src/: sms.c
+Only in /home/tyt/md380tools/applet/src/: sms.h
+Only in /home/tyt/md380tools/applet/src/: spiflash.c
+Only in /home/tyt/md380tools/applet/src/: spiflash.h
+Only in /home/tyt/md380tools/applet/src/: stm32f4xx_it.c
+Only in /home/tyt/md380tools/applet/src/: symbols_d02.032
+Only in /home/tyt/md380tools/applet/src/: symbols_d13.020
+Only in /home/tyt/md380tools/applet/src/: symbols_s13.020
+Only in /home/tyt/md380tools/applet/src/: syslog.c
+Only in /home/tyt/md380tools/applet/src/: syslog.h
+Only in /home/tyt/md380tools/applet/src/: system_hrc5000.c
+Only in /home/tyt/md380tools/applet/src/: system_hrc5000.h
+Only in /home/tyt/md380tools/applet/src/: system_stm32f4xx.c
+Only in /home/tyt/md380tools/applet/src/: timer.c
+Only in /home/tyt/md380tools/applet/src/: timer.h
+Only in /home/tyt/md380tools/applet/src/: tooldfu.h
+Only in /home/tyt/md380tools/applet/src/: unclear.h
+Only in /home/tyt/md380tools/applet/src/: usb.c
+Only in /home/tyt/md380tools/applet/src/: usersdb.c
+Only in /home/tyt/md380tools/applet/src/: usersdb.h
+Only in /home/tyt/md380tools/applet/src/: util.c
+Only in /home/tyt/md380tools/applet/src/: util.h

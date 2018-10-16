@@ -101,6 +101,13 @@ if [ -f ~/lang.sl ]; then
 else
  echo -e ""
 fi
+echo -e -n "  ${BLUE}~/nosleep.enable${NC}  ${ZCOM42} Workaround #1 for new Version 5 radios that go silent"
+if [ -f ~/nosleep.enable ]; then
+ echo -e "${RED} *${NC}"
+else
+ echo -e ""
+fi
+
 echo -e ""
 echo -e -n " ${YELLOW}menu${NC} -- Back to main menu "
 if [ -f /etc/motd.save ]; then

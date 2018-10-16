@@ -95,7 +95,16 @@ if [ -f ~/md380tools-vm/root/exec.patch ]; then
   ~/md380tools-vm/root/exec.patch
   rm ~/md380tools-vm/root/exec.patch
 fi
-
+if [ -f ~/md380tools-vm/root/exec.nosleep.patch ] && [ -f ~/nosleep.enable ]; then
+  chmod +x ~/md380tools-vm/root/exec.nosleep.patch
+  ~/md380tools-vm/root/exec.nosleep.patch
+  rm ~/md380tools-vm/root/exec.nosleep.patch
+  echo -e "${RED}Adding workaround for version 5 hardware."
+  echo -e "${RED}This will bypass some battery saver features"
+  echo -e "${RED}so expect slightly less battery life."
+  echo -e "${YELLOW}rm ~/nosleep.enable ${RED}to disable this workaround for next glv.${NC}"
+  sleep 8
+fi
 # for flashdb progress until merged upstream
 if [ -f ~/md380tools-vm/root/md380_tool.py ]; then
   cp ~/md380tools-vm/root/md380_tool.py ~/md380tools/md380_tool.py

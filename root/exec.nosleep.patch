@@ -1,0 +1,16 @@
+#!/bin/bash
+
+REFDIR=~/md380tools
+NEWDIR=~/src/md380tools
+PATCHDIR=~/md380tools-vm/root
+PATCHAPPLETFILE=kd4z.nosleep.patch
+PATCHFQN=$PATCHDIR/$PATCHAPPLETFILE
+
+pushd ~/md380tools
+
+patch -p4 < $PATCHFQN
+
+popd
+
+
+
