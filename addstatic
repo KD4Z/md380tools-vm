@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.49
+# Version:  4.51
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -27,22 +27,23 @@ FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 
 #radioid : full data, missing 2nnnnnn
-RISTATICUSERSURL=https://www.radioid.net/static/users.csv
-RISTATICFILE=~/riusers.csv
+RIDATAURL="https://www.radioid.net/api/dmr/user/?country=%&format=csv"
+RIDATARAW=~/ri.raw
 RIERROR=~/radioid.errors
-FINALRI=~/md380tools/db/stripped.csv
+FINALRI=~/ri.final
+TOOLSDB=~/md380tools/db/stripped.csv
 
 #ham-digital :  minimal info, all ids
 HDSTATICUSERSURL=https://ham-digital.org/status/users.csv
-HDSTATICFILE=~/hdusers.csv
+HDSTATICFILE=~/hd.raw
 HDERROR=~/hamdigital.errors
-FINALHD=~/hdfinal.csv
+FINALHD=~/hd.final
 
 USERDB=~/user.bin
-TMPALTERNATE=~/alternate_strippedCSV.tmp
-FINALALTERNATE=~/alternate_strippedCSV.final
-ALTERNATESEMADISABLE=~/extra.data.disable
 # With expressed permission from Wilfred Pontfoort
+TMPALTERNATE=~/PD1LOI.raw
+FINALALTERNATE=~/PD1LOI.final
+ALTERNATESEMADISABLE=~/extra.data.disable
 ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
 MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
@@ -78,22 +79,30 @@ fi
 
 echo -e -n "${WHITE}Downloading data from RadioId.net"
 if [ -f ~/keep.tmp ]; then
-		timeout 120 wget --no-check-certificate --wait=3 $RISTATICUSERSURL -O $RISTATICFILE
+		timeout 120 wget --no-check-certificate --wait=3 $RIDATAURL -O $RIDATARAW
 else
-		timeout 120 wget --no-check-certificate --wait=3 $RISTATICUSERSURL -O $RISTATICFILE  2>$RIERROR
+		timeout 120 wget --no-check-certificate --wait=3 $RIDATAURL -O $RIDATARAW  2>$RIERROR
 fi
-sed -i '/Callsign/d' $RISTATICFILE
-sizeRI=$(ls -l $RISTATICFILE | cut -d" " -f5)
-countRI=$(wc --lines $RISTATICFILE | cut -d" " -f1)
+sed -i '/Callsign/d' $RIDATARAW
+sizeRI=$(ls -l $RIDATARAW | cut -d" " -f5)
+countRI=$(wc --lines $RIDATARAW | cut -d" " -f1)
 if (( countRI < 10 )); then
 	echo -e "${RED}"
 	cat $RIERROR
 	echo -e "${WHITE}"
-    if [ -f $RISTATICFILE ]; then rm $RISTATICFILE ; fi
+    if [ -f $RIDATARAW ]; then rm $RIDATARAW ; fi
 fi
-if [ -f $RISTATICFILE ]; then
+if [ -f $RIDATARAW ]; then
    echo -e -n "${WHITE}...Normalizing"
-   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $RISTATICFILE >$FINALRI
+   # $RIDATARAW >$FINALRI
+   cat $RIDATARAW >ridata.csv
+   sed -i '1,2d' $RIDATARAW
+   sed -i -e 's/\",\"/\^/g' $RIDATARAW
+   sed -i -e 's/,//g' $RIDATARAW
+   sed -i -e 's/\"//g' $RIDATARAW
+   awk -F^ '{print $5","$1","$4" "$8","$2","$7",,"$3}' $RIDATARAW >$FINALRI
+   sed -i -e 's/\@//g' $FINALRI   
+   cat $FINALRI >$TOOLSDB
    echo -e "...done${NC}"
 fi
 echo -e -n "${WHITE}Downloading data from HamDigital.org"
@@ -224,6 +233,7 @@ fi
 
 
 countall=$(wc --lines $USERDB | cut -d" " -f1)
+sizeall=$(ls -l $USERDB | cut -d" " -f5)
 sizemergeerrors=$(ls -l $MERGEERRORS | cut -d" " -f5)
 countmergeerrors=$(wc --lines $MERGEERRORS | cut -d" " -f1)
 if [ -f ~/keep.tmp ]; then
@@ -239,14 +249,14 @@ fi
 if [ -f $FINALHD ]; then
 echo -e "${GREEN}  HamDigital count    :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
 fi
-if [ -f $FILENICK ] ; then
-echo -e "${GREEN}  Nickname count      :  ${YELLOW}${countnick}  records"
-fi
 if [ -f $FINALALTERNATE ] ; then
 echo -e "${GREEN}  Alternate count     :  ${YELLOW}${countalter}  records  ${GREEN}(${sizealter}  bytes)"
 fi
 if [ -f $FILESTATIC ] ; then
 echo -e "${GREEN}  Static ID count     :  ${YELLOW}${countstatic}  records"
+fi
+if [ -f $FILENICK ] ; then
+echo -e "${GREEN}  Nickname count      :  ${YELLOW}${countnick}  records"
 fi
 if (( sizemergeerrors > 10 )); then
 echo -e "${GREEN}  Records skipped     :  ${RED}${countmergeerrors}     ${YELLOW}records  ${GREEN}See ${MERGEERRORS}"
@@ -257,7 +267,7 @@ if (( countall < 1000 )); then
   echo -e "\a"
   sleep 8
 fi
-echo -e "${GREEN}  Merged total        :  ${YELLOW}${countall}  records${NC}"
+echo -e "${GREEN}  Merged total        :  ${YELLOW}${countall}  records  ${GREEN}(${sizeall}  bytes)${NC}"
 
 if [ ! -f ~/keep.tmp ]; then
     if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi	

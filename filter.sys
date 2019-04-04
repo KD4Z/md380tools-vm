@@ -1,7 +1,7 @@
 #!/bin/bash
 # filter.sys
 # KD4Z
-# Version:  4.10
+# Version:  4.51
 # script that executes system level search and replace operations to
 # reduce the usersCSV octet count by abbreviating known values
 # calls out to ~/filter.local if found in home directory
@@ -18,6 +18,14 @@ sed -i -e 's/SILENT KEY/SK/g' $1
 sed -i -e 's/Communications/Comm/g' $1
 sed -i -e 's/Amateur Radio Club/ARC/g' $1
 sed -i -e 's:,cnty,:,,:g' $1
+sed -i -e 's/Amateur Radio Amateur Radio Emergency Service/ARES/g' $1
+sed -i -e 's/Amateur Radio Societ/ARS/g' $1
+sed -i -e 's/Ccars Carteret County Amateur Radio Society In/CCARS/g' $1
+sed -i -e 's/Ovec Ohio/Ohio/g' $1
+sed -i -e 's/Group Brady/Group/g' $1
+sed -i -e 's/<U+0080><U+0093>//g' $1
+sed -i -e 's/<U+0093>//g' $1
+ 
 
 # other states / provinces until supported in merge_users
 sed -i -e 's/All Others//g' $1
