@@ -1,8 +1,8 @@
 #!/bin/bash 
 # KD4Z
-# Version:  4.51
+# Version:  4.52
 # main menu
-vers="4.51"
+vers="4.52"
 
 if [ ! -f /etc/motd.save ]; then
   . ~/md380tools-vm/root/.bash_aliases

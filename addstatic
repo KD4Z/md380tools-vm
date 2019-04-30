@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.51
+# Version:  4.52
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -27,7 +27,8 @@ FILENICKZIP=~/md380tools-vm/nicknames.zip
 STATICFILEHOST=~/static.host
 
 #radioid : full data, missing 2nnnnnn
-RIDATAURL="https://www.radioid.net/api/dmr/user/?country=%&format=csv"
+#RIDATAURL="https://www.radioid.net/api/dmr/user/?country=%&format=csv"
+RIDATAURL="https://radioid.net/static/user.csv"
 RIDATARAW=~/ri.raw
 RIERROR=~/radioid.errors
 FINALRI=~/ri.final
@@ -94,13 +95,17 @@ if (( countRI < 10 )); then
 fi
 if [ -f $RIDATARAW ]; then
    echo -e -n "${WHITE}...Normalizing"
-   # $RIDATARAW >$FINALRI
-   cat $RIDATARAW >ridata.csv
+   if [ -f ~/keep.tmp ]; then
+      cat $RIDATARAW >ridata_raw.csv
+   fi
    sed -i '1,2d' $RIDATARAW
-   sed -i -e 's/\",\"/\^/g' $RIDATARAW
-   sed -i -e 's/,//g' $RIDATARAW
-   sed -i -e 's/\"//g' $RIDATARAW
-   awk -F^ '{print $5","$1","$4" "$8","$2","$7",,"$3}' $RIDATARAW >$FINALRI
+   #sed -i -e 's/\",\"/\^/g' $RIDATARAW
+   #sed -i -e 's/,//g' $RIDATARAW
+   #sed -i -e 's/\"//g' $RIDATARAW
+   # format from RadioId.net changes like the weather.  Come on guys, quit changing the column format
+   # 27 April 2019 = RADIO_ID,CALLSIGN,FIRST_NAME,LAST_NAME,CITY,STATE,COUNTRY,REMARKS
+   #awk -F^ '{print $5","$1","$4" "$8","$2","$7",,"$3}' $RIDATARAW >$FINALRI
+   awk -F, 'length($1) {print $1","$2","$3" "$4","$5","$6",,"$7}' $RIDATARAW >$FINALRI
    sed -i -e 's/\@//g' $FINALRI   
    cat $FINALRI >$TOOLSDB
    echo -e "...done${NC}"
