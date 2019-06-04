@@ -478,6 +478,9 @@ export ZCOM58="Varno ugasni ali ponovno zazeni VM"
 export ZCOM59="Informacije o VM"
 export ZCOM60="Obnovi zaklenjeno postajo"
 export ZCOM61="Orodja"
+export ZCOM62="Star RX prikaz"
+export ZCOM63="Crna pisava v RX prikazu"
+export ZCOM64="Filter kontaktov"
 fi
 # End of Slovenian translation area
 
