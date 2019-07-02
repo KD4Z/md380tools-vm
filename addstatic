@@ -42,10 +42,10 @@ FINALHD=~/hd.final
 
 USERDB=~/user.bin
 # With expressed permission from Wilfred Pontfoort
-TMPALTERNATE=~/PD1LOI.raw
-FINALALTERNATE=~/PD1LOI.final
+TMPALTERNATE=~/BM-Database.raw
+FINALALTERNATE=~/BM-Database.final
 ALTERNATESEMADISABLE=~/extra.data.disable
-ALTERNATEURL=https://github.com/PD1LOI/MD380tools/raw/master/user.bin
+ALTERNATEURL=https://github.com/BM-Database/database/raw/master/user.bin
 MERGEERRORS=~/merge.errors
 ALTFILEDLERROR=~/alternate.download.error
 EXCLUDEIDS=~/exclude.ids
