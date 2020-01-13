@@ -107,6 +107,8 @@ if [ -f ~/nosleep.enable ]; then
 else
  echo -e ""
 fi
+echo -e "${WHITE}  >> Workaround #2 See:${YELLOW} Version_5_Hardware_with_MD380tools_firmware.pdf"
+echo -e "     https://tinyurl.com/w8g4ol5"
 
 echo -e ""
 echo -e -n " ${YELLOW}menu${NC} -- Back to main menu "
