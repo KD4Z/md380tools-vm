@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.52
+# Version:  4.53
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -16,7 +16,7 @@
 #  privateID2,call2,name2,,,nickname2,
 #  privateID3,call3,name3,,,,
 #
-# This file can be pulled in on-the-fly from an FTP server
+# The static file can be pulled in on-the-fly from an FTP server
 # defined in static.host file
 #
 . ~/md380tools-vm/strings
@@ -42,8 +42,8 @@ FINALHD=~/hd.final
 
 USERDB=~/user.bin
 # With expressed permission from Wilfred Pontfoort
-TMPALTERNATE=~/BM-Database.raw
-FINALALTERNATE=~/BM-Database.final
+TMPALTERNATE=~/alt-database.raw
+FINALALTERNATE=~/alt-database.final
 ALTERNATESEMADISABLE=~/extra.data.disable
 ALTERNATEURL=https://github.com/BM-Database/database/raw/master/user.bin
 MERGEERRORS=~/merge.errors
@@ -196,8 +196,11 @@ fi
 if [ -f $FINALRI ]; then
 	FILELIST="$FILELIST $FINALRI"
 fi
-if [ -f $FINALALTERNATE ]; then 
-	FILELIST="$FILELIST $FINALALTERNATE"  
+if [ -f $FINALALTERNATE ]; then
+	FILELIST="$FILELIST $FINALALTERNATE"
+fi
+if [ -f $FINALRI ]; then
+	FILELIST="$FILELIST $FINALRI"
 fi
 if [ -f $FILESTATIC ]; then
 	FILELIST="$FILELIST $FILESTATIC"
