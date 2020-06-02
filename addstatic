@@ -28,7 +28,7 @@ STATICFILEHOST=~/static.host
 
 #radioid : full data, missing 2nnnnnn
 #RIDATAURL="https://www.radioid.net/api/dmr/user/?country=%&format=csv"
-RIDATAURL="https://radioid.net/static/user.csv"
+RIDATAURL="https://database.radioid.net/static/user.csv"
 RIDATARAW=~/ri.raw
 RIERROR=~/radioid.errors
 FINALRI=~/ri.final
