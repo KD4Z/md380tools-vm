@@ -186,7 +186,7 @@ static const char *const states[] = {
 	"CA,California",
      "CAL,Calabria",
      "CAM,Campania",
-	"CO,Colorada",
+	"CO,Colorado",
 	"CT,Connecticut",
 	"DC,District of Columbia",
 	"DE,Delaware",
