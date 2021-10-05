@@ -32,6 +32,7 @@ if [ -f ./rotatebins ]; then
   ./rotatebins
 fi
 sed -i -e 's/--dirty //g' ~/md380tools/applet/Makefile
+sed -i -e 's/-s /-k -s /g' ~/md380tools/curl.mak
 # not needed as "booooo" tone removed upstream in PR #830
 #if [ -f ~/beep.disable ]; then
 #  sed -i -e 's/bp_beep(3)/bp_beep(3);break;case 15:return 0/g' ~/md380tools/applet/src/beep.c
