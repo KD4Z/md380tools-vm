@@ -26,6 +26,9 @@ fi
 if [ -f ~/md380tools-vm/flashdb ]; then
   chmod +x ~/md380tools-vm/flashdb
 fi
+if [ -f ~/md380tools-vm/flashidb ]; then
+  chmod +x ~/md380tools-vm/flashidb
+fi
 if [ -f ~/md380tools-vm/recipes ]; then
   chmod +x ~/md380tools-vm/recipes
 fi

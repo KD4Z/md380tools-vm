@@ -1,0 +1,21 @@
+#!/bin/bash
+# flashidb
+# KD4Z
+# Version:  4.6
+# flashes UsersCSV to radio
+
+ 
+if [ -f ~/user.bin ]; then
+  echo 
+  echo -e "${YELLOW}Record Count `wc --lines ~/user.bin`"
+   echo -e "${GREEN}Radio should be just turned ${RED}ON ${GREEN}(${RED}not DFU mode${GREEN}) and connected to USB port.${NC}"
+  sleep 2
+  ~/md380tools/md380-tool spiflashwrite ~/indexeduser.bin 0x100000
+else
+  echo "${RED}User Contact DB file not present.  ${YELLOW}Run glv or glvusers first."
+fi
+sleep 5
+cd ~ 
+~/md380tools-vm/menuopts
+ 
+
