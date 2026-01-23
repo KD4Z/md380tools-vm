@@ -1,7 +1,10 @@
+#!/bin/bash 
+# KD4Z
+# Version:  4.6
 # localization strings
 # this file is used for simple language translation.
 # no font change support is available.  
-
+#
 # These can not be changed without more effort
 # do not change this section as the menu commands
 # themselves do not follow these.  They are hardwired.
@@ -35,6 +38,7 @@ export ZCOM29="touch"
 export ZCOM36="setting"
 export ZCOM17="save"
 export ZCOM18="restore"
+export ZCOM65="flashidb"
 
 
 export RED='\033[1;31m'
@@ -79,6 +83,7 @@ export ZCOM12="Downloads and builds User DB only."
 export ZWRITE1="Write firmware to radios without GPS."
 export ZWRITE2="Write firmware to radios with GPS."
 export ZWRITE3="Write User DB (Contacts) to radio"
+export ZWRITE5="Write Compressed User DB to radio"
 export ZWRITE4="Search the User DB for given text"
 export ZCOM13="Save"
 export ZCOM14="Restore"

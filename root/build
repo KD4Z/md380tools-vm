@@ -11,12 +11,13 @@ cd ~/md380tools-vm
 cd ~/md380tools
 
 make dist
-if [ ! -f db/stripped.csv ]; then
- echo -e "${RED}The dmr-marc file stripped.csv should be here but I can not find it!${GREEN}"
-fi
- 
-cat db/stripped.csv >user.bin
-cp user.bin ~/user.bin
+# dist target blows up getting stripped.csv but we don't care.
+#if [ ! -f db/stripped.csv ]; then
+# echo -e "${RED}stripped.csv should been created but it is not present${GREEN}"
+# cat db/stripped.csv >user.bin
+# cp user.bin ~/user.bin
+#fi
+
 
 if [ ! -d ~/screenshots ]; then
   mkdir ~/screenshots

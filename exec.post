@@ -8,6 +8,7 @@
 
 userfile=~/user.bin
 usertmp=~/header.tmp
+indexedfile=~/indexeduser.bin
 
 cd ~/md380tools-vm
 
@@ -15,6 +16,7 @@ cd ~/md380tools-vm
 ./addstatic
 
 if [ -f filter.sys ] && [ ! -f ~/filter.sys.disable ]; then  
+  echo -e "${YELLOW}Replacing redicuously long contact names${NC}"
   ./filter.sys $userfile
 fi
 
@@ -22,6 +24,7 @@ if [ -f ~/md380tools/db/special.tmp ]; then
 	if [ ! -d ~/cache ]; then
 	  mkdir ~/cache
 	fi
+  echo -e "${YELLOW}Updating local cache${NC}"
 	cp ~/md380tools/db/special.tmp ~/cache 
 fi
 
@@ -33,15 +36,27 @@ if [ -f ~/exec.post.local ]; then
   ~/exec.post.local $userfile
 fi
 
-userbinsize=$(ls -l $userfile | cut -d" " -f5)
-echo -e "${GREEN}  User.bin filesize   :  ${YELLOW}${userbinsize}  bytes  ${GREEN}(not including header record) ${NC}"
+#userbinsize=$(ls -l $userfile | cut -d" " -f5)
+#echo -e "${GREEN}  user.bin filesize   :  ${YELLOW}${userbinsize}  bytes  ${GREEN}(uncompressed) ${NC}"
 
-# now put back the header
+
+if [ $userfile ]; then
+  if [ -f $indexedfile ]; then rm $indexedfile ; fi
+  echo -e "${YELLOW}Compressing user.bin ... ${GREEN}${WHITE}"
+  # Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex data converter in python.
+  ~/md380tools/lineardb_to_indexeddb.py $userfile ~/indexeduser.bin
+fi
+if [ $indexedfile ]; then
+  sizeindexed=$(ls -l $indexedfile | cut -d" " -f5)
+  echo -e "${GREEN}  indexeduser.bin     :  ${YELLOW}Compressed file  ${GREEN}($sizeindexed bytes)${NC}" 
+fi
+
+# now put back the header 
 wc -c < $userfile >$usertmp
 cat $userfile >>$usertmp
 cat $usertmp >$userfile
 rm $usertmp
-echo -e "${WHITE}Processing complete.${NC}"
+echo -e "${YELLOW}Contact data processing completed.${NC}"
  
 
 

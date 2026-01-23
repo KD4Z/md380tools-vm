@@ -48,6 +48,10 @@ if [ -f ~/md380tools-vm/root/flashdb ]; then
   cp ~/md380tools-vm/root/flashdb ~
   chmod +x ~/flashdb
 fi
+if [ -f ~/md380tools-vm/root/flashidb ]; then
+  cp ~/md380tools-vm/root/flashidb ~
+  chmod +x ~/flashidb
+fi
 if [ -f ~/md380tools-vm/root/lookup ]; then
   cp ~/md380tools-vm/root/lookup ~
   chmod +x ~/lookup

@@ -42,31 +42,43 @@ fi
 if [ -f ~/md380tools-vm/glv.wolf ]; then
   echo -e -n " ${RED}(Wolf)"
 fi
-
+if [ -f ~/md380tools-vm/glv.dale ]; then
+  echo -e -n " ${RED}(Dale)"
+fi
 echo -e "${NC}"
 echo -e "  ${YELLOW}${ZCOM10}${NC} --  ${ZCOM12}"
 echo -e ""
 echo -e " ${ZSEL4}"
 echo -e ""
+
+# flash
 if [ ! -f ~/firmware-noGPS.bin ]; then
   echo -e "  ${YELLOW}${ZCOM2}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}again${NC}"
 else
   echo -e "  ${YELLOW}${ZCOM2}${NC}    -- ${RED}(DFU)${NC} ${ZWRITE1} (${ZRAD10})"
 fi
-
+# flashgps
 if [ ! -f ~/firmware-GPS.bin ]; then
   echo -e "  ${YELLOW}${ZCOM3}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}again${NC}"
 else
   echo -e "  ${YELLOW}${ZCOM3}${NC} -- ${RED}(DFU)${NC} ${ZWRITE2} (${ZRAD20})"
 fi
-
+# flashdb  (actually runs flashidb)
 if [ ! -f ~/user.bin ]; then
-  echo -e "  ${YELLOW}${ZCOM4}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}or ${YELLOW}glvusers ${RED}again{NC}"
+  echo -e "  ${YELLOW}${ZCOM4}${NC}    -- ${RED} Not available.  Run ${YELLOW}glv ${RED}or ${YELLOW}glvusers ${RED}again${NC}"
 else
-  echo -e "  ${YELLOW}${ZCOM4}${NC}  -- ${RED}(${ZCOM24}) ${NC} ${ZWRITE3}"
+  echo -e "  ${YELLOW}${ZCOM4}${NC}  -- ${RED}(${ZCOM24}) ${NC} ${ZWRITE5}"
 fi
+# flashidb
+#if [ ! -f ~/indexeduser.bin ]; then
+#  echo -e "  ${YELLOW}${ZCOM65}${NC} -- ${RED} Not available.  Run ${YELLOW}glv ${RED}or ${YELLOW}glvusers ${RED}again${NC}"
+#else
+#  echo -e "  ${YELLOW}${ZCOM65}${NC} -- ${RED}(${ZCOM24}) ${NC} ${ZWRITE5}"
+#fi
+
 
 echo -e ""
+# lookup
 echo -e "  ${YELLOW}${ZCOM5}${NC} ${BLUE}${ZCOM51}${NC} -- ${ZWRITE4} "
 
 echo -e ""

@@ -16,6 +16,7 @@ FINALALTERNATE=~/alternate_strippedCSV.final
 HDSTATICFILE=~/users.csv
 FILESTATIC=~/static.users
 USERBIN=~/user.bin
+COMPRESSEDUSERBIN=~/indexeduser.bin
 
 echo -e "Collecting information..."
 ipin=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
@@ -29,6 +30,11 @@ if [ -f $USERBIN ]; then
 	countall=$(wc --lines $USERBIN | cut -d" " -f1)
 else
 	userbinsize="Not present"
+fi
+if [ -f $COMPRESSEDUSERBIN ]; then
+	compresseduserbinsize=$(ls -l $COMPRESSEDUSERBIN | awk '{print $5,$6,$7,$8,$9}')
+else
+	compresseduserbinsize="Not present"
 fi
 if [ -f ~/firmware-noGPS.bin ]; then
 	fwnogps=$(ls -l ~/firmware-noGPS.bin | awk '{print $5,$6,$7,$8,$9}')
@@ -69,9 +75,9 @@ if [ -f $FILESTATIC ]; then
 	sizestatic=$(ls -l $FILESTATIC | cut -d" " -f5)
 	echo -e "${GREEN} Static users     : ${YELLOW}${countstatic}  ${GREEN}(${sizestatic}  bytes)"
 fi
-echo -e "${GREEN} user.bin file    : ${YELLOW}${userbinsize}		${WHITE}(flashdb)"
+echo -e "${GREEN} user.bin file    : ${YELLOW}${userbinsize}		${WHITE}(flashdbold)"
 echo -e "${GREEN} user.bin count   : ${YELLOW}${countall} "
-
+echo -e "${GREEN} indexeduser.bin  : ${YELLOW}${compresseduserbinsize}      ${WHITE}(flashdb)"
 echo -e ""
 MERGECONFIG=~/md380tools-vm/mergeconfig
 if [ -f $MERGECONFIG ]; then

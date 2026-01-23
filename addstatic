@@ -1,7 +1,7 @@
 #!/bin/bash
 # addstatic
 # KD4Z
-# Version:  4.53
+# Version:  4.6
 # Part of the user.db creation step.  Far more advanced than just
 # including ham-digital data.
 # Ths script can merge in static DMR ids as part of the process.
@@ -34,11 +34,11 @@ RIERROR=~/radioid.errors
 FINALRI=~/ri.final
 TOOLSDB=~/md380tools/db/stripped.csv
 
-#ham-digital :  minimal info, all ids
-HDSTATICUSERSURL=https://ham-digital.org/status/users.csv
-HDSTATICFILE=~/hd.raw
-HDERROR=~/hamdigital.errors
-FINALHD=~/hd.final
+#ham-digital :  minimal info, all ids Site not gone
+#HDSTATICUSERSURL=https://ham-digital.org/status/users.csv
+#HDSTATICFILE=~/hd.raw
+#HDERROR=~/hamdigital.errors
+#FINALHD=~/hd.final
 
 USERDB=~/user.bin
 # With expressed permission from Wilfred Pontfoort
@@ -78,7 +78,7 @@ if [ -f $FILENICKZIP ]; then
 fi
 
 
-echo -e -n "${WHITE}Downloading data from RadioId.net"
+echo -e -n "${YELLOW}Downloading data from RadioId.net ${WHITE}"
 if [ -f ~/keep.tmp ]; then
 		timeout 120 wget --no-check-certificate --wait=3 $RIDATAURL -O $RIDATARAW
 else
@@ -110,33 +110,33 @@ if [ -f $RIDATARAW ]; then
    cat $FINALRI >$TOOLSDB
    echo -e "...done${NC}"
 fi
-echo -e -n "${WHITE}Downloading data from HamDigital.org"
-if [ -f ~/keep.tmp ]; then
-		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE
-else
-		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE  2>$HDERROR
-fi 
-
-sizeHD=$(ls -l $HDSTATICFILE | cut -d" " -f5)
-countHD=$(wc --lines $HDSTATICFILE | cut -d" " -f1)
-if (( countHD < 10 )); then
-	echo -e "${RED}"
-	cat $HDERROR
-	echo -e "${WHITE}"
-    if [ -f $HDSTATICFILE ]; then rm $HDSTATICFILE ; fi
-fi
-if [ -f $HDSTATICFILE ]; then
-	echo -e -n "${WHITE}...Normalizing"
-   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $HDSTATICFILE >$FINALHD
-   echo -e "...done${NC}"
-fi
+#echo -e -n "${WHITE}Downloading data from HamDigital.org"
+#if [ -f ~/keep.tmp ]; then
+#		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE
+#else
+#		timeout 120 wget --no-check-certificate --wait=3 $HDSTATICUSERSURL -O $HDSTATICFILE  2>$HDERROR
+#fi 
+#
+#sizeHD=$(ls -l $HDSTATICFILE | cut -d" " -f5)
+#countHD=$(wc --lines $HDSTATICFILE | cut -d" " -f1)
+#if (( countHD < 10 )); then
+#	echo -e "${RED}"
+#	cat $HDERROR
+#	echo -e "${WHITE}"
+#    if [ -f $HDSTATICFILE ]; then rm $HDSTATICFILE ; fi
+#fi
+#if [ -f $HDSTATICFILE ]; then
+#	echo -e -n "${WHITE}...Normalizing"
+#   awk -F, '{print $1","$2","$3","$4","$5",,"$6}' $HDSTATICFILE >$FINALHD
+#   echo -e "...done${NC}"
+#fi
 
 
 if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi
 if [ ! -f $ALTERNATESEMADISABLE ]; then
 	OPTS="-quiet --no-verbose"
 	if [ -f $TMPALTERNATE ] ; then rm $TMPALTERNATE ; fi
-	echo -e -n "${WHITE}Downloading alternate data."
+	echo -e -n "${YELLOW}Downloading alternate data.${NC}"
 	if [ -f ~/keep.tmp ]; then
 		timeout 120 wget --no-check-certificate --wait=3 $ALTERNATEURL -O $TMPALTERNATE
 	else
@@ -148,7 +148,7 @@ if [ ! -f $ALTERNATESEMADISABLE ]; then
 	else
 			echo -e "...done${NC}"
 	fi
-	
+	echo -e "${YELLOW}Merging data...${NC}"
 	if [ -f $TMPALTERNATE ]; then
 		sed -i '1,1d' $TMPALTERNATE
 		sed -i -e 's/\r//' $TMPALTERNATE
@@ -162,16 +162,16 @@ fi
 
 if [ -f $STATICFILEHOST ]; then
 	if [ -f $FILESTATIC ]; then rm $FILESTATIC ; fi
-    echo -e "${WHITE}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
+    echo -e "${YELLOW}Downloading ${FILESTATIC} from ${STATICFILEHOST}${NC}"
     timeout 120 wget --no-check-certificate --wait=3 -i $STATICFILEHOST -O $FILESTATIC
 fi
 
 if [ -f $FILESTATIC ]; then
-  echo -e "${WHITE} Using ${FILESTATIC}${NC}"
+  echo -e "${YELLOW} Using ${FILESTATIC}${NC}"
   sed -i -e 's/\r//' $FILESTATIC  
 fi
 
-echo -e "${WHITE}Merging data...${NC}"
+echo -e "${YELLOW}Preparing filters...${NC}"
 
 if [ -f $MERGECONFIG ]; then rm $MERGECONFIG; fi
 if [ ! -f $FILTERDISABLESEMA ]; then
@@ -190,9 +190,9 @@ if [ ! -f $FILTERDISABLESEMA ]; then
 fi
 
 FILELIST=""
-if [ -f $FINALHD ]; then
-	FILELIST="$FINALHD"
-fi
+#if [ -f $FINALHD ]; then
+#	FILELIST="$FINALHD"
+#fi
 if [ -f $FINALRI ]; then
 	FILELIST="$FILELIST $FINALRI"
 fi
@@ -211,19 +211,19 @@ fi
 OPTS="--abbrevCountries --abbrevStates --noHeader --abbrevDirections"
 if [ -f $MERGECONFIG ]; then
   OPTS="$OPTS --config $MERGECONFIG"
-  echo -e "${WHITE}Applying contact filters... ${YELLOW}"
   cat $MERGECONFIG
 fi
 if [ -f ~/keep.tmp ]; then
  echo -e "Filelist=$FILELIST Options=$OPTS" 
 fi
 if [ -f $MERGEERRORS ]; then rm $MERGEERRORS ; fi
-echo -e -n "${RED}"
+#echo -e -n "${RED}"
 
+echo -e "${YELLOW}Merging contacts with filters... ${WHITE}"
 # Thanks to Dale Farnsworth dale@farnsworth.org for providing this complex merge routine in python.
 python ~/md380tools-vm/merge_users.py $FILELIST $OPTS >$USERDB 2>$MERGEERRORS
 
-echo -e "${WHITE}Contact Merge completed.${NC}"
+echo -e "${YELLOW}Contact Merge completed.${NC}"
 
 countstatic=0
 countalter=0
@@ -241,7 +241,9 @@ fi
 
 
 countall=$(wc --lines $USERDB | cut -d" " -f1)
+countall=$countall - 1  # account for header record
 sizeall=$(ls -l $USERDB | cut -d" " -f5)
+sizemax=15000000  # Flash memory manufacturers define 1MB as 1,000,000 bytes (10^6)
 sizemergeerrors=$(ls -l $MERGEERRORS | cut -d" " -f5)
 countmergeerrors=$(wc --lines $MERGEERRORS | cut -d" " -f1)
 if [ -f ~/keep.tmp ]; then
@@ -253,9 +255,6 @@ if [ -f ~/keep.tmp ]; then
 fi
 if [ -f $FINALRI ]; then
 echo -e "${GREEN}  RadioId count       :  ${YELLOW}${countRI}  records  ${GREEN}(${sizeRI}  bytes)"
-fi
-if [ -f $FINALHD ]; then
-echo -e "${GREEN}  HamDigital count    :  ${YELLOW}${countHD}  records  ${GREEN}(${sizeHD}  bytes)"
 fi
 if [ -f $FINALALTERNATE ] ; then
 echo -e "${GREEN}  Alternate count     :  ${YELLOW}${countalter}  records  ${GREEN}(${sizealter}  bytes)"
@@ -275,7 +274,12 @@ if (( countall < 1000 )); then
   echo -e "\a"
   sleep 8
 fi
-echo -e "${GREEN}  Merged total        :  ${YELLOW}${countall}  records  ${GREEN}(${sizeall}  bytes)${NC}"
+echo -e -n "${GREEN}  Final user.bin      :  ${YELLOW}${countall}  records  ${GREEN}(${sizeall}  bytes)"
+if (( sizeall > sizemax)) ; then
+  echo -e "${RED} Over limit - will use compressed version ${NC}"
+else
+  echo -e "${NC}"
+fi
 
 if [ ! -f ~/keep.tmp ]; then
     if [ -f $TMPALTERNATE ]; then rm $TMPALTERNATE ; fi	
